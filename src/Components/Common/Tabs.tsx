@@ -34,15 +34,10 @@ export function Tabs({
     const itemsCollection: TabItem[] = [];
     React.Children.forEach(children, (element) => {
       if (React.isValidElement(element)) {
-        const props = element.props as {
-          name?: string;
-          eventKey?: string;
-          children?: ReactNode;
-        };
-        const { name, eventKey: key, children: component } = props;
+        const { name, eventKey: key, children: component } = element.props;
         itemsCollection.push({
-          name: name || "",
-          key: key || "",
+          name,
+          key,
           component,
         });
       }
