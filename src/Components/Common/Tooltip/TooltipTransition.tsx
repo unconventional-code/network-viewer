@@ -40,12 +40,18 @@ export function TooltipTransition({
       }}
     >
       {(state) =>
-        React.Children.map(children, (child) => (
-          <OverlayContainer>
-            {React.isValidElement(child) &&
-              React.cloneElement(child, { isOpen: !!OPEN_STATES[state] })}
-          </OverlayContainer>
-        ))
+        React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            return (
+              <OverlayContainer>
+                {React.cloneElement(child, {
+                  isOpen: !!OPEN_STATES[state],
+                } as any)}
+              </OverlayContainer>
+            );
+          }
+          return <OverlayContainer>{child}</OverlayContainer>;
+        })
       }
     </Transition>
   );

@@ -67,9 +67,6 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
       tooltipRef
     );
 
-    // If we're passed an element, make sure that we've only been given one.
-    const child =
-      typeof children === "function" ? children : React.Children.only(children);
     // Manually include a handful of props from react-aria's triggerProps. Otherwise, they block
     // certain events from propagating which can cause conflicts with other listeners in the app.
     const eventedProps = {
@@ -88,16 +85,22 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
 
     return (
       <>
-        {typeof child === "function"
-          ? child({
+        {typeof children === "function"
+          ? children({
               triggerProps: eventedProps,
               targetRef,
             })
-          : React.cloneElement(child, {
-              ref: targetRef,
-              // Merge the child's original props, with the new props provided by the trigger.
-              ...mergeProps(child.props, eventedProps),
-            })}
+          : (() => {
+              const child = React.Children.only(children);
+              if (React.isValidElement(child)) {
+                return React.cloneElement(child, {
+                  ref: targetRef,
+                  // Merge the child's original props, with the new props provided by the trigger.
+                  ...mergeProps(child.props as any, eventedProps),
+                } as any);
+              }
+              return child;
+            })()}
         <TooltipTransition isOpen={state.isOpen}>
           <TooltipLabel
             ref={tooltipRef}

@@ -9,8 +9,14 @@ import { useTheme } from "../../state/theme/Context";
 import { useNetwork } from "../../state/network/Context";
 import { Entry } from "har-format";
 
+interface PreparedEntry extends Omit<Entry, "timings"> {
+  index: number;
+  timings: Record<string, number>;
+  [key: string]: any;
+}
+
 interface NetworkTableRowProps {
-  entry: Entry;
+  entry: PreparedEntry;
   maxTime: number;
   onSelect: (entry: any) => void;
   scrollHighlight: boolean;
@@ -29,7 +35,7 @@ export function NetworkTableRow({
   const { showWaterfall } = useTheme();
   const columns = getViewerFields(showReqDetail, showWaterfall || false);
 
-  const statusClass = getStatusClass(entry);
+  const statusClass = getStatusClass(entry as unknown as Entry);
   const rowClassName = classNames(
     "flex items-center h-6 border-b border-border-color cursor-pointer hover:bg-bg-gray-90",
     {
@@ -47,28 +53,32 @@ export function NetworkTableRow({
         id={ROW_ID_PREFIX + entry.index}
         onClick={() => onSelect(entry)}
       >
-        {Object.entries(columns).map(([datakey, { key, unit }]) => (
-          <div
-            key={key}
-            className={classNames(
-              "flex items-center px-xs min-w-[60px]",
-              datakey,
-              { "flex-1": showReqDetail },
-              { "w-[128px]": showWaterfall && key === "waterfall" }
-            )}
-          >
-            {key === "waterfall" && entry.time ? (
-              <TimeChart maxTime={maxTime} timings={entry.timings} />
-            ) : (
-              <NetworkCellValue
-                datakey={key}
-                onClick={() => onSelect(entry)}
-                payload={entry}
-                unit={unit}
-              />
-            )}
-          </div>
-        ))}
+        {Object.entries(columns).map(([datakey, fieldConfig]) => {
+          const key = fieldConfig.key;
+          const isWaterfall = key === ("waterfall" as string);
+          return (
+            <div
+              key={key}
+              className={classNames(
+                "flex items-center px-xs min-w-[60px]",
+                datakey,
+                { "flex-1": showReqDetail },
+                { "w-[128px]": showWaterfall && isWaterfall }
+              )}
+            >
+              {isWaterfall && entry.time ? (
+                <TimeChart maxTime={maxTime} timings={entry.timings} />
+              ) : (
+                <NetworkCellValue
+                  datakey={key}
+                  onClick={() => onSelect(entry)}
+                  payload={entry}
+                  unit={undefined}
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

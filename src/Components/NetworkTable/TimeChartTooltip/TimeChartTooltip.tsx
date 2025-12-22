@@ -4,7 +4,14 @@ import classNames from "classnames";
 import { TIMINGS } from "../../../constants";
 import { prepareTooltipData } from "../../../utils";
 
-const DETAIL = [
+type TimingKey = keyof typeof TIMINGS;
+
+interface DetailItem {
+  title: string;
+  category: TimingKey[];
+}
+
+const DETAIL: DetailItem[] = [
   {
     title: "Resource Scheduling",
     category: ["queueing"],
@@ -17,15 +24,22 @@ const DETAIL = [
     title: "Request/Response",
     category: ["send", "wait", "receive"],
   },
-] as const;
+];
 
 interface TimeChartTooltipProps {
   data: Record<string, number>;
 }
 
+interface TooltipData {
+  queuedAt: string | number;
+  startedAt: string | number;
+  totalTime: string | number;
+  [key: string]: string | number;
+}
+
 export function TimeChartTooltip({ data }: TimeChartTooltipProps) {
   const tooltipData = useMemo(
-    () => (!data ? null : prepareTooltipData(data)),
+    () => (!data ? null : (prepareTooltipData(data) as TooltipData)),
     [data]
   );
 
@@ -99,12 +113,13 @@ export function TimeChartTooltip({ data }: TimeChartTooltipProps) {
                   </td>
                   <td className="p-0 border-0 bg-transparent font-normal text-right">
                     {Array.isArray(TIMINGS[key].dataKey)
-                      ? tooltipData[
-                          TIMINGS[key].dataKey.find(
-                            (dataKey) => tooltipData[dataKey]
-                          )
-                        ]
-                      : tooltipData[TIMINGS[key].dataKey]}
+                      ? (() => {
+                          const foundKey = TIMINGS[key].dataKey.find(
+                            (dataKey) => tooltipData[dataKey] !== undefined
+                          );
+                          return foundKey ? tooltipData[foundKey] : "";
+                        })()
+                      : tooltipData[TIMINGS[key].dataKey as string] || ""}
                   </td>
                 </tr>
               ))}
