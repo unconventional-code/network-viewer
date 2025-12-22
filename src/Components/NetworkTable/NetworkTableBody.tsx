@@ -32,15 +32,21 @@ export function NetworkTableBody({ height }: NetworkTableBodyProps) {
     setTableHeaderWidthRef.current = actions.setTableHeaderWidth;
   }, [actions.setTableHeaderWidth]);
 
-  // Update elementRef when listRef's element changes - use a ref callback pattern
+  // Update elementRef when listRef's element changes
   useEffect(() => {
-    if (
-      listRef.current?.element &&
-      listRef.current.element !== elementRef.current
-    ) {
-      elementRef.current = listRef.current.element;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const updateElementRef = () => {
+      if (listRef.current?.element) {
+        elementRef.current = listRef.current.element;
+      }
+    };
+
+    // Initial update
+    updateElementRef();
+
+    // Set up a small delay to catch when the element is mounted
+    const timeoutId = setTimeout(updateElementRef, 0);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const { elementDims } = useResizeObserver(elementRef);
@@ -109,16 +115,6 @@ export function NetworkTableBody({ height }: NetworkTableBodyProps) {
     );
   }, []);
 
-  const rowProps = useMemo(
-    () => ({
-      data,
-      totalNetworkTime: totalNetworkTime ?? 0,
-      selectedReqIndex,
-      handleReqSelect,
-    }),
-    [data, totalNetworkTime, selectedReqIndex, handleReqSelect]
-  );
-
   if (actualData.length === 0) {
     return (
       <div
@@ -143,25 +139,31 @@ export function NetworkTableBody({ height }: NetworkTableBodyProps) {
     );
   }
 
+  // Ensure height is a valid positive number
+  const listHeight = height > 0 ? height : 0;
+
   return (
-    <>
-      <List
-        id="network-table-body"
-        data-testid="network-table-body"
-        className="w-full h-full"
-        style={{ height }}
-        rowCount={data.length}
-        rowHeight={TABLE_ENTRY_HEIGHT}
-        rowComponent={rowComponent}
-        rowProps={rowProps}
-        listRef={listRef}
-        onResize={() => {
-          // Update elementRef when List resizes
-          if (listRef.current?.element) {
-            elementRef.current = listRef.current.element;
-          }
-        }}
-      />
-    </>
+    <List
+      id="network-table-body"
+      data-testid="network-table-body"
+      className="w-full"
+      style={{ height: listHeight, width: "100%" }}
+      rowCount={data.length}
+      rowHeight={TABLE_ENTRY_HEIGHT}
+      rowComponent={rowComponent}
+      rowProps={{
+        data,
+        totalNetworkTime: totalNetworkTime ?? 0,
+        selectedReqIndex,
+        handleReqSelect,
+      }}
+      listRef={listRef}
+      onResize={() => {
+        // Update elementRef when List resizes
+        if (listRef.current?.element) {
+          elementRef.current = listRef.current.element;
+        }
+      }}
+    />
   );
 }

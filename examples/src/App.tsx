@@ -25,6 +25,9 @@ export function App() {
         `}
       >
         <NetworkViewer
+          options={{
+            enableAutoScroll: true,
+          }}
           onDataLoaded={() => setIsDataLoaded(true)}
           onReset={() => setIsDataLoaded(false)}
           {...fileOptions}
