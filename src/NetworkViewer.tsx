@@ -3,7 +3,28 @@ import classNames from "classnames";
 import { NetworkProvider } from "./state/network/NetworkProvider/NetworkProvider";
 import { MainContainer } from "./Containers/MainContainer";
 import { ThemeProvider } from "./state/theme/Context";
-import { NetworkViewerProps } from "./types";
+import { NetworkViewerOptions, ScrollRequestPosition } from "./types";
+import { Har } from "har-format";
+import { AxiosRequestConfig } from "axios";
+
+interface NetworkViewerProps {
+  autoHighlightChange?: boolean;
+  containerClassName?: string | null;
+  data?: Har | null;
+  fetchOptions?: AxiosRequestConfig;
+  file?: string | null;
+  onDataError?:
+    | ((error: string | { title: string; description: string }) => void)
+    | null;
+  onDataLoaded?: ((data: any[]) => void) | null;
+  onPause?: () => void;
+  onRequestSelect?: ((request: any) => void) | null;
+  onReset?: () => void;
+  onResume?: () => void;
+  options?: NetworkViewerOptions | null;
+  scrollRequestPosition?: ScrollRequestPosition;
+  scrollTimeStamp?: number | null;
+}
 
 export function NetworkViewer({
   file = null,

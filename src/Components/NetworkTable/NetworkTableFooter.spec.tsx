@@ -1,4 +1,3 @@
-import { Map } from "immutable";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { NetworkTableFooter } from "./NetworkTableFooter";
@@ -8,17 +7,15 @@ describe("NetworkTableFooter", () => {
     const { container } = render(
       <div>
         <NetworkTableFooter
-          dataSummary={
-            new Map({
-              totalRequests: 20,
-              totalTransferredSize: 2034,
-              totalUncompressedSize: 1035,
-              timings: {
-                onLoad: 999,
-                DOMContentLoaded: 2000,
-              },
-            })
-          }
+          dataSummary={{
+            totalRequests: 20,
+            totalTransferredSize: 2034,
+            totalUncompressedSize: 1035,
+            timings: {
+              onLoad: 999,
+              DOMContentLoaded: 2000,
+            },
+          }}
           showAllInfo
         />
       </div>

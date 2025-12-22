@@ -1,5 +1,4 @@
 /* eslint no-useless-escape: 0 */
-import { List } from "immutable";
 import { describe, it, expect } from "vitest";
 import * as utils from "./utils";
 import networkDataMock from "./network.json";
@@ -216,7 +215,7 @@ describe("utils", () => {
 
   describe("getSummary", () => {
     it("should return correct value", () => {
-      const data = new List([
+      const data = [
         {
           transferredSize: 1343,
           uncompressedSize: 2400,
@@ -229,7 +228,7 @@ describe("utils", () => {
           transferredSize: 200,
           uncompressedSize: 650,
         },
-      ]);
+      ];
       expect(utils.getSummary(data)).toMatchSnapshot();
     });
   });

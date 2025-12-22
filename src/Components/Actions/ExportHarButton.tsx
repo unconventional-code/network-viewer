@@ -4,10 +4,10 @@ import { Button } from "../Common/Button";
 import { IconDownload } from "../../icons/IconDownload";
 import { Tooltip } from "../Common/Tooltip/Tooltip";
 import { EMPTY_NETWORK_HAR } from "../../constants";
-import { HarData } from "../../types";
+import { Har } from "har-format";
 
 interface ExportHarButtonProps {
-  rawData?: HarData;
+  rawData?: Har;
 }
 
 export function ExportHarButton({

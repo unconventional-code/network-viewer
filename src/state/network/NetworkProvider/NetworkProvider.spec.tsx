@@ -1,4 +1,3 @@
-import { List } from "immutable";
 import { render } from "@testing-library/react";
 import { vi, describe, it, expect } from "vitest";
 
@@ -33,7 +32,7 @@ describe("NetworkProvider", () => {
 
     describe("when gets actualData", () => {
       it("calls the callback", () => {
-        const actualData = new List(["entry"]);
+        const actualData = ["entry"];
         const initialState = defaultState.set("actualData", actualData);
         const props = {
           initialState,

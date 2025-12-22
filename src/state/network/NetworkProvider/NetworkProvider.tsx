@@ -11,8 +11,9 @@ import {
 import { calculateTimings } from "../utils";
 import { NetworkContext } from "../Context";
 import { findRequestIndex } from "./utils";
-import { HarData, ScrollRequestPosition } from "../../../types";
+import { ScrollRequestPosition } from "../../../types";
 import { DEFAULT_STATUS_FILTER, EMPTY_NETWORK_HAR } from "../../../constants";
+import { Har } from "har-format";
 
 // Prepared entry type (from prepareViewerData)
 export interface PreparedEntry {
@@ -37,7 +38,7 @@ export interface PreparedEntry {
 }
 
 interface NetworkState {
-  rawData: HarData;
+  rawData: Har;
   data: PreparedEntry[]; // filtered data (what's shown in table)
   actualData: PreparedEntry[]; // sorted but unfiltered (all entries)
   totalNetworkTime: number | null;
@@ -77,7 +78,7 @@ interface NetworkState {
 
 interface NetworkProviderProps {
   autoHighlightChange?: boolean;
-  data?: HarData | null;
+  data?: Har | null;
   fetchOptions?: AxiosRequestConfig;
   file?: string | null;
   initialState?: Partial<NetworkState>;
@@ -154,7 +155,7 @@ export function NetworkProvider({
 
   // Update data - processes HAR entries and applies filters
   const updateData = useCallback(
-    (harData: HarData) => {
+    (harData: Har) => {
       const {
         data: preparedData,
         totalNetworkTime,
