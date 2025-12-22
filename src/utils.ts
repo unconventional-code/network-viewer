@@ -299,17 +299,6 @@ export const filterData = ({
   );
 };
 
-export const actionsWrapper =
-  (actions = {}) =>
-  (dispatch, state) =>
-    Object.keys(actions).reduce(
-      (modifiedActions, type) => ({
-        ...modifiedActions,
-        [type]: actions[type](dispatch, state),
-      }),
-      {}
-    );
-
 export const parseTime = (time) => {
   if (!time) {
     return time;

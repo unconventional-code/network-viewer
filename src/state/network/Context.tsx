@@ -1,8 +1,7 @@
-import React, { useContext, Dispatch } from 'react';
-import { Map } from 'immutable';
+import React, { useContext, Dispatch } from "react";
+import { Map } from "immutable";
 
-import { actionsWrapper } from './../../utils';
-import * as actions from './actions';
+import * as actions from "./actions";
 
 type NetworkState = Map<string, any>;
 type NetworkAction = any;
@@ -13,14 +12,39 @@ type NetworkCallbacks = {
   onRequestSelect?: ((request: any) => void) | null;
 };
 
-type NetworkContextValue = [NetworkState, Dispatch<NetworkAction>, NetworkCallbacks];
+type NetworkContextValue = [
+  NetworkState,
+  Dispatch<NetworkAction>,
+  NetworkCallbacks
+];
 
-export const NetworkContext = React.createContext<NetworkContextValue | undefined>(undefined);
+const actionsWrapper =
+  (actions = {}) =>
+  (
+    dispatch: Dispatch<NetworkAction>,
+    state: NetworkState
+  ): Record<string, any> =>
+    Object.keys(actions).reduce(
+      (modifiedActions, type) => ({
+        ...modifiedActions,
+        [type]: (
+          actions as Record<
+            string,
+            (dispatch: Dispatch<NetworkAction>, state: NetworkState) => any
+          >
+        )[type](dispatch, state),
+      }),
+      {}
+    );
+
+export const NetworkContext = React.createContext<
+  NetworkContextValue | undefined
+>(undefined);
 
 export const useNetwork = () => {
   const context = useContext(NetworkContext);
   if (!context) {
-    throw new Error('useNetwork must be used within a NetworkProvider');
+    throw new Error("useNetwork must be used within a NetworkProvider");
   }
   const [state, dispatch, callbacks] = context;
 
