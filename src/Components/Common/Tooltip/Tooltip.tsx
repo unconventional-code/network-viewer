@@ -4,9 +4,9 @@ import { useTooltipTriggerState } from "@react-stately/tooltip";
 import { useOverlayPosition } from "@react-aria/overlays";
 import { mergeProps, useObjectRef } from "@react-aria/utils";
 
-import TooltipLabel from "./TooltipLabel";
-import TooltipArrow from "./TooltipArrow";
-import TooltipTransition from "./TooltipTransition";
+import { TooltipLabel } from "./TooltipLabel";
+import { TooltipArrow } from "./TooltipArrow";
+import { TooltipTransition } from "./TooltipTransition";
 
 const ARROW_CROSS_SIZE = Math.sqrt(32);
 
@@ -23,7 +23,7 @@ interface TooltipProps {
   title: ReactNode;
 }
 
-const Tooltip = forwardRef<HTMLElement, TooltipProps>(
+export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
   (
     {
       children,
@@ -118,5 +118,3 @@ const Tooltip = forwardRef<HTMLElement, TooltipProps>(
 );
 
 Tooltip.displayName = "Tooltip";
-
-export default Tooltip;

@@ -1,14 +1,12 @@
-import React from "react";
-
 import { useNetwork } from "../state/network/Context";
-import Tabs from "../Components/Common/Tabs";
-import Tab from "../Components/Common/Tab";
-import Headers from "../Components/ReqDetail/Headers";
-import IconCloseSign from "../icons/IconCloseSign";
-import Response from "../Components/ReqDetail/Response";
-import Request from "../Components/ReqDetail/Request";
+import { Tabs } from "../Components/Common/Tabs";
+import { Tab } from "../Components/Common/Tab";
+import { Headers } from "../Components/ReqDetail/Headers";
+import { IconCloseSign } from "../icons/IconCloseSign";
+import { Response } from "../Components/ReqDetail/Response";
+import { Request } from "../Components/ReqDetail/Request";
 
-const ReqDetailContainer: React.FC = () => {
+export function ReqDetailContainer() {
   const { actions, state } = useNetwork();
   const reqDetail = state.get("reqDetail");
   const handleCloseClick = () => {
@@ -44,6 +42,4 @@ const ReqDetailContainer: React.FC = () => {
       </Tabs>
     </div>
   );
-};
-
-export default ReqDetailContainer;
+}

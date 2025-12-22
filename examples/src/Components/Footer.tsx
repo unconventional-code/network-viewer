@@ -1,5 +1,3 @@
-import React from "react";
-
 const Footer = () => (
   <footer className="p-4 bg-gray-100 border-t border-gray-300 text-center">
     <span>For more information please check</span>
@@ -13,5 +11,3 @@ const Footer = () => (
     </a>
   </footer>
 );
-
-export default Footer;

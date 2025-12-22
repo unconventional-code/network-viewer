@@ -1,8 +1,6 @@
-import React from "react";
-
 import { SECTION_TITLES, PAYLOAD_CAPTIONS } from "../../constants";
-import IconCaretDown from "../../icons/IconCaretDown";
-import IconCaretRight from "../../icons/IconCaretRight";
+import { IconCaretDown } from "../../icons/IconCaretDown";
+import { IconCaretRight } from "../../icons/IconCaretRight";
 
 interface SectionTitleProps {
   eventKey: string;
@@ -14,7 +12,7 @@ interface SectionTitleProps {
   onPayloadTransform: () => void;
 }
 
-const SectionTitle: React.FC<SectionTitleProps> = ({
+export function SectionTitle({
   onClick,
   eventKey,
   isEncodeEnabled = false,
@@ -22,7 +20,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
   onPayloadTransform,
   isPayloadTransformed = true,
   isParseEnabled = false,
-}) => {
+}: SectionTitleProps) {
   const payloadStatus =
     PAYLOAD_CAPTIONS[isParseEnabled ? "parse" : "encode"][
       String(isPayloadTransformed)
@@ -55,6 +53,4 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
       )}
     </div>
   );
-};
-
-export default SectionTitle;
+}

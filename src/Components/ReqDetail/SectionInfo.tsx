@@ -1,6 +1,6 @@
-import React, { useState, ReactNode } from "react";
+import { useState, ReactNode } from "react";
 
-import SectionTitle from "./SectionTitle";
+import { SectionTitle } from "./SectionTitle";
 
 interface SectionInfoProps {
   component: (props: {
@@ -15,14 +15,14 @@ interface SectionInfoProps {
   isVisible?: boolean;
 }
 
-const SectionInfo: React.FC<SectionInfoProps> = ({
+export function SectionInfo({
   eventKey,
   data = null,
   component,
   isEncodeEnabled = false,
   isParseEnabled = false,
   isVisible = false,
-}) => {
+}: SectionInfoProps) {
   const [isOpen, setIsOpen] = useState(isVisible);
   const [isPayloadTransformed, updateTransform] = useState(true);
 
@@ -48,6 +48,4 @@ const SectionInfo: React.FC<SectionInfoProps> = ({
       {isOpen && <ChildComponent />}
     </>
   );
-};
-
-export default SectionInfo;
+}

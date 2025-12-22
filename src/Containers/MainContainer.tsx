@@ -1,16 +1,14 @@
-import React from "react";
-
 import { useNetwork } from "../state/network/Context";
-import FilterContainer from "./FilterContainer";
-import NetworkTableContainer from "./NetworkTableContainer";
-import LoaderContainer from "./../Components/LoaderContainer";
+import { FilterContainer } from "./FilterContainer";
+import { NetworkTableContainer } from "./NetworkTableContainer";
+import { LoaderContainer } from "./../Components/LoaderContainer";
 import { FETCH_FILE_LOAD_TEXT } from "../constants";
-import ReqDetailContainer from "./ReqDetailContainer";
-import TimelineContainer from "./TimelineContainer";
+import { ReqDetailContainer } from "./ReqDetailContainer";
+import { TimelineContainer } from "./TimelineContainer";
 import { useTheme } from "../state/theme/Context";
-import NetworkTableFooter from "./../Components/NetworkTable/NetworkTableFooter";
+import { NetworkTableFooter } from "./../Components/NetworkTable/NetworkTableFooter";
 
-const MainContainer: React.FC = () => {
+export function MainContainer() {
   const { state } = useNetwork();
   const { showTimeline } = useTheme();
   const loading = state.get("loading");
@@ -37,6 +35,4 @@ const MainContainer: React.FC = () => {
       </LoaderContainer>
     </>
   );
-};
-
-export default MainContainer;
+}

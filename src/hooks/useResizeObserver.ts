@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /* eslint no-underscore-dangle: 0 */
 
-const debounce = (func, delay) => {
-  let timeoutId;
-  return (...args) => {
+const debounce = (func: (...args: any[]) => void, delay: number) => {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  return (...args: any[]) => {
     if (timeoutId) clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
       func(...args);
@@ -12,7 +12,9 @@ const debounce = (func, delay) => {
   };
 };
 
-export const useResizeObserver = (elementRef) => {
+export function useResizeObserver(
+  elementRef: React.RefObject<HTMLDivElement | null>
+) {
   const [elementDims, setElementDims] = useState({
     width: 0,
     height: 0,
@@ -43,4 +45,4 @@ export const useResizeObserver = (elementRef) => {
   }, [elementRef]);
 
   return { elementDims };
-};
+}

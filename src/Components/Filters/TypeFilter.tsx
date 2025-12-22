@@ -1,11 +1,10 @@
-import React from "react";
 import classNames from "classnames";
 
 import { useNetwork } from "../../state/network/Context";
-import Button from "../Common/Button";
+import { Button } from "../Common/Button";
 import { TYPE_FILTERS } from "../../constants";
 
-const TypeFilter: React.FC = () => {
+export function TypeFilter() {
   const { state, actions } = useNetwork();
   const filter = state.get("typeFilter");
 
@@ -25,6 +24,4 @@ const TypeFilter: React.FC = () => {
       </Button>
     );
   });
-};
-
-export default TypeFilter;
+}

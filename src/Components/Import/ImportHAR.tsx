@@ -1,8 +1,7 @@
-import React from "react";
 import { useDropzone } from "react-dropzone";
 
 import { useNetwork } from "../../state/network/Context";
-import ImportHarButton from "../Actions/ImportHarButton";
+import { ImportHarButton } from "../Actions/ImportHarButton";
 
 const DROP_FILE_CONFIG = {
   accept: { "application/json": [".har"] },
@@ -13,7 +12,7 @@ interface ImportHARProps {
   showButton?: boolean;
 }
 
-const ImportHAR: React.FC<ImportHARProps> = ({ showButton = true }) => {
+export function ImportHAR({ showButton = true }: ImportHARProps) {
   const { actions } = useNetwork();
   const { updateErrorMessage } = actions;
 
@@ -54,6 +53,4 @@ const ImportHAR: React.FC<ImportHARProps> = ({ showButton = true }) => {
       )}
     </div>
   );
-};
-
-export default ImportHAR;
+}

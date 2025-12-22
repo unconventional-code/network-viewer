@@ -1,9 +1,7 @@
-import React from "react";
-
 import { useNetwork } from "../state/network/Context";
-import TimelineChart from "../Components/TimelineChart/TimelineChart";
+import { TimelineChart } from "../Components/TimelineChart/TimelineChart";
 
-const TimelineContainer: React.FC = () => {
+export function TimelineContainer() {
   const { state } = useNetwork();
   const data = state.get("data");
   const actualData = state.get("actualData");
@@ -20,6 +18,4 @@ const TimelineContainer: React.FC = () => {
       />
     </section>
   );
-};
-
-export default TimelineContainer;
+}

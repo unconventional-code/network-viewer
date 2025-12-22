@@ -1,11 +1,10 @@
-import React from "react";
 import classNames from "classnames";
 
 import { useNetwork } from "../../state/network/Context";
 import { useTheme } from "../../state/theme/Context";
 import { getViewerFields } from "../../utils";
 
-const NetworkTableHeader: React.FC = () => {
+export function NetworkTableHeader() {
   const { state } = useNetwork();
   const showReqDetail = state.get("showReqDetail");
   const tableHeaderWidth = state.get("tableHeaderWidth");
@@ -33,6 +32,4 @@ const NetworkTableHeader: React.FC = () => {
       ))}
     </div>
   );
-};
-
-export default NetworkTableHeader;
+}

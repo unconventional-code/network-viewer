@@ -1,12 +1,12 @@
-import React, { useEffect, useReducer, useMemo, ReactNode } from 'react';
-import { Map } from 'immutable';
-import { AxiosRequestConfig } from 'axios';
+import { useEffect, useReducer, useMemo, ReactNode } from "react";
+import { Map } from "immutable";
+import { AxiosRequestConfig } from "axios";
 
-import { reducer, initialState as defaultState } from './reducer';
-import { updateData, fetchFile, updateScrollToIndex } from './actions';
-import { NetworkContext } from './Context';
-import { findRequestIndex } from '../../utils';
-import { HarData, ScrollRequestPosition } from '../../types';
+import { reducer, initialState as defaultState } from "./reducer";
+import { updateData, fetchFile, updateScrollToIndex } from "./actions";
+import { NetworkContext } from "./Context";
+import { findRequestIndex } from "../../utils";
+import { HarData, ScrollRequestPosition } from "../../types";
 
 interface NetworkProviderProps {
   autoHighlightChange?: boolean;
@@ -25,13 +25,13 @@ interface NetworkProviderProps {
   children?: ReactNode;
 }
 
-const NetworkProvider: React.FC<NetworkProviderProps> = ({
+export function NetworkProvider({
   data = null,
   file = null,
   fetchOptions = { withCredentials: true },
   initialState = defaultState,
   scrollTimeStamp = null,
-  scrollRequestPosition = 'near',
+  scrollRequestPosition = "near",
   autoHighlightChange = false,
   onDataLoaded = null,
   onDataError = null,
@@ -41,7 +41,7 @@ const NetworkProvider: React.FC<NetworkProviderProps> = ({
   onRequestSelect = null,
   children,
   ...props
-}) => {
+}: NetworkProviderProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const callbacks = {
     onPause,
@@ -50,10 +50,10 @@ const NetworkProvider: React.FC<NetworkProviderProps> = ({
     onRequestSelect,
   };
   const value = useMemo(() => [state, dispatch, callbacks], [state]);
-  const requestData = value[0].get('data');
-  const showReqDetail = value[0].get('showReqDetail');
-  const actualData = value[0].get('actualData');
-  const error = value[0].get('error');
+  const requestData = value[0].get("data");
+  const showReqDetail = value[0].get("showReqDetail");
+  const actualData = value[0].get("actualData");
+  const error = value[0].get("error");
 
   // Update data onChange of network data
   useEffect(() => {
@@ -97,13 +97,8 @@ const NetworkProvider: React.FC<NetworkProviderProps> = ({
   }, [scrollTimeStamp, actualData]);
 
   return (
-    <NetworkContext.Provider
-      value={value}
-      {...props}
-    >
+    <NetworkContext.Provider value={value} {...props}>
       {children}
     </NetworkContext.Provider>
   );
-};
-
-export default NetworkProvider;
+}

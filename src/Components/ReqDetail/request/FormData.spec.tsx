@@ -1,8 +1,7 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
-import FormData from "./FormData";
+import { FormData } from "./FormData";
 
 describe("FormData", () => {
   const props = {

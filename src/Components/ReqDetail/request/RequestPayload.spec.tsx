@@ -1,8 +1,7 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
-import RequestPayload from "./RequestPayload";
+import { RequestPayload } from "./RequestPayload";
 
 describe("RequestPayload", () => {
   const props = {

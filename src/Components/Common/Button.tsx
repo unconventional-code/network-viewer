@@ -1,7 +1,8 @@
 import React, { forwardRef, ReactNode } from "react";
 import classNames from "classnames";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
   children: ReactNode;
   className?: string;
   disabled?: boolean;
@@ -10,7 +11,10 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "default" | "text";
 }
 
-const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
+export const Button = forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  ButtonProps
+>(
   (
     {
       children,
@@ -45,18 +49,27 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       className
     );
 
-    const TagName = href && !disabled ? "a" : "button";
-    const commonProps = {
-      ref: ref as any,
-      className: combinedClasses,
-      ...(TagName === "button" ? { disabled, type } : { href }),
-      ...props,
-    };
+    if (href && !disabled) {
+      return (
+        // @ts-ignore
+        <a ref={ref as any} className={combinedClasses} href={href} {...props}>
+          {children}
+        </a>
+      );
+    }
 
-    return <TagName {...commonProps}>{children}</TagName>;
+    return (
+      <button
+        ref={ref as any}
+        className={combinedClasses}
+        disabled={disabled}
+        type={type as React.ButtonHTMLAttributes<HTMLButtonElement>["type"]}
+        {...props}
+      >
+        {children}
+      </button>
+    );
   }
 );
 
 Button.displayName = "Button";
-
-export default Button;

@@ -1,17 +1,17 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 import { parseRequestPayload } from "../../../utils";
-import CopyAllButton from "../CopyAllButton";
+import { CopyAllButton } from "../CopyAllButton";
 
 interface RequestPayloadProps {
   data?: any | null;
   isPayloadTransformed: boolean;
 }
 
-const RequestPayload: React.FC<RequestPayloadProps> = ({
+export function RequestPayload({
   data = null,
   isPayloadTransformed,
-}) => {
+}: RequestPayloadProps) {
   const payloadData = data?.headers?.postData?.text;
   const parsedData = useMemo(
     () => parseRequestPayload(payloadData),
@@ -29,6 +29,4 @@ const RequestPayload: React.FC<RequestPayloadProps> = ({
       </div>
     </div>
   );
-};
-
-export default RequestPayload;
+}

@@ -9,12 +9,12 @@ import {
 
 /* eslint no-underscore-dangle: 0 */
 
-export const roundOff = (value, decimal = 1) => {
+export const roundOff = (value: number, decimal = 1) => {
   const base = 10 ** decimal;
   return Math.round(value * base) / base;
 };
 
-export const formatSize = (bytes) => {
+export const formatSize = (bytes: number) => {
   if (bytes < 1024) {
     return `${roundOff(bytes)} B`;
   }
@@ -24,7 +24,7 @@ export const formatSize = (bytes) => {
   return `${roundOff(bytes / 1024 ** 2)} MB`;
 };
 
-export const formatTime = (time) => {
+export const formatTime = (time: number) => {
   if (time < 1000) {
     return `${Math.round(time)}ms`;
   }
@@ -34,7 +34,7 @@ export const formatTime = (time) => {
   return `${(Math.ceil(time / 60000) * 100) / 100}m`;
 };
 
-export const getUrlInfo = (url) => {
+export const getUrlInfo = (url: string) => {
   // If there's an invalid URL (resource identifier, etc.) the constructor would throw an exception.
   // Return a 'placeholder' object with default values in the event the passed value cannot be
   // parsed.
@@ -357,7 +357,13 @@ export const formatValue = (key, value, unit, entry = {}) => {
   }
 };
 
-export const calcChartAttributes = (data, maxTime, cx, index, cy = null) => {
+export const calcChartAttributes = (
+  data: any,
+  maxTime: number,
+  cx: number,
+  index: number,
+  cy: number | null = null
+) => {
   const startTimePercent = (data.startTime / maxTime) * 100;
   let previousX = 0;
   let previousWidth = 0;
@@ -457,7 +463,7 @@ export const getSummary = (data) =>
     }
   );
 
-export const parseRequestPayload = (text) => {
+export const parseRequestPayload = (text: string) => {
   let parsedJson;
   try {
     parsedJson = JSON.stringify(JSON.parse(text), null, 2);
@@ -467,7 +473,10 @@ export const parseRequestPayload = (text) => {
   return parsedJson;
 };
 
-export const getViewerFields = (showReqDetail, showWaterfall) => {
+export const getViewerFields = (
+  showReqDetail: boolean,
+  showWaterfall: boolean
+) => {
   if (showReqDetail) {
     return VIEWER_FIELD_FILE;
   }

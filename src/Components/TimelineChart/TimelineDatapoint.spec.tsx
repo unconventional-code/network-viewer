@@ -1,8 +1,7 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
-import TimelineDatapoint from "./TimelineDatapoint";
+import { TimelineDatapoint } from "./TimelineDatapoint";
 
 describe("TimelineDatapoint", () => {
   it("renders without crashing", () => {

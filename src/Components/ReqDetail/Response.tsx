@@ -1,18 +1,18 @@
-import React from "react";
+import { CopyAllButton } from "./CopyAllButton";
 
-import CopyAllButton from "./CopyAllButton";
-
-const NoResponseText: React.FC = () => (
-  <h4 className="flex items-center justify-center text-h4 w-full text-brand-primary-dark-gray">
-    This request has no response data available.
-  </h4>
-);
+export function NoResponseText() {
+  return (
+    <h4 className="flex items-center justify-center text-h4 w-full text-brand-primary-dark-gray">
+      This request has no response data available.
+    </h4>
+  );
+}
 
 interface ResponseProps {
   data?: any | null;
 }
 
-const Response: React.FC<ResponseProps> = ({ data = null }) => {
+export function Response({ data = null }: ResponseProps) {
   const content = data && data.body ? data.body : null;
 
   if (!content) {
@@ -31,6 +31,4 @@ const Response: React.FC<ResponseProps> = ({ data = null }) => {
       </div>
     </div>
   );
-};
-
-export default Response;
+}

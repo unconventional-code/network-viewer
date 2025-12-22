@@ -1,8 +1,7 @@
-import React from "react";
 import { Map } from "immutable";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import NetworkTableFooter from "./NetworkTableFooter";
+import { NetworkTableFooter } from "./NetworkTableFooter";
 
 describe("NetworkTableFooter", () => {
   it("renders without crashing", () => {

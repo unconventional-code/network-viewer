@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import classNames from "classnames";
 
 import { TIMINGS } from "../../constants";
@@ -23,7 +23,7 @@ interface TimeChartTooltipProps {
   data: Record<string, number>;
 }
 
-const TimeChartTooltip: React.FC<TimeChartTooltipProps> = ({ data }) => {
+export function TimeChartTooltip({ data }: TimeChartTooltipProps) {
   const tooltipData = useMemo(
     () => (!data ? null : prepareTooltipData(data)),
     [data]
@@ -117,6 +117,4 @@ const TimeChartTooltip: React.FC<TimeChartTooltipProps> = ({ data }) => {
       </section>
     </div>
   );
-};
-
-export default TimeChartTooltip;
+}

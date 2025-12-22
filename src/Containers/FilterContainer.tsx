@@ -1,16 +1,14 @@
-import React from "react";
-
-import Search from "../Components/Filters/Search";
-import ResetButton from "../Components/Actions/ResetButton";
-import StatusFilter from "../Components/Filters/StatusFilter";
-import ExportHarButton from "../Components/Actions/ExportHarButton";
-import PauseResumeButton from "../Components/Actions/PauseResumeButton";
-import TypeFilter from "../Components/Filters/TypeFilter";
-import ImportHAR from "../Components/Import/ImportHAR";
+import { Search } from "../Components/Filters/Search";
+import { ResetButton } from "../Components/Actions/ResetButton";
+import { StatusFilter } from "../Components/Filters/StatusFilter";
+import { ExportHarButton } from "../Components/Actions/ExportHarButton";
+import { PauseResumeButton } from "../Components/Actions/PauseResumeButton";
+import { TypeFilter } from "../Components/Filters/TypeFilter";
+import { ImportHAR } from "../Components/Import/ImportHAR";
 import { useTheme } from "../state/theme/Context";
 import { useNetwork } from "../state/network/Context";
 
-const FilterContainer: React.FC = () => {
+export function FilterContainer() {
   const { state } = useNetwork();
   const { showExportHar, showImportHar, showReset, showPauseResume } =
     useTheme();
@@ -31,6 +29,4 @@ const FilterContainer: React.FC = () => {
       </div>
     </section>
   );
-};
-
-export default FilterContainer;
+}

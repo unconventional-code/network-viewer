@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import NetworkViewer from '../../../src/NetworkViewer';
-import NetworkData from './../data/network.har';
+import NetworkViewer from "../../../src/NetworkViewer";
+import NetworkData from "./../data/network.har";
 
 const data = JSON.parse(NetworkData);
 
@@ -28,5 +28,3 @@ const ScrollExample = () => {
     />
   );
 };
-
-export default ScrollExample;

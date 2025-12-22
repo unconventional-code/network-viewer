@@ -1,8 +1,7 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
-import TimelineChart from "./TimelineChart";
+import { TimelineChart } from "./TimelineChart";
 
 describe("TimelineChart", () => {
   it("renders without crashing", () => {

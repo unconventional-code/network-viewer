@@ -1,8 +1,7 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
-import ResponseHeaders from "./ResponseHeaders";
+import { ResponseHeaders } from "./ResponseHeaders";
 
 describe("ResponseHeaders", () => {
   const props = {

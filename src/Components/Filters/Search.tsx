@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler } from "react";
+import { ChangeEventHandler } from "react";
 
 import { useNetwork } from "../../state/network/Context";
 
@@ -7,7 +7,7 @@ interface SearchProps {
   value?: string;
 }
 
-const Search: React.FC<SearchProps> = ({ name, value = "" }) => {
+export function Search({ name, value = "" }: SearchProps) {
   const { actions } = useNetwork();
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = ({
@@ -29,6 +29,4 @@ const Search: React.FC<SearchProps> = ({ name, value = "" }) => {
       value={value}
     />
   );
-};
-
-export default Search;
+}

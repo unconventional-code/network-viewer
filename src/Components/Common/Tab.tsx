@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
 
 interface TabProps {
   children: ReactNode;
@@ -6,6 +6,6 @@ interface TabProps {
   eventKey?: string;
 }
 
-const Tab: React.FC<TabProps> = ({ children }) => children as React.ReactElement;
-
-export default Tab;
+export function Tab({ children }: TabProps) {
+  return children as React.ReactElement;
+}

@@ -1,16 +1,17 @@
-import React from "react";
-
-import General from "./headers/General";
-import ResponseHeaders from "./headers/ResponseHeaders";
-import RequestHeaders from "./headers/RequestHeaders";
-import SectionInfo from "./SectionInfo";
+import { General } from "./headers/General";
+import { ResponseHeaders } from "./headers/ResponseHeaders";
+import { RequestHeaders } from "./headers/RequestHeaders";
+import { SectionInfo } from "./SectionInfo";
 
 interface HeadersProps {
   data?: any | null;
 }
 
-const Headers: React.FC<HeadersProps> = ({ data = null }) =>
-  !data ? null : (
+export function Headers({ data = null }: HeadersProps) {
+  if (!data) {
+    return null;
+  }
+  return (
     <section className="w-full">
       <SectionInfo
         component={General}
@@ -30,5 +31,4 @@ const Headers: React.FC<HeadersProps> = ({ data = null }) =>
       />
     </section>
   );
-
-export default Headers;
+}

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 import { calcChartAttributes } from "../../utils";
 import { TIMELINE_DATA_POINT_HEIGHT } from "../../constants";
@@ -11,13 +11,13 @@ interface TimelineDatapointProps {
   index?: number;
 }
 
-const TimelineDatapoint: React.FC<TimelineDatapointProps> = ({
+export function TimelineDatapoint({
   payload = null,
   maxTime,
   cx = 0,
   cy = null,
   index = 0,
-}) => {
+}: TimelineDatapointProps) {
   if (!payload) {
     return null;
   }
@@ -39,6 +39,4 @@ const TimelineDatapoint: React.FC<TimelineDatapointProps> = ({
       ))}
     </g>
   );
-};
-
-export default TimelineDatapoint;
+}

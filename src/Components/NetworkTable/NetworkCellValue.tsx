@@ -1,9 +1,8 @@
-import React from "react";
 import classNames from "classnames";
 
 import { formatValue } from "../../utils";
 import { VIEWER_FIELDS } from "../../constants";
-import Tooltip from "../Common/Tooltip/Tooltip";
+import { Tooltip } from "../Common/Tooltip/Tooltip";
 
 interface NetworkCellValueProps {
   datakey: string;
@@ -12,12 +11,12 @@ interface NetworkCellValueProps {
   unit?: string | null;
 }
 
-const NetworkCellValue: React.FC<NetworkCellValueProps> = ({
+export function NetworkCellValue({
   datakey,
   onClick = () => {},
   payload = {},
   unit = null,
-}) => {
+}: NetworkCellValueProps) {
   const formattedValue = formatValue(datakey, payload[datakey], unit, payload);
   const shouldDisplayTooltip =
     datakey === VIEWER_FIELDS.file.key || payload.error;
@@ -52,6 +51,4 @@ const NetworkCellValue: React.FC<NetworkCellValueProps> = ({
       </div>
     </Tooltip>
   );
-};
-
-export default NetworkCellValue;
+}

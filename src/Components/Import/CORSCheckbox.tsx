@@ -1,13 +1,11 @@
-import React from "react";
-
-import Checkbox from "../../../src/Components/Common/Checkbox";
+import { Checkbox } from "../../../src/Components/Common/Checkbox";
 
 interface CORSCheckboxProps {
   isEnabled: boolean;
   onChange: (enabled: boolean) => void;
 }
 
-const CORSCheckbox: React.FC<CORSCheckboxProps> = ({ isEnabled, onChange }) => {
+export function CORSCheckbox({ isEnabled, onChange }: CORSCheckboxProps) {
   const handleChange = () => {
     onChange(!isEnabled);
   };
@@ -22,6 +20,4 @@ const CORSCheckbox: React.FC<CORSCheckboxProps> = ({ isEnabled, onChange }) => {
       CORS
     </Checkbox>
   );
-};
-
-export default CORSCheckbox;
+}

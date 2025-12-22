@@ -4,7 +4,7 @@ import { describe, it, expect } from "vitest";
 import * as types from "./types";
 import { reducer, initialState } from "./reducer";
 import networkDataMock from "../../network.json";
-import preparedMockData from "../../preparedData";
+import { preparedMockData } from "../../preparedData";
 
 describe("network reducer", () => {
   let state;

@@ -1,10 +1,9 @@
-import React from "react";
 import { List } from "immutable";
 import { render } from "@testing-library/react";
 import { vi, describe, it, expect } from "vitest";
 
 import { initialState as defaultState } from "./reducer";
-import NetworkProvider from "./NetworkProvider";
+import { NetworkProvider } from "./NetworkProvider";
 
 describe("NetworkProvider", () => {
   it("renders without crashing", () => {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NetworkViewer } from "../../src";
 
-import Footer from "./Components/Footer";
+import { Footer } from "./Components/Footer";
 import { parseQueryString } from "./utils";
 
 const App = () => {
@@ -38,5 +38,3 @@ const App = () => {
     </section>
   );
 };
-
-export default App;

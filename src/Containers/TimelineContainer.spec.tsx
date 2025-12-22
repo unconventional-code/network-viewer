@@ -1,9 +1,8 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
-import TimelineContainer from "./TimelineContainer";
-import NetworkProvider from "../state/network/NetworkProvider";
+import { TimelineContainer } from "./TimelineContainer";
+import { NetworkProvider } from "../state/network/NetworkProvider";
 
 describe("TimelineContainer", () => {
   it("renders without crashing", () => {

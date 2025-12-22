@@ -12,10 +12,10 @@ interface TooltipTransitionProps {
   isOpen: boolean;
 }
 
-const TooltipTransition: React.FC<TooltipTransitionProps> = ({
+export function TooltipTransition({
   children,
   isOpen,
-}) => {
+}: TooltipTransitionProps) {
   const [exited, setExited] = useState(!isOpen);
 
   const handleEntered = () => setExited(false);
@@ -49,6 +49,4 @@ const TooltipTransition: React.FC<TooltipTransitionProps> = ({
       }
     </Transition>
   );
-};
-
-export default TooltipTransition;
+}

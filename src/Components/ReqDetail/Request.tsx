@@ -1,15 +1,13 @@
-import React from "react";
-
-import QueryString from "./request/QueryString";
-import FormData from "./request/FormData";
-import SectionInfo from "./SectionInfo";
-import RequestPayload from "./request/RequestPayload";
+import { QueryString } from "./request/QueryString";
+import { FormData } from "./request/FormData";
+import { SectionInfo } from "./SectionInfo";
+import { RequestPayload } from "./request/RequestPayload";
 
 interface RequestProps {
   data?: any | null;
 }
 
-const Request: React.FC<RequestProps> = ({ data = null }) => {
+export function Request({ data = null }: RequestProps) {
   if (
     !data ||
     (!data.headers.postData?.text &&
@@ -52,6 +50,4 @@ const Request: React.FC<RequestProps> = ({ data = null }) => {
       )}
     </section>
   );
-};
-
-export default Request;
+}

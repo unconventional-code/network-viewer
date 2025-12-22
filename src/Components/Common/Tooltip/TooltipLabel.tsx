@@ -1,4 +1,4 @@
-import React, { forwardRef, ReactNode } from "react";
+import { forwardRef, ReactNode } from "react";
 import { useTooltip } from "@react-aria/tooltip";
 import { mergeProps } from "@react-aria/utils";
 import classnames from "classnames";
@@ -11,7 +11,7 @@ interface TooltipLabelProps {
   [key: string]: any;
 }
 
-const TooltipLabel = forwardRef<HTMLDivElement, TooltipLabelProps>(
+export const TooltipLabel = forwardRef<HTMLDivElement, TooltipLabelProps>(
   ({ state, className = "", children, isOpen = false, ...props }, ref) => {
     const { tooltipProps } = useTooltip(props, state);
     return (
@@ -37,5 +37,3 @@ const TooltipLabel = forwardRef<HTMLDivElement, TooltipLabelProps>(
 );
 
 TooltipLabel.displayName = "TooltipLabel";
-
-export default TooltipLabel;

@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FixedSizeList } from "react-window";
 
 import { useNetwork } from "../../state/network/Context";
-import NetworkTableRow from "./NetworkTableRow";
+import { NetworkTableRow } from "./NetworkTableRow";
 import { TABLE_ENTRY_HEIGHT } from "../../constants";
 import { useResizeObserver } from "../../hooks/useResizeObserver";
 import { useTheme } from "../../state/theme/Context";
-import IconNetworkRequest from "../../icons/IconNetworkRequest";
+import { IconNetworkRequest } from "../../icons/IconNetworkRequest";
 
 /* eslint no-underscore-dangle: 0 */
 
@@ -31,7 +31,7 @@ interface NetworkTableBodyProps {
   height: number;
 }
 
-const NetworkTableBody: React.FC<NetworkTableBodyProps> = ({ height }) => {
+export function NetworkTableBody({ height }: NetworkTableBodyProps) {
   const { state, actions, callbacks } = useNetwork();
   const { enableAutoScroll, NoDataPlaceholder } = useTheme();
   const numberOfNewEntries = state.get("numberOfNewEntries");
@@ -111,6 +111,4 @@ const NetworkTableBody: React.FC<NetworkTableBodyProps> = ({ height }) => {
       </FixedSizeList>
     </>
   );
-};
-
-export default NetworkTableBody;
+}

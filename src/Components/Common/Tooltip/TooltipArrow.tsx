@@ -1,4 +1,3 @@
-import React from "react";
 import classnames from "classnames";
 
 type PlacementAxis = "top" | "bottom" | "left" | "right" | "center";
@@ -16,17 +15,17 @@ const getArrowPosition = (placement: PlacementAxis) =>
     "top-0": placement === "bottom",
   });
 
-const TooltipArrow: React.FC<TooltipArrowProps> = ({
+export function TooltipArrow({
   placementAxis = "bottom",
   ...props
-}) => (
-  <div
-    className={classnames(
-      "absolute w-2 h-2 bg-white-39 transform rotate-45",
-      getArrowPosition(placementAxis)
-    )}
-    {...props}
-  />
-);
-
-export default TooltipArrow;
+}: TooltipArrowProps) {
+  return (
+    <div
+      className={classnames(
+        "absolute w-2 h-2 bg-white-39 transform rotate-45",
+        getArrowPosition(placementAxis)
+      )}
+      {...props}
+    />
+  );
+}

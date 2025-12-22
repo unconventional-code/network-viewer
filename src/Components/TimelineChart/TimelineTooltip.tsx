@@ -1,5 +1,3 @@
-import React from "react";
-
 import { formatTime } from "../../utils";
 
 interface TimelineTooltipProps {
@@ -8,9 +6,7 @@ interface TimelineTooltipProps {
   }> | null;
 }
 
-const TimelineTooltip: React.FC<TimelineTooltipProps> = ({
-  payload = null,
-}) => {
+export function TimelineTooltip({ payload = null }: TimelineTooltipProps) {
   if (!payload || !payload.length) {
     return null;
   }
@@ -23,6 +19,4 @@ const TimelineTooltip: React.FC<TimelineTooltipProps> = ({
       </div>
     </div>
   );
-};
-
-export default TimelineTooltip;
+}

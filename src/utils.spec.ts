@@ -4,7 +4,7 @@ import { describe, it, expect } from "vitest";
 import * as utils from "./utils";
 import networkDataMock from "./network.json";
 import interceptErrorNetworkDataMock from "./network_intercept_error.json";
-import preparedMockData from "./preparedData";
+import { preparedMockData } from "./preparedData";
 
 describe("utils", () => {
   it("getUrlInfo", () => {

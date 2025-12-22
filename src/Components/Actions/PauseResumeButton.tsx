@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import Button from "../Common/Button";
-import IconPause from "../../icons/IconPause";
+import { Button } from "../Common/Button";
+import { IconPause } from "../../icons/IconPause";
 import { useNetwork } from "../../state/network/Context";
-import IconResume from "../../icons/IconResume";
-import Tooltip from "../Common/Tooltip/Tooltip";
+import { IconResume } from "../../icons/IconResume";
+import { Tooltip } from "../Common/Tooltip/Tooltip";
 
-const PauseResumeButton: React.FC = () => {
+export function PauseResumeButton() {
   const { callbacks } = useNetwork();
   const [isPaused, setIsPaused] = useState(false);
 
@@ -38,6 +38,4 @@ const PauseResumeButton: React.FC = () => {
       </Button>
     </Tooltip>
   );
-};
-
-export default PauseResumeButton;
+}

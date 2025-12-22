@@ -1,9 +1,8 @@
-import React from "react";
 import FileSaver from "file-saver";
 
-import Button from "../Common/Button";
-import IconDownload from "../../icons/IconDownload";
-import Tooltip from "../Common/Tooltip/Tooltip";
+import { Button } from "../Common/Button";
+import { IconDownload } from "../../icons/IconDownload";
+import { Tooltip } from "../Common/Tooltip/Tooltip";
 import { EMPTY_NETWORK_HAR } from "../../constants";
 import { HarData } from "../../types";
 
@@ -11,9 +10,9 @@ interface ExportHarButtonProps {
   rawData?: HarData;
 }
 
-const ExportHarButton: React.FC<ExportHarButtonProps> = ({
+export function ExportHarButton({
   rawData = EMPTY_NETWORK_HAR,
-}) => {
+}: ExportHarButtonProps) {
   const downloadHar = () => {
     const formattedHar = JSON.stringify(rawData, null, 2);
 
@@ -27,6 +26,4 @@ const ExportHarButton: React.FC<ExportHarButtonProps> = ({
       </Button>
     </Tooltip>
   );
-};
-
-export default ExportHarButton;
+}

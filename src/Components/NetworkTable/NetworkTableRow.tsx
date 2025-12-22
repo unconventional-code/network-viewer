@@ -1,9 +1,9 @@
-import React, { CSSProperties } from "react";
+import { CSSProperties } from "react";
 import classNames from "classnames";
 
 import { ROW_ID_PREFIX } from "../../constants";
-import TimeChart from "./TimeChart";
-import NetworkCellValue from "./NetworkCellValue";
+import { TimeChart } from "./TimeChart";
+import { NetworkCellValue } from "./NetworkCellValue";
 import { getStatusClass, getViewerFields } from "../../utils";
 import { useTheme } from "../../state/theme/Context";
 import { useNetwork } from "../../state/network/Context";
@@ -16,13 +16,13 @@ interface NetworkTableRowProps {
   style?: CSSProperties;
 }
 
-const NetworkTableRow: React.FC<NetworkTableRowProps> = ({
+export function NetworkTableRow({
   entry,
   maxTime,
   onSelect,
   scrollHighlight,
   style = {},
-}) => {
+}: NetworkTableRowProps) {
   const { state } = useNetwork();
   const showReqDetail = state.get("showReqDetail");
   const { showWaterfall } = useTheme();
@@ -71,6 +71,4 @@ const NetworkTableRow: React.FC<NetworkTableRowProps> = ({
       </div>
     </div>
   );
-};
-
-export default NetworkTableRow;
+}

@@ -1,9 +1,8 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
-import ReqDetailContainer from "./ReqDetailContainer";
-import NetworkProvider from "../state/network/NetworkProvider";
+import { ReqDetailContainer } from "./ReqDetailContainer";
+import { NetworkProvider } from "../state/network/NetworkProvider";
 
 describe("ReqDetailContainer", () => {
   it("renders without crashing", () => {

@@ -1,8 +1,7 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
-import SectionTitle from "./SectionTitle";
+import { SectionTitle } from "./SectionTitle";
 
 describe("SectionTitle", () => {
   const props = {

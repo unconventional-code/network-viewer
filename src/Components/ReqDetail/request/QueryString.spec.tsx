@@ -1,7 +1,6 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import QueryString from "./QueryString";
+import { QueryString } from "./QueryString";
 
 describe("QueryString", () => {
   const props = {

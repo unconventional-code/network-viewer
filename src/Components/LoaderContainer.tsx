@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 interface LoaderContainerProps {
   children?: ReactNode | null;
@@ -6,15 +6,17 @@ interface LoaderContainerProps {
   text?: string | ReactNode | null;
 }
 
-const LoaderContainer: React.FC<LoaderContainerProps> = ({
+export function LoaderContainer({
   children = null,
   show = true,
   text = null,
-}) => {
-  const colorBrandBlue = '#0E75DD';
+}: LoaderContainerProps) {
+  const colorBrandBlue = "#0E75DD";
   const uniqueId = `Gradient-${Math.round(Math.random() * 10000000)}`;
 
-  return !show ? <>{children}</> : (
+  return !show ? (
+    <>{children}</>
+  ) : (
     <section className="flex flex-col items-center justify-center h-full w-full absolute inset-0 bg-white-100 bg-opacity-90 z-50">
       <div className="animate-spin-slow">
         <svg
@@ -24,20 +26,9 @@ const LoaderContainer: React.FC<LoaderContainerProps> = ({
         >
           <defs>
             <linearGradient id={uniqueId}>
-              <stop
-                offset="0%"
-                stopColor={colorBrandBlue}
-              />
-              <stop
-                offset="75%"
-                stopColor={colorBrandBlue}
-                stopOpacity="0"
-              />
-              <stop
-                offset="100%"
-                stopColor={colorBrandBlue}
-                stopOpacity="0"
-              />
+              <stop offset="0%" stopColor={colorBrandBlue} />
+              <stop offset="75%" stopColor={colorBrandBlue} stopOpacity="0" />
+              <stop offset="100%" stopColor={colorBrandBlue} stopOpacity="0" />
             </linearGradient>
           </defs>
           <circle
@@ -50,9 +41,7 @@ const LoaderContainer: React.FC<LoaderContainerProps> = ({
           />
         </svg>
       </div>
-      { text && <p className="mt-m text-base text-brand-primary-gray">{text}</p> }
+      {text && <p className="mt-m text-base text-brand-primary-gray">{text}</p>}
     </section>
   );
-};
-
-export default LoaderContainer;
+}

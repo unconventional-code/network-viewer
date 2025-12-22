@@ -1,12 +1,10 @@
-import React from "react";
-
-import Button from "../Common/Button";
-import IconReset from "../../icons/IconReset";
+import { Button } from "../Common/Button";
+import { IconReset } from "../../icons/IconReset";
 import { useNetwork } from "../../state/network/Context";
-import Tooltip from "../Common/Tooltip/Tooltip";
+import { Tooltip } from "../Common/Tooltip/Tooltip";
 import { useTheme } from "../../state/theme/Context";
 
-const ResetButton: React.FC = () => {
+export function ResetButton() {
   const { actions, callbacks } = useNetwork();
   const { showImportHar } = useTheme();
 
@@ -28,6 +26,4 @@ const ResetButton: React.FC = () => {
       </Button>
     </Tooltip>
   );
-};
-
-export default ResetButton;
+}

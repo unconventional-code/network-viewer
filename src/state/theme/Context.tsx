@@ -1,14 +1,16 @@
-import React, { useContext, ReactNode } from 'react';
+import React, { useContext, ReactNode } from "react";
 
-import { NETWORK_VIEWER_DEFAULT_OPTIONS } from '../../constants';
-import { NetworkViewerOptions } from '../../types';
+import { NETWORK_VIEWER_DEFAULT_OPTIONS } from "../../constants";
+import { NetworkViewerOptions } from "../../types";
 
-export const ThemeContext = React.createContext<NetworkViewerOptions>(NETWORK_VIEWER_DEFAULT_OPTIONS);
+export const ThemeContext = React.createContext<NetworkViewerOptions>(
+  NETWORK_VIEWER_DEFAULT_OPTIONS
+);
 
 export const useTheme = (): NetworkViewerOptions => {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeContext');
+    throw new Error("useTheme must be used within a ThemeContext");
   }
 
   return context;
@@ -30,13 +32,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   };
 
   return (
-    <ThemeContext.Provider
-      value={finalOptions}
-      {...props}
-    >
+    <ThemeContext.Provider value={finalOptions} {...props}>
       {children}
     </ThemeContext.Provider>
   );
 };
-
-export default ThemeProvider;

@@ -1,14 +1,14 @@
-import React, { useRef, useState, ReactNode } from "react";
+import { useRef, useState, ReactNode } from "react";
 
-import Button from "../Common/Button";
-import IconCopy from "../../icons/IconCopy";
-import IconCheckMark from "../../icons/IconCheckMark";
+import { Button } from "../Common/Button";
+import { IconCopy } from "../../icons/IconCopy";
+import { IconCheckMark } from "../../icons/IconCheckMark";
 
 interface CopyAllButtonProps {
   text?: string | ReactNode;
 }
 
-const CopyAllButton: React.FC<CopyAllButtonProps> = ({ text = "" }) => {
+export function CopyAllButton({ text = "" }: CopyAllButtonProps) {
   const [isCopied, setIsCopied] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -36,6 +36,4 @@ const CopyAllButton: React.FC<CopyAllButtonProps> = ({ text = "" }) => {
       <span className="text-h5">{isCopied ? "Copied!" : "Copy All"}</span>
     </Button>
   );
-};
-
-export default CopyAllButton;
+}

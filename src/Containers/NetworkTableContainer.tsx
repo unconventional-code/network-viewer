@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 
-import NetworkTableHeader from "../Components/NetworkTable/NetworkTableHeader";
+import { NetworkTableHeader } from "../Components/NetworkTable/NetworkTableHeader";
 import { useNetwork } from "../state/network/Context";
-import ImportHar from "../Components/Import/ImportHAR";
-import ErrorMessage from "../Components/ErrorMessage";
+import { ImportHAR } from "../Components/Import/ImportHAR";
+import { ErrorMessage } from "../Components/ErrorMessage";
 import { useTheme } from "../state/theme/Context";
-import InputHAR from "../Components/Import/InputHAR";
-import NetworkTableBody from "../Components/NetworkTable/NetworkTableBody";
+import { InputHAR } from "../Components/Import/InputHAR";
+import { NetworkTableBody } from "../Components/NetworkTable/NetworkTableBody";
 import { TABLE_HEADER_HEIGHT } from "../constants";
 import { useResizeObserver } from "../hooks/useResizeObserver";
 
-const NetworkTableContainer: React.FC = () => {
+export function NetworkTableContainer() {
   const { state } = useNetwork();
   const { showImportHar, showWaterfall } = useTheme();
   const actualData = state.get("actualData");
@@ -35,7 +35,7 @@ const NetworkTableContainer: React.FC = () => {
   if (!actualData.size && showImportHar) {
     return (
       <section className="flex flex-col items-center justify-center h-full w-full">
-        <ImportHar showButton={false} />
+        <ImportHAR showButton={false} />
         <InputHAR />
       </section>
     );
@@ -54,6 +54,4 @@ const NetworkTableContainer: React.FC = () => {
       <NetworkTableBody height={tableBodyHeight} />
     </section>
   );
-};
-
-export default NetworkTableContainer;
+}

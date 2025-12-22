@@ -1,10 +1,10 @@
-import React, { useState, ChangeEventHandler } from "react";
+import { useState, ChangeEventHandler } from "react";
 import { stringify } from "qs";
 
-import Button from "../../../src/Components/Common/Button";
-import CORSCheckbox from "./CORSCheckbox";
+import { Button } from "../../../src/Components/Common/Button";
+import { CORSCheckbox } from "./CORSCheckbox";
 
-const URLInput: React.FC = () => {
+export function URLInput() {
   const [url, setURL] = useState("");
   const [isCORSEnabled, setCORS] = useState(false);
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = ({
@@ -38,6 +38,4 @@ const URLInput: React.FC = () => {
       </Button>
     </div>
   );
-};
-
-export default URLInput;
+}

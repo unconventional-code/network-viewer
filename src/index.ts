@@ -1,5 +1,1 @@
-import NetworkViewer from './NetworkViewer';
-
-export {
-  NetworkViewer,
-};
+export { NetworkViewer } from "./NetworkViewer";

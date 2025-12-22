@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 
-import Button from "./Button";
-import IconChevronDown from "../../icons/IconChevronDown";
-import IconChevronUp from "../../icons/IconChevronUp";
+import { Button } from "./Button";
+import { IconChevronDown } from "../../icons/IconChevronDown";
+import { IconChevronUp } from "../../icons/IconChevronUp";
 
 interface DropdownItem {
   name: string;
-  value: string | number;
+  value: string | number | null;
 }
 
 interface DropdownProps {
@@ -17,12 +17,12 @@ interface DropdownProps {
   selected?: DropdownItem | null;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({
+export function Dropdown({
   items,
   selected = null,
   onChange,
   className = null,
-}) => {
+}: DropdownProps) {
   const [isExpand, setExpand] = useState(false);
   const [selectedKey, setSelection] = useState<DropdownItem>(
     selected !== null ? selected : items[0]
@@ -115,6 +115,4 @@ const Dropdown: React.FC<DropdownProps> = ({
       )}
     </span>
   );
-};
-
-export default Dropdown;
+}
