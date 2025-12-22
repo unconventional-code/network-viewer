@@ -1,5 +1,10 @@
 import React, { useContext } from "react";
 import { PreparedEntry } from "./NetworkProvider/NetworkProvider";
+import {
+  PaginationState,
+  PaginationCallbacks,
+  FilteringMode,
+} from "../../types";
 
 export interface NetworkCallbacks {
   onPause?: (() => void) | null;
@@ -73,6 +78,9 @@ export interface NetworkContextValue {
   state: NetworkState;
   actions: NetworkActions;
   callbacks: NetworkCallbacks;
+  pagination?: PaginationState | null;
+  paginationCallbacks?: PaginationCallbacks | null;
+  filteringMode?: FilteringMode;
 }
 
 export const NetworkContext = React.createContext<
