@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const IconCloseSign = ({ className }) => (
+interface IconCloseSignProps {
+  className?: string;
+}
+
+const IconCloseSign: React.FC<IconCloseSignProps> = ({ className = '' }) => (
   <svg
     className={className}
     height="24"
@@ -16,13 +19,5 @@ const IconCloseSign = ({ className }) => (
     />
   </svg>
 );
-
-IconCloseSign.propTypes = {
-  className: PropTypes.string,
-};
-
-IconCloseSign.defaultProps = {
-  className: '',
-};
 
 export default IconCloseSign;

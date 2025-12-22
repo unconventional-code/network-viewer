@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const IconCopy = ({ className }) => (
+interface IconCopyProps {
+  className?: string;
+}
+
+const IconCopy: React.FC<IconCopyProps> = ({ className = '' }) => (
   <svg
     className={className}
     height="24"
@@ -16,13 +19,5 @@ const IconCopy = ({ className }) => (
     />
   </svg>
 );
-
-IconCopy.propTypes = {
-  className: PropTypes.string,
-};
-
-IconCopy.defaultProps = {
-  className: '',
-};
 
 export default IconCopy;

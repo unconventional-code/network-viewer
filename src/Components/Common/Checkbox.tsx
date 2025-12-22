@@ -1,26 +1,29 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames/bind';
+import React, { ReactNode, ChangeEventHandler } from 'react';
+import classNames from 'classnames';
 
-import Styles from './Checkbox.styles.scss';
+interface CheckboxProps {
+  children: ReactNode;
+  containerClassName?: string;
+  isChecked?: boolean;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  title?: string;
+}
 
-const context = classNames.bind(Styles);
-
-const Checkbox = ({
-  containerClassName,
-  isChecked,
+const Checkbox: React.FC<CheckboxProps> = ({
+  containerClassName = '',
+  isChecked = false,
   onChange,
   children,
-  title,
+  title = '',
 }) => (
-  <div className={context('checkbox-container', containerClassName)}>
+  <div className={classNames('flex items-center', containerClassName)}>
     <label
-      className={Styles['checkbox-label']}
+      className="flex items-center cursor-pointer"
       title={title}
     >
       <input
         checked={isChecked}
-        className={Styles.checkbox}
+        className="mr-s w-4 h-4 cursor-pointer"
         name="checkbox"
         onChange={onChange}
         type="checkbox"
@@ -29,19 +32,5 @@ const Checkbox = ({
     </label>
   </div>
 );
-
-Checkbox.propTypes = {
-  children: PropTypes.any.isRequired,
-  containerClassName: PropTypes.string,
-  isChecked: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
-  title: PropTypes.string,
-};
-
-Checkbox.defaultProps = {
-  containerClassName: '',
-  isChecked: false,
-  title: '',
-};
 
 export default Checkbox;

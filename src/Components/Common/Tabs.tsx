@@ -1,25 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames/bind';
+import React, { useState, useEffect, ReactNode } from 'react';
+import classNames from 'classnames';
 
-import Styles from './Tabs.styles.scss';
+interface TabItem {
+  name: string;
+  key: string;
+  component: ReactNode;
+}
 
-const context = classNames.bind(Styles);
+interface TabsProps {
+  activeClassName?: string | null;
+  children: ReactNode;
+  defaultSelectedKey?: string | null;
+  navLinkClassName?: string | null;
+  navTabsClassName?: string | null;
+  onUpdate?: ((key: string) => void) | null;
+  selectedKey?: string | null;
+  tabsContainerClassName?: string | null;
+}
 
-const Tabs = ({
-  onUpdate,
-  selectedKey,
-  defaultSelectedKey,
+const Tabs: React.FC<TabsProps> = ({
+  onUpdate = null,
+  selectedKey = null,
+  defaultSelectedKey = null,
   children,
-  navTabsClassName,
-  tabsContainerClassName,
-  navLinkClassName,
-  activeClassName,
+  navTabsClassName = null,
+  tabsContainerClassName = null,
+  navLinkClassName = null,
+  activeClassName = null,
 }) => {
-  const [items, updateItems] = useState([]);
+  const [items, updateItems] = useState<TabItem[]>([]);
 
   useEffect(() => {
-    const itemsCollection = [];
+    const itemsCollection: TabItem[] = [];
     React.Children.forEach(children, (element) => {
       if (React.isValidElement(element)) {
         const {
@@ -37,10 +49,10 @@ const Tabs = ({
     updateItems(itemsCollection);
   }, [children]);
 
-  const [activeTab, updateTab] = useState(
+  const [activeTab, updateTab] = useState<string | null>(
     defaultSelectedKey || (items && items.length ? items[0].key : null),
   );
-  const handleUpdate = (key) => {
+  const handleUpdate = (key: string) => {
     updateTab(key);
     if (onUpdate) {
       onUpdate(key);
@@ -54,13 +66,17 @@ const Tabs = ({
 
   return (
     <>
-      <nav className={context('nav-tabs', navTabsClassName)}>
+      <nav className={classNames('flex border-b border-border-color', navTabsClassName)}>
         {items.map(({ key: item, name }, index) => (
           <a
             key={item}
-            className={context('tab-item', navLinkClassName, {
-              [activeClassName || Styles.active]: activeTab === item,
-            })}
+            className={classNames(
+              'px-m py-s text-h5 font-normal text-brand-primary-gray no-underline cursor-pointer border-b-2 border-transparent hover:text-brand-primary-dark-gray',
+              navLinkClassName,
+              {
+                [activeClassName || 'text-brand-primary-dark-gray border-brand-blue']: activeTab === item,
+              }
+            )}
             onClick={() => handleUpdate(item)}
             role="tab"
             tabIndex={index}
@@ -69,32 +85,11 @@ const Tabs = ({
           </a>
         ))}
       </nav>
-      <section className={context(tabsContainerClassName)}>
+      <section className={classNames(tabsContainerClassName)}>
         {renderItem()}
       </section>
     </>
   );
-};
-
-Tabs.propTypes = {
-  activeClassName: PropTypes.string,
-  children: PropTypes.node.isRequired,
-  defaultSelectedKey: PropTypes.string,
-  navLinkClassName: PropTypes.string,
-  navTabsClassName: PropTypes.string,
-  onUpdate: PropTypes.func,
-  selectedKey: PropTypes.string,
-  tabsContainerClassName: PropTypes.string,
-};
-
-Tabs.defaultProps = {
-  activeClassName: null,
-  defaultSelectedKey: null,
-  navLinkClassName: null,
-  navTabsClassName: null,
-  onUpdate: null,
-  selectedKey: null,
-  tabsContainerClassName: null,
 };
 
 export default Tabs;

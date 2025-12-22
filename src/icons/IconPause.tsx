@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const IconPause = ({ className }) => (
+interface IconPauseProps {
+  className?: string;
+}
+
+const IconPause: React.FC<IconPauseProps> = ({ className = '' }) => (
   <svg
     className={className}
     height="24"
@@ -14,13 +17,5 @@ const IconPause = ({ className }) => (
     <path d="M15 1C14.4477 1 14 1.44772 14 2V22C14 22.5523 14.4477 23 15 23H21C21.5523 23 22 22.5523 22 22V2C22 1.44772 21.5523 1 21 1H15Z" />
   </svg>
 );
-
-IconPause.propTypes = {
-  className: PropTypes.string,
-};
-
-IconPause.defaultProps = {
-  className: '',
-};
 
 export default IconPause;

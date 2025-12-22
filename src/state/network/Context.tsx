@@ -1,9 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, Dispatch } from 'react';
+import { Map } from 'immutable';
 
 import { actionsWrapper } from './../../utils';
 import * as actions from './actions';
 
-export const NetworkContext = React.createContext();
+type NetworkState = Map<string, any>;
+type NetworkAction = any;
+type NetworkCallbacks = {
+  onPause?: (() => void) | null;
+  onResume?: (() => void) | null;
+  onReset?: (() => void) | null;
+  onRequestSelect?: ((request: any) => void) | null;
+};
+
+type NetworkContextValue = [NetworkState, Dispatch<NetworkAction>, NetworkCallbacks];
+
+export const NetworkContext = React.createContext<NetworkContextValue | undefined>(undefined);
 
 export const useNetwork = () => {
   const context = useContext(NetworkContext);

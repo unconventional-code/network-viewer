@@ -1,28 +1,47 @@
-import React, { useEffect, useReducer, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useReducer, useMemo, ReactNode } from 'react';
+import { Map } from 'immutable';
+import { AxiosRequestConfig } from 'axios';
 
 import { reducer, initialState as defaultState } from './reducer';
 import { updateData, fetchFile, updateScrollToIndex } from './actions';
 import { NetworkContext } from './Context';
 import { findRequestIndex } from '../../utils';
+import { HarData, ScrollRequestPosition } from '../../types';
 
-const NetworkProvider = (props) => {
-  const {
-    data,
-    file,
-    fetchOptions,
-    initialState,
-    scrollTimeStamp,
-    scrollRequestPosition,
-    autoHighlightChange,
-    onDataLoaded,
-    onDataError,
-    onPause,
-    onResume,
-    onReset,
-    onRequestSelect,
-  } = props;
+interface NetworkProviderProps {
+  autoHighlightChange?: boolean;
+  data?: HarData | null;
+  fetchOptions?: AxiosRequestConfig;
+  file?: string | null;
+  initialState?: Map<string, any>;
+  onDataError?: ((error: string) => void) | null;
+  onDataLoaded?: ((data: any) => void) | null;
+  onPause?: (() => void) | null;
+  onRequestSelect?: ((request: any) => void) | null;
+  onReset?: (() => void) | null;
+  onResume?: (() => void) | null;
+  scrollRequestPosition?: ScrollRequestPosition;
+  scrollTimeStamp?: number | null;
+  children?: ReactNode;
+}
 
+const NetworkProvider: React.FC<NetworkProviderProps> = ({
+  data = null,
+  file = null,
+  fetchOptions = { withCredentials: true },
+  initialState = defaultState,
+  scrollTimeStamp = null,
+  scrollRequestPosition = 'near',
+  autoHighlightChange = false,
+  onDataLoaded = null,
+  onDataError = null,
+  onPause = null,
+  onResume = null,
+  onReset = null,
+  onRequestSelect = null,
+  children,
+  ...props
+}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const callbacks = {
     onPause,
@@ -81,40 +100,10 @@ const NetworkProvider = (props) => {
     <NetworkContext.Provider
       value={value}
       {...props}
-    />
+    >
+      {children}
+    </NetworkContext.Provider>
   );
-};
-
-NetworkProvider.propTypes = {
-  autoHighlightChange: PropTypes.bool,
-  data: PropTypes.object,
-  fetchOptions: PropTypes.object,
-  file: PropTypes.string,
-  initialState: PropTypes.object,
-  onDataError: PropTypes.func,
-  onDataLoaded: PropTypes.func,
-  onPause: PropTypes.func,
-  onRequestSelect: PropTypes.func,
-  onReset: PropTypes.func,
-  onResume: PropTypes.func,
-  scrollRequestPosition: PropTypes.oneOf(['before', 'after', 'near']),
-  scrollTimeStamp: PropTypes.number,
-};
-
-NetworkProvider.defaultProps = {
-  autoHighlightChange: false,
-  data: null,
-  fetchOptions: { withCredentials: true },
-  file: null,
-  initialState: defaultState,
-  onDataError: null,
-  onDataLoaded: null,
-  onPause: null,
-  onRequestSelect: null,
-  onReset: null,
-  onResume: null,
-  scrollRequestPosition: 'near',
-  scrollTimeStamp: null,
 };
 
 export default NetworkProvider;

@@ -1,23 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 
-import Styles from './ErrorMessage.styles.scss';
+interface ErrorMessageProps {
+  description?: ReactNode | null;
+  title?: ReactNode | null;
+}
 
-const ErrorMessage = ({ title, description }) => (
-  <div className={Styles['error-container']}>
-    {title && <h4 className={Styles.title}>{title}</h4>}
-    {description && <p>{description}</p>}
+const ErrorMessage: React.FC<ErrorMessageProps> = ({
+  title = null,
+  description = null,
+}) => (
+  <div className="flex flex-col items-center justify-center p-xxl text-center">
+    {title && <h4 className="text-h4 font-semibold text-brand-primary-dark-gray mb-s">{title}</h4>}
+    {description && <p className="text-base text-brand-primary-gray">{description}</p>}
   </div>
 );
-
-ErrorMessage.propTypes = {
-  description: PropTypes.any,
-  title: PropTypes.any,
-};
-
-ErrorMessage.defaultProps = {
-  description: null,
-  title: null,
-};
 
 export default ErrorMessage;

@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const IconChevronUp = ({ className }) => (
+interface IconChevronUpProps {
+  className?: string;
+}
+
+const IconChevronUp: React.FC<IconChevronUpProps> = ({ className = '' }) => (
   <svg
     className={className}
     height="24"
@@ -15,15 +18,6 @@ const IconChevronUp = ({ className }) => (
       fillRule="evenodd"
     />
   </svg>
-
 );
-
-IconChevronUp.propTypes = {
-  className: PropTypes.string,
-};
-
-IconChevronUp.defaultProps = {
-  className: '',
-};
 
 export default IconChevronUp;

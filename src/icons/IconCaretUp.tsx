@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const IconCaretUp = ({ className }) => (
+interface IconCaretUpProps {
+  className?: string;
+}
+
+const IconCaretUp: React.FC<IconCaretUpProps> = ({ className = '' }) => (
   <svg
     className={className}
     height="8"
@@ -18,13 +21,5 @@ const IconCaretUp = ({ className }) => (
     </g>
   </svg>
 );
-
-IconCaretUp.propTypes = {
-  className: PropTypes.string,
-};
-
-IconCaretUp.defaultProps = {
-  className: '',
-};
 
 export default IconCaretUp;

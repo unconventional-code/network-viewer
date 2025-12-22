@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const IconUpload = ({ className }) => (
+interface IconImportProps {
+  className?: string;
+}
+
+const IconImport: React.FC<IconImportProps> = ({ className = '' }) => (
   <svg
     className={className}
     height="24"
@@ -14,12 +17,4 @@ const IconUpload = ({ className }) => (
   </svg>
 );
 
-IconUpload.propTypes = {
-  className: PropTypes.string,
-};
-
-IconUpload.defaultProps = {
-  className: '',
-};
-
-export default IconUpload;
+export default IconImport;

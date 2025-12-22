@@ -1,18 +1,26 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 
-import Styles from './LoaderContainer.styles.scss';
+interface LoaderContainerProps {
+  children?: ReactNode | null;
+  show?: boolean;
+  text?: string | ReactNode | null;
+}
 
-const LoaderContainer = ({ children, show, text }) => {
+const LoaderContainer: React.FC<LoaderContainerProps> = ({
+  children = null,
+  show = true,
+  text = null,
+}) => {
   const colorBrandBlue = '#0E75DD';
   const uniqueId = `Gradient-${Math.round(Math.random() * 10000000)}`;
 
-  return !show ? children : (
-    <section className={Styles['loader-container']}>
-      <div className={Styles.spin}>
+  return !show ? <>{children}</> : (
+    <section className="flex flex-col items-center justify-center h-full w-full absolute inset-0 bg-white-100 bg-opacity-90 z-50">
+      <div className="animate-spin-slow">
         <svg
           viewBox="0 0 100 100"
           xmlns="http://www.w3.org/2000/svg"
+          className="w-16 h-16"
         >
           <defs>
             <linearGradient id={uniqueId}>
@@ -42,21 +50,9 @@ const LoaderContainer = ({ children, show, text }) => {
           />
         </svg>
       </div>
-      { text && <p className={Styles.text}>{text}</p> }
+      { text && <p className="mt-m text-base text-brand-primary-gray">{text}</p> }
     </section>
   );
-};
-
-LoaderContainer.propTypes = {
-  children: PropTypes.node,
-  show: PropTypes.bool,
-  text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-};
-
-LoaderContainer.defaultProps = {
-  children: null,
-  show: true,
-  text: null,
 };
 
 export default LoaderContainer;

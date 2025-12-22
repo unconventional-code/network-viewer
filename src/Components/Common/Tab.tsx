@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 
-const Tab = ({ children }) => children;
+interface TabProps {
+  children: ReactNode;
+  name?: string;
+  eventKey?: string;
+}
 
-Tab.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+const Tab: React.FC<TabProps> = ({ children }) => children as React.ReactElement;
 
 export default Tab;

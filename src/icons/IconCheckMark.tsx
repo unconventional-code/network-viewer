@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const IconCheckMark = ({ className }) => (
+interface IconCheckMarkProps {
+  className?: string;
+}
+
+const IconCheckMark: React.FC<IconCheckMarkProps> = ({ className = '' }) => (
   <svg
     className={className}
     height="24"
@@ -16,13 +19,5 @@ const IconCheckMark = ({ className }) => (
     />
   </svg>
 );
-
-IconCheckMark.propTypes = {
-  className: PropTypes.string,
-};
-
-IconCheckMark.defaultProps = {
-  className: '',
-};
 
 export default IconCheckMark;

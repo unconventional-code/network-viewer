@@ -1,31 +1,28 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames/bind';
+import classNames from 'classnames';
 
 import NetworkProvider from './state/network/NetworkProvider';
 import MainContainer from './Containers/MainContainer';
-import Styles from './NetworkViewer.styles.scss';
 import ThemeProvider from './state/theme/Context';
+import { NetworkViewerProps } from './types';
 
-const contextClassNames = classNames.bind(Styles);
-
-const NetworkViewer = ({
-  file,
-  data,
-  fetchOptions,
-  scrollTimeStamp,
-  options,
-  onPause,
-  onRequestSelect,
-  onResume,
-  onReset,
-  scrollRequestPosition,
-  autoHighlightChange,
-  onDataLoaded,
-  onDataError,
-  containerClassName,
+const NetworkViewer: React.FC<NetworkViewerProps> = ({
+  file = null,
+  data = null,
+  fetchOptions = { withCredentials: true },
+  scrollTimeStamp = null,
+  options = null,
+  onPause = () => {},
+  onRequestSelect = () => {},
+  onResume = () => {},
+  onReset = () => {},
+  scrollRequestPosition = 'near',
+  autoHighlightChange = false,
+  onDataLoaded = null,
+  onDataError = null,
+  containerClassName = null,
 }) => (
-  <section className={contextClassNames('network-viewer', containerClassName)}>
+  <section className={classNames('h-full', '*:box-border', containerClassName)}>
     <ThemeProvider options={options}>
       <NetworkProvider
         autoHighlightChange={autoHighlightChange}
@@ -46,39 +43,5 @@ const NetworkViewer = ({
     </ThemeProvider>
   </section>
 );
-
-NetworkViewer.propTypes = {
-  autoHighlightChange: PropTypes.bool,
-  containerClassName: PropTypes.string,
-  data: PropTypes.object,
-  fetchOptions: PropTypes.object,
-  file: PropTypes.string,
-  onDataError: PropTypes.func,
-  onDataLoaded: PropTypes.func,
-  onPause: PropTypes.func,
-  onRequestSelect: PropTypes.func,
-  onReset: PropTypes.func,
-  onResume: PropTypes.func,
-  options: PropTypes.object,
-  scrollRequestPosition: PropTypes.oneOf(['before', 'after', 'near']),
-  scrollTimeStamp: PropTypes.number,
-};
-
-NetworkViewer.defaultProps = {
-  autoHighlightChange: false,
-  containerClassName: null,
-  data: null,
-  fetchOptions: { withCredentials: true },
-  file: null,
-  onDataError: null,
-  onDataLoaded: null,
-  onPause: () => {},
-  onRequestSelect: () => {},
-  onReset: () => {},
-  onResume: () => {},
-  options: null,
-  scrollRequestPosition: 'near',
-  scrollTimeStamp: null,
-};
 
 export default NetworkViewer;

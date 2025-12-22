@@ -1,7 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const IconReset = ({ className }) => (
+interface IconResetProps {
+  className?: string;
+}
+
+const IconReset: React.FC<IconResetProps> = ({ className = '' }) => (
   <svg
     className={className}
     height="24"
@@ -24,13 +27,5 @@ const IconReset = ({ className }) => (
     </defs>
   </svg>
 );
-
-IconReset.propTypes = {
-  className: PropTypes.string,
-};
-
-IconReset.defaultProps = {
-  className: '',
-};
 
 export default IconReset;
