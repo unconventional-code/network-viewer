@@ -17,7 +17,7 @@ const DETAIL = [
     title: "Request/Response",
     category: ["send", "wait", "receive"],
   },
-];
+] as const;
 
 interface TimeChartTooltipProps {
   data: Record<string, number>;

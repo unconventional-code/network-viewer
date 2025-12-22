@@ -9,7 +9,13 @@ interface SectionInfoProps {
     onChangeEncode: () => void;
   }) => ReactNode;
   data?: any | null;
-  eventKey: string;
+  eventKey:
+    | "general"
+    | "requestHeaders"
+    | "responseHeaders"
+    | "requestPayload"
+    | "queryString"
+    | "formData";
   isEncodeEnabled?: boolean;
   isParseEnabled?: boolean;
   isVisible?: boolean;

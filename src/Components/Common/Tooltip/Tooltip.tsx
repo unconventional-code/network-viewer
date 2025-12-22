@@ -107,7 +107,10 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
             {...tooltipProps}
           >
             {hasArrow && (
-              <TooltipArrow placementAxis={arrowPlacement} {...arrowProps} />
+              <TooltipArrow
+                placementAxis={arrowPlacement || "bottom"}
+                {...arrowProps}
+              />
             )}
             {title}
           </TooltipLabel>

@@ -7,9 +7,10 @@ import { NetworkCellValue } from "./NetworkCellValue";
 import { getStatusClass, getViewerFields } from "../../utils";
 import { useTheme } from "../../state/theme/Context";
 import { useNetwork } from "../../state/network/Context";
+import { Entry } from "har-format";
 
 interface NetworkTableRowProps {
-  entry: any;
+  entry: Entry;
   maxTime: number;
   onSelect: (entry: any) => void;
   scrollHighlight: boolean;
@@ -26,7 +27,7 @@ export function NetworkTableRow({
   const { state } = useNetwork();
   const showReqDetail = state.get("showReqDetail");
   const { showWaterfall } = useTheme();
-  const columns = getViewerFields(showReqDetail, showWaterfall);
+  const columns = getViewerFields(showReqDetail, showWaterfall || false);
 
   const statusClass = getStatusClass(entry);
   const rowClassName = classNames(
