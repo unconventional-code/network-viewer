@@ -12,7 +12,11 @@ export function Headers({ data = null }: HeadersProps) {
     return null;
   }
   return (
-    <section className="w-full">
+    <section
+      id="headers-detail"
+      data-testid="headers-detail"
+      className="w-full"
+    >
       <SectionInfo
         component={General}
         data={data}

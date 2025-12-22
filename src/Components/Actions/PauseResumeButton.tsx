@@ -27,6 +27,9 @@ export function PauseResumeButton() {
   return (
     <Tooltip title={isPaused ? "Resume" : "Pause"}>
       <Button
+        id="pause-resume-button"
+        data-testid="pause-resume-button"
+        data-paused={isPaused}
         className="p-0 w-8 h-8 min-w-8 h-[26px]"
         onClick={isPaused ? resume : pause}
       >

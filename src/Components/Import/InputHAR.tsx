@@ -5,7 +5,11 @@ const SAMPLE_HAR_URL =
 
 export function InputHAR() {
   return (
-    <div className="flex flex-col items-center justify-center p-xxl">
+    <div
+      id="input-har-container"
+      data-testid="input-har-container"
+      className="flex flex-col items-center justify-center p-xxl"
+    >
       <h4 className="text-h4 font-semibold text-brand-primary-dark-gray mb-m">
         OR add HAR file URL in the below input box
       </h4>

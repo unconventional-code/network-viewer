@@ -36,7 +36,12 @@ export function NetworkCellValue({
 
   if (!shouldDisplayTooltip) {
     return (
-      <div className={classNames(baseClasses, datakey)}>{formattedValue}</div>
+      <div
+        data-testid={`network-cell-${datakey}`}
+        className={classNames(baseClasses, datakey)}
+      >
+        {formattedValue}
+      </div>
     );
   }
 
@@ -44,6 +49,7 @@ export function NetworkCellValue({
     <Tooltip delay={500} title={getTitle()}>
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
       <div
+        data-testid={`network-cell-${datakey}`}
         className={classNames(baseClasses, "cursor-pointer", datakey)}
         onClick={onClick}
       >

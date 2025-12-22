@@ -23,6 +23,8 @@ export function NetworkViewer({
 }: NetworkViewerProps) {
   return (
     <section
+      id="network-viewer"
+      data-testid="network-viewer"
       className={classNames("h-full", "*:box-border", containerClassName)}
     >
       <ThemeProvider options={options}>

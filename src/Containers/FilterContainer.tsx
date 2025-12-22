@@ -14,8 +14,16 @@ export function FilterContainer() {
     useTheme();
 
   return (
-    <section className="bg-bg-gray-90 flex flex-col">
-      <div className="flex w-full border-b border-border-color px-xs-s py-xs-s [&>*:not(:last-child)]:mr-xs-s">
+    <section
+      id="filter-container"
+      data-testid="filter-container"
+      className="bg-bg-gray-90 flex flex-col"
+    >
+      <div
+        id="filter-row-primary"
+        data-testid="filter-row-primary"
+        className="flex w-full border-b border-border-color px-xs-s py-xs-s [&>*:not(:last-child)]:mr-xs-s"
+      >
         <StatusFilter />
         <Search {...state.search} />
         {showPauseResume && <PauseResumeButton />}
@@ -24,7 +32,11 @@ export function FilterContainer() {
         {showImportHar && <ImportHAR />}
       </div>
 
-      <div className="flex w-full border-b border-border-color px-xs-s py-xs-s overflow-x-auto [&>*:not(:last-child)]:mr-xs">
+      <div
+        id="filter-row-secondary"
+        data-testid="filter-row-secondary"
+        className="flex w-full border-b border-border-color px-xs-s py-xs-s overflow-x-auto [&>*:not(:last-child)]:mr-xs"
+      >
         <TypeFilter />
       </div>
     </section>

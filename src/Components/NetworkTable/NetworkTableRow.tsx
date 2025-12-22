@@ -45,6 +45,8 @@ export function NetworkTableRow({
       <div
         className={rowClassName}
         id={ROW_ID_PREFIX + entry.index}
+        data-testid={`network-table-row-${entry.index}`}
+        data-entry-index={entry.index}
         onClick={() => onSelect(entry)}
       >
         {Object.entries(columns).map(([datakey, { key, unit }]) => (

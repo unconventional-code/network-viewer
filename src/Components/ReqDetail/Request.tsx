@@ -22,7 +22,11 @@ export function Request({ data = null }: RequestProps) {
   }
 
   return (
-    <section className="w-full">
+    <section
+      id="request-detail"
+      data-testid="request-detail"
+      className="w-full"
+    >
       {data.headers.postData && data.headers.postData.text && (
         <SectionInfo
           component={RequestPayload}

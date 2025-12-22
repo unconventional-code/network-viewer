@@ -20,7 +20,11 @@ export function NetworkTableFooter({
   showAllInfo = true,
 }: NetworkTableFooterProps) {
   return (
-    <div className="flex items-center justify-between px-m py-xs bg-bg-gray-90 border-t border-border-color text-h6 text-brand-primary-gray">
+    <div
+      id="network-table-footer"
+      data-testid="network-table-footer"
+      className="flex items-center justify-between px-m py-xs bg-bg-gray-90 border-t border-border-color text-h6 text-brand-primary-gray"
+    >
       {showAllInfo ? (
         <>
           <span>{`${dataSummary.totalRequests} requests`}</span>

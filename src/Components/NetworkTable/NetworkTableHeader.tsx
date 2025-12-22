@@ -14,6 +14,8 @@ export function NetworkTableHeader() {
 
   return (
     <div
+      id="network-table-header"
+      data-testid="network-table-header"
       className="flex items-center h-8 border-b border-border-color bg-bg-gray-90 sticky top-0 z-10"
       style={{ width: tableHeaderWidth }}
     >

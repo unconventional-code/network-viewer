@@ -21,7 +21,12 @@ export function ExportHarButton({
 
   return (
     <Tooltip title="Export HAR">
-      <Button className="p-0 w-8 h-8 min-w-8 h-[26px]" onClick={downloadHar}>
+      <Button
+        id="export-har-button"
+        data-testid="export-har-button"
+        className="p-0 w-8 h-8 min-w-8 h-[26px]"
+        onClick={downloadHar}
+      >
         <IconDownload className="w-4 h-4 fill-brand-primary-dark-gray" />
       </Button>
     </Tooltip>

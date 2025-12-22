@@ -14,6 +14,9 @@ export function TypeFilter() {
     return (
       <Button
         key={name}
+        id={`type-filter-${name.toLowerCase().replace(/\s+/g, "-")}`}
+        data-testid={`type-filter-${name.toLowerCase().replace(/\s+/g, "-")}`}
+        data-selected={selectedFilter}
         className={classNames({
           "text-white-100 bg-brand-blue": selectedFilter,
         })}

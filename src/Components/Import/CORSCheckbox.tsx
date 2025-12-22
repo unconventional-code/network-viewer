@@ -12,6 +12,8 @@ export function CORSCheckbox({ isEnabled, onChange }: CORSCheckboxProps) {
 
   return (
     <Checkbox
+      id="cors-checkbox"
+      data-testid="cors-checkbox"
       containerClassName="pr-6 text-right min-w-[110px]"
       isChecked={isEnabled}
       onChange={handleChange}

@@ -21,7 +21,11 @@ export function TimelineChart({
   totalNetworkTime,
 }: TimelineChartProps) {
   return (
-    <div className="w-full h-[100px] p-m">
+    <div
+      id="timeline-chart"
+      data-testid="timeline-chart"
+      className="w-full h-[100px] p-m"
+    >
       <ResponsiveContainer height={100} width="100%">
         <ScatterChart>
           <XAxis

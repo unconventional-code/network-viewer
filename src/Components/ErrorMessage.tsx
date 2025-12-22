@@ -10,14 +10,28 @@ export function ErrorMessage({
   description = null,
 }: ErrorMessageProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-xxl text-center">
+    <div
+      id="error-message"
+      data-testid="error-message"
+      className="flex flex-col items-center justify-center p-xxl text-center"
+    >
       {title && (
-        <h4 className="text-h4 font-semibold text-brand-primary-dark-gray mb-s">
+        <h4
+          id="error-message-title"
+          data-testid="error-message-title"
+          className="text-h4 font-semibold text-brand-primary-dark-gray mb-s"
+        >
           {title}
         </h4>
       )}
       {description && (
-        <p className="text-base text-brand-primary-gray">{description}</p>
+        <p
+          id="error-message-description"
+          data-testid="error-message-description"
+          className="text-base text-brand-primary-gray"
+        >
+          {description}
+        </p>
       )}
     </div>
   );

@@ -27,7 +27,14 @@ export function CopyAllButton({ text = "" }: CopyAllButtonProps) {
   };
 
   return (
-    <Button className="gap-xs" onClick={copy} variant="text">
+    <Button
+      id="copy-all-button"
+      data-testid="copy-all-button"
+      data-copied={isCopied}
+      className="gap-xs"
+      onClick={copy}
+      variant="text"
+    >
       {isCopied ? (
         <IconCheckMark className="w-4 h-4 fill-brand-primary-dark-gray" />
       ) : (

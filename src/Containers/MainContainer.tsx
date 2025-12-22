@@ -19,12 +19,20 @@ export function MainContainer() {
   return (
     <>
       <LoaderContainer show={loading} text={FETCH_FILE_LOAD_TEXT}>
-        <div className="flex flex-col h-full justify-between">
+        <div
+          id="main-container"
+          data-testid="main-container"
+          className="flex flex-col h-full justify-between"
+        >
           <div>
             {showTimeline && <TimelineContainer />}
             <FilterContainer />
           </div>
-          <section className="flex h-full w-full overflow-auto overflow-x-hidden outline-none">
+          <section
+            id="main-content-section"
+            data-testid="main-content-section"
+            className="flex h-full w-full overflow-auto overflow-x-hidden outline-none"
+          >
             <NetworkTableContainer />
             {showReqDetail && <ReqDetailContainer />}
           </section>

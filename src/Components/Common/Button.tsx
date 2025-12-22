@@ -28,7 +28,7 @@ export const Button = forwardRef<
     ref
   ) => {
     const baseClasses =
-      "flex items-center justify-center px-xs py-xs-s text-h5 font-semibold no-underline cursor-pointer outline-none rounded-base";
+      "flex items-center justify-center px-2 py-xs-s text-h5 font-semibold no-underline cursor-pointer outline-none rounded-base";
     const defaultClasses =
       "border border-border-color bg-white-100 text-brand-primary-gray hover:bg-bg-blue-50";
     const textVariantClasses =

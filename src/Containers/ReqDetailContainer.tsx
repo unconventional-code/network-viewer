@@ -14,8 +14,14 @@ export function ReqDetailContainer() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full border-l border-border-color bg-white-100 relative">
+    <div
+      id="req-detail-container"
+      data-testid="req-detail-container"
+      className="flex flex-col h-full w-full border-l border-border-color bg-white-100 relative"
+    >
       <button
+        id="req-detail-close-button"
+        data-testid="req-detail-close-button"
         aria-label="Close button"
         className="absolute top-s right-s z-10 p-xs border-0 bg-transparent cursor-pointer hover:bg-bg-gray-90 rounded-base"
         onClick={handleCloseClick}

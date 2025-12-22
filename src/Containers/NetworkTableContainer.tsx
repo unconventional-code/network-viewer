@@ -37,7 +37,11 @@ export function NetworkTableContainer() {
 
   if (!actualData.length && showImportHar) {
     return (
-      <section className="flex flex-col items-center justify-center h-full w-full">
+      <section
+        id="network-table-empty"
+        data-testid="network-table-empty"
+        className="flex flex-col items-center justify-center h-full w-full"
+      >
         <ImportHAR showButton={false} />
         <InputHAR />
       </section>
@@ -46,6 +50,8 @@ export function NetworkTableContainer() {
 
   return (
     <section
+      id="network-table-container"
+      data-testid="network-table-container"
       ref={ref}
       className={classNames(
         "flex flex-col h-full w-full overflow-hidden",

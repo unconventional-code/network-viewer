@@ -11,7 +11,11 @@ export function TimelineContainer() {
     return null;
   }
   return (
-    <section className="w-full border-b border-border-color bg-white-100">
+    <section
+      id="timeline-container"
+      data-testid="timeline-container"
+      className="w-full border-b border-border-color bg-white-100"
+    >
       <TimelineChart
         chartData={data}
         totalNetworkTime={totalNetworkTime || 0}

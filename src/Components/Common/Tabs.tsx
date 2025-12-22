@@ -65,6 +65,8 @@ export function Tabs({
   return (
     <>
       <nav
+        id="tabs-nav"
+        data-testid="tabs-nav"
         className={classNames(
           "flex border-b border-border-color",
           navTabsClassName
@@ -73,6 +75,9 @@ export function Tabs({
         {items.map(({ key: item, name }, index) => (
           <a
             key={item}
+            id={`tab-${item}`}
+            data-testid={`tab-${item}`}
+            data-active={activeTab === item}
             className={classNames(
               "px-m py-s text-h5 font-normal text-brand-primary-gray no-underline cursor-pointer border-b-2 border-transparent hover:text-brand-primary-dark-gray",
               navLinkClassName,
@@ -90,7 +95,11 @@ export function Tabs({
           </a>
         ))}
       </nav>
-      <section className={classNames(tabsContainerClassName)}>
+      <section
+        id="tabs-content"
+        data-testid="tabs-content"
+        className={classNames(tabsContainerClassName)}
+      >
         {renderItem()}
       </section>
     </>

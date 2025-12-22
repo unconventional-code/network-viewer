@@ -17,7 +17,11 @@ export function LoaderContainer({
   return !show ? (
     <>{children}</>
   ) : (
-    <section className="flex flex-col items-center justify-center h-full w-full absolute inset-0 bg-white-100 bg-opacity-90 z-50">
+    <section
+      id="loader-container"
+      data-testid="loader-container"
+      className="flex flex-col items-center justify-center h-full w-full absolute inset-0 bg-white-100 bg-opacity-90 z-50"
+    >
       <div className="animate-spin-slow">
         <svg
           viewBox="0 0 100 100"

@@ -1,3 +1,8 @@
+@import "tailwindcss";
+@import "tailwindcss/preflight";
+/* @import "tailwindcss/components"; */
+@import "tailwindcss/utilities";
+
 html {
   height: 100%;
   font-size: 14px;
@@ -28,9 +33,16 @@ div:focus {
   height: 100%;
 }
 
-@import "tailwindcss";
-
 @custom-variant dark (&:is(.dark *));
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 :root {
   --background: oklch(1 0 0);
@@ -140,6 +152,71 @@ div:focus {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Custom brand colors */
+  --color-brand-blue: #0e75dd;
+  --color-brand-danger: #eb3f47;
+  --color-brand-success: #70be44;
+  --color-brand-warning: #f68d38;
+  --color-brand-primary-dark-gray: #1e2127;
+  --color-brand-primary-gray: #6d7584;
+  --color-brand-primary-light-gray: #979eab;
+  --color-dark-gray: #5c7288;
+  --color-bg-blue-50: #e6f1fd;
+  --color-bg-gray-90: #f7f8fa;
+  --color-gray-lighter: #d8dde3;
+  --color-border-color: #dbe0ea;
+  --color-time-blocked: #a1000c;
+  --color-time-dns: #dcc9e5;
+  --color-time-ssl: #e78057;
+  --color-time-connect: #db8553;
+  --color-time-send: #3c96c4;
+  --color-time-wait: #7ca0bf;
+  --color-time-receive: #65b955;
+  --color-time-queueing: #ccc;
+  --color-white-0: #000;
+  --color-white-100: #fff;
+  --color-white-33: #555;
+  --color-white-39: #646464;
+  --color-white-50: #808080;
+  --color-white-80: #ccc;
+  --color-white-90: #e6e6e6;
+
+  /* Custom font sizes */
+  --font-size-base: 14px;
+  --font-size-bigger: 16px;
+  --font-size-huge: 42px;
+  --font-size-large: 18px;
+  --font-size-small: 12px;
+  --font-size-h1: 36px;
+  --font-size-h2: 30px;
+  --font-size-h3: 24px;
+  --font-size-h4: 18px;
+  --font-size-h5: 14px;
+  --font-size-h6: 12px;
+
+  /* Custom border radius */
+  --radius-base: 4px;
+
+  /* Custom spacing */
+  --spacing-xs: 4px;
+  --spacing-xs-s: 8px;
+  --spacing-s: 12px;
+  --spacing-m: 16px;
+  --spacing-l: 20px;
+  --spacing-xl: 28px;
+  --spacing-xxl: 36px;
+  --spacing-xxxl: 44px;
+
+  /* Custom breakpoints */
+  --breakpoint-xs: 480px;
+  --breakpoint-grid-sm: 576px;
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 992px;
+  --breakpoint-lg: 1200px;
+
+  /* Custom animations */
+  --animate-spin-slow: spin 1.4s infinite linear;
 }
 
 @layer base {

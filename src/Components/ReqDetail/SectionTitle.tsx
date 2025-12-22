@@ -42,7 +42,11 @@ export function SectionTitle({
   }, [isParseEnabled, isPayloadTransformed]);
 
   return (
-    <div className="flex items-center justify-between py-xs border-b border-border-color">
+    <div
+      id={`section-title-${eventKey}`}
+      data-testid={`section-title-${eventKey}`}
+      className="flex items-center justify-between py-xs border-b border-border-color"
+    >
       <span
         className="flex items-center gap-xs text-h5 font-medium text-brand-primary-dark-gray cursor-pointer hover:text-brand-blue"
         onClick={() => onClick(SECTION_TITLES[eventKey].key)}

@@ -12,6 +12,8 @@ interface DropdownItem {
 
 interface DropdownProps {
   className?: string | null;
+  id?: string;
+  "data-testid"?: string;
   items: DropdownItem[];
   onChange: (item: DropdownItem) => void;
   selected?: DropdownItem | null;
@@ -22,6 +24,8 @@ export function Dropdown({
   selected = null,
   onChange,
   className = null,
+  id,
+  "data-testid": dataTestId,
 }: DropdownProps) {
   const [isExpand, setExpand] = useState(false);
   const [selectedKey, setSelection] = useState<DropdownItem>(
@@ -66,8 +70,16 @@ export function Dropdown({
   }, [selected]);
 
   return (
-    <span ref={dropdownItemsRef} className={classNames("relative", className)}>
+    <span
+      ref={dropdownItemsRef}
+      id={id}
+      data-testid={dataTestId || "dropdown"}
+      className={classNames("relative", className)}
+    >
       <Button
+        id={id ? `${id}-button` : "dropdown-button"}
+        data-testid={dataTestId ? `${dataTestId}-button` : "dropdown-button"}
+        data-expanded={isExpand}
         className={classNames(
           "flex justify-between w-[8.5rem] font-medium text-h5 text-brand-primary-dark-gray",
           {
@@ -88,10 +100,15 @@ export function Dropdown({
         </>
       </Button>
       {isExpand && (
-        <ul className="absolute z-[1000] top-0 left-px mt-0.5 p-0 border border-border-color rounded-none rounded-b-xs w-[7.5rem] text-left list-none bg-white-100 bg-clip-padding transform translate-x-[-1px] translate-y-[23px]">
+        <ul
+          id={id ? `${id}-menu` : "dropdown-menu"}
+          data-testid={dataTestId ? `${dataTestId}-menu` : "dropdown-menu"}
+          className="absolute z-[1000] top-0 left-px mt-0.5 p-0 border border-border-color rounded-none rounded-b-xs w-[7.5rem] text-left list-none bg-white-100 bg-clip-padding transform translate-x-[-1px] translate-y-[23px]"
+        >
           {items.map((item, index) => (
             <li
               key={item.value}
+              data-testid={`${dataTestId || "dropdown"}-item-${item.value}`}
               className={classNames(
                 "block w-full p-0 clear-both text-inherit whitespace-nowrap bg-transparent border-0 font-medium text-h5 text-brand-primary-dark-gray",
                 {

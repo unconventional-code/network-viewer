@@ -21,7 +21,12 @@ export function ResetButton() {
 
   return (
     <Tooltip title="Reset">
-      <Button className="p-0 w-8 h-8 min-w-8 h-[26px]" onClick={handleReset}>
+      <Button
+        id="reset-button"
+        data-testid="reset-button"
+        className="p-0 w-8 h-8 min-w-8 h-[26px]"
+        onClick={handleReset}
+      >
         <IconReset className="w-4 h-4 fill-brand-primary-dark-gray" />
       </Button>
     </Tooltip>

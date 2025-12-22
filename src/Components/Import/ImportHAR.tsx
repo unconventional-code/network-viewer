@@ -42,12 +42,20 @@ export function ImportHAR({ showButton = true }: ImportHARProps) {
   });
 
   return (
-    <div {...getRootProps()}>
+    <div
+      id="import-har-dropzone"
+      data-testid="import-har-dropzone"
+      {...getRootProps()}
+    >
       <input {...getInputProps()} />
       {showButton ? (
         <ImportHarButton />
       ) : (
-        <p className="text-base text-brand-primary-gray cursor-pointer hover:text-brand-blue">
+        <p
+          id="import-har-text"
+          data-testid="import-har-text"
+          className="text-base text-brand-primary-gray cursor-pointer hover:text-brand-blue"
+        >
           Drag and drop HAR file here, or click to select file
         </p>
       )}

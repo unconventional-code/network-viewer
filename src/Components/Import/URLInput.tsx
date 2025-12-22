@@ -23,9 +23,15 @@ export function URLInput() {
   };
 
   return (
-    <div className="flex items-center gap-s w-full max-w-2xl">
+    <div
+      id="url-input-container"
+      data-testid="url-input-container"
+      className="flex items-center gap-s w-full max-w-2xl"
+    >
       <CORSCheckbox isEnabled={isCORSEnabled} onChange={setCORS} />
       <input
+        id="url-input"
+        data-testid="url-input"
         className="flex-1 px-s py-xs border border-border-color rounded-base text-h5 text-brand-primary-dark-gray outline-none focus:border-brand-blue"
         name="har-url"
         onChange={handleInputChange}
@@ -33,7 +39,12 @@ export function URLInput() {
         type="text"
         value={url}
       />
-      <Button className="ml-s" onClick={handleSubmit}>
+      <Button
+        id="url-input-submit-button"
+        data-testid="url-input-submit-button"
+        className="ml-s"
+        onClick={handleSubmit}
+      >
         GO
       </Button>
     </div>

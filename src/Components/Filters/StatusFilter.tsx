@@ -8,6 +8,8 @@ export function StatusFilter() {
 
   return (
     <Dropdown
+      id="status-filter"
+      data-testid="status-filter"
       items={STATUS_FILTERS}
       onChange={actions.updateStatusFilter}
       selected={filter}

@@ -21,6 +21,8 @@ export function Search({ name, value = "" }: SearchProps) {
 
   return (
     <input
+      id="search-input"
+      data-testid="search-input"
       className="w-full px-s py-xs border border-border-color rounded-base text-h5 text-brand-primary-dark-gray outline-none focus:border-brand-blue"
       name="search"
       onChange={handleInputChange}

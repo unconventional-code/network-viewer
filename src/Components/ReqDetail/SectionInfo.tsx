@@ -41,7 +41,11 @@ export function SectionInfo({
     });
 
   return (
-    <>
+    <div
+      id={`section-info-${eventKey}`}
+      data-testid={`section-info-${eventKey}`}
+      data-open={isOpen}
+    >
       <SectionTitle
         eventKey={eventKey}
         isEncodeEnabled={isEncodeEnabled}
@@ -52,6 +56,6 @@ export function SectionInfo({
         onPayloadTransform={handlePayloadTransform}
       />
       {isOpen && <ChildComponent />}
-    </>
+    </div>
   );
 }
