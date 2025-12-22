@@ -1,9 +1,16 @@
+import { useMemo } from "react";
 import { SECTION_TITLES, PAYLOAD_CAPTIONS } from "../../constants";
 import { IconCaretDown } from "../../icons/IconCaretDown";
 import { IconCaretRight } from "../../icons/IconCaretRight";
 
 interface SectionTitleProps {
-  eventKey: string;
+  eventKey:
+    | "general"
+    | "requestHeaders"
+    | "responseHeaders"
+    | "requestPayload"
+    | "queryString"
+    | "formData";
   isEncodeEnabled?: boolean;
   isOpen?: boolean;
   isParseEnabled?: boolean;
@@ -21,10 +28,18 @@ export function SectionTitle({
   isPayloadTransformed = true,
   isParseEnabled = false,
 }: SectionTitleProps) {
-  const payloadStatus =
-    PAYLOAD_CAPTIONS[isParseEnabled ? "parse" : "encode"][
-      String(isPayloadTransformed)
-    ];
+  const payloadStatus = useMemo(() => {
+    if (isParseEnabled && isPayloadTransformed) {
+      return PAYLOAD_CAPTIONS.parse.true;
+    } else if (isParseEnabled && !isPayloadTransformed) {
+      return PAYLOAD_CAPTIONS.parse.false;
+    } else if (!isParseEnabled && isPayloadTransformed) {
+      return PAYLOAD_CAPTIONS.encode.true;
+    } else if (!isParseEnabled && !isPayloadTransformed) {
+      return PAYLOAD_CAPTIONS.encode.false;
+    }
+    return "";
+  }, [isParseEnabled, isPayloadTransformed]);
 
   return (
     <div className="flex items-center justify-between py-xs border-b border-border-color">

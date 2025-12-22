@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
 import { Search } from "./Search";
-import { NetworkProvider } from "../../state/network/NetworkProvider";
+import { NetworkProvider } from "../../state/network/NetworkProvider/NetworkProvider";
 
 describe("Search", () => {
   const params = {

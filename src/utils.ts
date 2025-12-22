@@ -1,3 +1,4 @@
+import { Entry, Header } from "har-format";
 import {
   FILTER_OPTION,
   TIMELINE_DATA_POINT_HEIGHT,
@@ -60,11 +61,16 @@ export const getUrlInfo = (url: string) => {
   }
 };
 
-export const parseSize = ({ bodySize, _transferSize, headers, content }) => {
+export const parseSize = ({
+  bodySize,
+  _transferSize,
+  headers,
+  content,
+}: Entry["response"]) => {
   if (content && content.size) {
     return formatSize(content.size);
   }
-  if (_transferSize > -1) {
+  if (_transferSize && _transferSize > -1) {
     return formatSize(_transferSize);
   }
   if (bodySize > -1) {
@@ -77,10 +83,10 @@ export const parseSize = ({ bodySize, _transferSize, headers, content }) => {
     return 0;
   }
 
-  return formatSize(contentInfo.value);
+  return formatSize(Number(contentInfo.value));
 };
 
-export const getContentType = (entry) => {
+export const getContentType = (entry: Entry) => {
   if (entry._resourceType) {
     return entry._resourceType.toLowerCase();
   }
@@ -96,17 +102,23 @@ export const getContentType = (entry) => {
   return type.length > 1 ? type[1] : type[0];
 };
 
-export const getTimings = ({ startedDateTime, timings }, firstEntryTime) => ({
+export const getTimings = (
+  { startedDateTime, timings }: Entry,
+  firstEntryTime: number
+) => ({
   ...timings,
   startTime:
     new Date(startedDateTime).getTime() - new Date(firstEntryTime).getTime(),
 });
 
-export const getContent = ({ mimeType, text }) => {
+export const getContent = ({
+  mimeType,
+  text,
+}: Entry["response"]["content"]) => {
   if (mimeType === "application/json") {
     let parsedJson;
     try {
-      parsedJson = JSON.stringify(JSON.parse(text), null, 2);
+      parsedJson = JSON.stringify(JSON.parse(text || ""), null, 2);
     } catch (err) {
       parsedJson = text;
     }
@@ -116,9 +128,9 @@ export const getContent = ({ mimeType, text }) => {
   return text;
 };
 
-export const getEntryTransferredSize = ({ response }) => {
+export const getEntryTransferredSize = ({ response }: Entry) => {
   const { bodySize, _transferSize } = response;
-  if (_transferSize > -1) {
+  if (_transferSize && _transferSize > -1) {
     return _transferSize;
   }
 
@@ -128,7 +140,7 @@ export const getEntryTransferredSize = ({ response }) => {
   return -1;
 };
 
-export const getEntryUncompressedSize = ({ response }) => {
+export const getEntryUncompressedSize = ({ response }: Entry) => {
   const {
     bodySize,
     _transferSize,
@@ -137,7 +149,7 @@ export const getEntryUncompressedSize = ({ response }) => {
   if (size > 0) {
     return size;
   }
-  if (_transferSize > -1) {
+  if (_transferSize && _transferSize > -1) {
     return _transferSize;
   }
   if (bodySize > -1) {
@@ -146,7 +158,7 @@ export const getEntryUncompressedSize = ({ response }) => {
   return -1;
 };
 
-export const calculateFinishTime = (data) => {
+export const calculateFinishTime = (data: Entry[]) => {
   const finishTimes = data.map(({ timings }) =>
     Object.values(timings).reduce(
       (acc, durationInMS) => acc + (durationInMS > -1 ? durationInMS : 0),
@@ -156,14 +168,14 @@ export const calculateFinishTime = (data) => {
   return Math.max(...finishTimes);
 };
 
-export const sortHeaders = (current, next) => {
+export const sortHeaders = (current: Header, next: Header) => {
   if (current.name < next.name) {
     return -1;
   }
   return current.name > next.name ? 1 : 0;
 };
 
-export const getHeaders = (entry) => {
+export const getHeaders = (entry: Entry) => {
   const requestHeaders = [...entry.request.headers];
   const responseHeaders = [...entry.response.headers];
   return {
@@ -174,7 +186,11 @@ export const getHeaders = (entry) => {
   };
 };
 
-export const getTotalTimeOfEntry = ({ startedDateTime, time, timings }) =>
+export const getTotalTimeOfEntry = ({
+  startedDateTime,
+  time,
+  timings,
+}: Entry) =>
   new Date(startedDateTime).getTime() +
   time +
   (timings?._blocked_queueing || timings?._queued || 0);
@@ -182,7 +198,7 @@ export const getTotalTimeOfEntry = ({ startedDateTime, time, timings }) =>
 export const getInterceptError = ({ response }) =>
   response && response._error ? response._error : null;
 
-export const prepareViewerData = (entries) => {
+export const prepareViewerData = (entries: Entry[]) => {
   if (!entries.length) {
     return {
       totalNetworkTime: 0,
@@ -299,7 +315,7 @@ export const filterData = ({
   );
 };
 
-export const parseTime = (time) => {
+export const parseTime = (time: number) => {
   if (!time) {
     return time;
   }
@@ -330,7 +346,7 @@ export const prepareTooltipData = (data) => ({
   }, {}),
 });
 
-export const getStatusClass = ({ status, error }) => {
+export const getStatusClass = ({ status, error }: Entry) => {
   if (status === 0 && !error) {
     return "pending";
   }
@@ -367,7 +383,13 @@ export const calcChartAttributes = (
   const startTimePercent = (data.startTime / maxTime) * 100;
   let previousX = 0;
   let previousWidth = 0;
-  const chartAttributes = [];
+  const chartAttributes: {
+    width: string;
+    y: number;
+    x: string;
+    fill: string;
+    key: string;
+  }[] = [];
 
   Object.keys(TIMINGS).forEach((key) => {
     const timingInfo = TIMINGS[key];
@@ -393,61 +415,6 @@ export const calcChartAttributes = (
 
   return chartAttributes;
 };
-
-export const findIndexNearTimestamp = (data, exactTimestamp) =>
-  data.reduce(
-    (
-      { value, index },
-      { startedDateTime: currentValue, index: currentIndex }
-    ) =>
-      Math.abs(currentValue - exactTimestamp) < Math.abs(value - exactTimestamp)
-        ? {
-            value: currentValue,
-            index: currentIndex,
-          }
-        : {
-            value,
-            index,
-          },
-    {
-      value: 0,
-      index: 0,
-    }
-  ).index;
-
-export const findIndexBeforeTimestamp = (data, exactTimestamp) => {
-  const resultIndex = data
-    .reverse()
-    .findIndex(({ startedDateTime }) => startedDateTime <= exactTimestamp);
-  return resultIndex < 0 ? 0 : data.size - (resultIndex + 1);
-};
-
-export const findIndexAfterTimestamp = (data, exactTimestamp) =>
-  data.findIndex(({ startedDateTime }) => startedDateTime >= exactTimestamp);
-
-export const findRequestIndex = ({ data, timestamp, position }) => {
-  switch (position) {
-    case "before":
-      return findIndexBeforeTimestamp(data, timestamp);
-    case "after":
-      return findIndexAfterTimestamp(data, timestamp);
-    case "near":
-    default:
-      return findIndexNearTimestamp(data, timestamp);
-  }
-};
-
-export const calculateTimings = (pages) =>
-  pages.reduce(
-    ({ DOMContentLoaded, onLoad }, { pageTimings }) => ({
-      DOMContentLoaded: DOMContentLoaded + pageTimings.onContentLoad,
-      onLoad: onLoad + pageTimings.onLoad,
-    }),
-    {
-      DOMContentLoaded: 0,
-      onLoad: 0,
-    }
-  );
 
 export const getSummary = (data) =>
   data.reduce(

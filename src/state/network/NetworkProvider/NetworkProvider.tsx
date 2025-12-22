@@ -2,11 +2,11 @@ import { useEffect, useReducer, useMemo, ReactNode } from "react";
 import { Map } from "immutable";
 import { AxiosRequestConfig } from "axios";
 
-import { reducer, initialState as defaultState } from "./reducer";
-import { updateData, fetchFile, updateScrollToIndex } from "./actions";
-import { NetworkContext } from "./Context";
-import { findRequestIndex } from "../../utils";
-import { HarData, ScrollRequestPosition } from "../../types";
+import { reducer, initialState as defaultState } from "../reducer";
+import { updateData, fetchFile, updateScrollToIndex } from "../actions";
+import { NetworkContext } from "../Context";
+import { findRequestIndex } from "./utils";
+import { HarData, ScrollRequestPosition } from "../../../types";
 
 interface NetworkProviderProps {
   autoHighlightChange?: boolean;

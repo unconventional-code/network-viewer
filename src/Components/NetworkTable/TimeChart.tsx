@@ -5,7 +5,7 @@ import {
   TIME_CHART_DEFAULT_PROPS,
   TIME_CHART_SVG_PROPS,
 } from "../../constants";
-import { TimeChartTooltip } from "./TimeChartTooltip";
+import { TimeChartTooltip } from "./TimeChartTooltip/TimeChartTooltip";
 import { Tooltip } from "../Common/Tooltip/Tooltip";
 
 interface TimeChartProps {
@@ -29,8 +29,8 @@ export function TimeChart({ timings, maxTime }: TimeChartProps) {
         <g>
           {chartAttributes.map((chartProps) => (
             <rect
-              key={chartProps.key}
               {...chartProps}
+              key={chartProps.key}
               {...TIME_CHART_DEFAULT_PROPS}
             />
           ))}

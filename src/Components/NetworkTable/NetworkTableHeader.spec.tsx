@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { NetworkTableHeader } from "./NetworkTableHeader";
-import { NetworkProvider } from "../../state/network/NetworkProvider";
+import { NetworkProvider } from "../../state/network/NetworkProvider/NetworkProvider";
 
 describe("NetworkTableHeader", () => {
   it("renders without crashing", () => {

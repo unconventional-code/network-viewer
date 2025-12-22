@@ -15,6 +15,7 @@
     "@react-aria/tooltip": "^3.9.0",
     "@react-aria/utils": "^3.32.0",
     "@react-stately/tooltip": "^3.5.9",
+    "@types/har-format": "^1.2.16",
     "@types/react-transition-group": "^4.4.12",
     "axios": "1.13.2",
     "classnames": ">=2.5.1",

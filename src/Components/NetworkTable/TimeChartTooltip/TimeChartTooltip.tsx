@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import classNames from "classnames";
 
-import { TIMINGS } from "../../constants";
-import { prepareTooltipData } from "../../utils";
+import { TIMINGS } from "../../../constants";
+import { prepareTooltipData } from "../../../utils";
 
 const DETAIL = [
   {

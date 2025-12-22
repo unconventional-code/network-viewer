@@ -1,6 +1,6 @@
 import classNames from "classnames";
 
-import { NetworkProvider } from "./state/network/NetworkProvider";
+import { NetworkProvider } from "./state/network/NetworkProvider/NetworkProvider";
 import { MainContainer } from "./Containers/MainContainer";
 import { ThemeProvider } from "./state/theme/Context";
 import { NetworkViewerProps } from "./types";

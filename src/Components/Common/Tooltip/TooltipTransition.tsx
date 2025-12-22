@@ -1,8 +1,8 @@
 import { OverlayContainer } from "@react-aria/overlays";
 import React, { useState, ReactNode } from "react";
-import { Transition } from "react-transition-group";
+import { Transition, TransitionStatus } from "react-transition-group";
 
-const OPEN_STATES: Record<string, boolean> = {
+const OPEN_STATES: Partial<Record<TransitionStatus, boolean>> = {
   entering: false,
   entered: true,
 };

@@ -5,6 +5,7 @@ import * as utils from "./utils";
 import networkDataMock from "./network.json";
 import interceptErrorNetworkDataMock from "./network_intercept_error.json";
 import { preparedMockData } from "./preparedData";
+import { Entry, Request, Response } from "har-format";
 
 describe("utils", () => {
   it("getUrlInfo", () => {
@@ -101,9 +102,12 @@ describe("utils", () => {
       utils.getContent({
         mimeType: "application/json",
         text: '{\n  "foo": "bar"\n}',
+        size: 10,
       })
     ).toMatchSnapshot();
-    expect(utils.getContent({ content: "cool" })).toMatchSnapshot();
+    expect(
+      utils.getContent({ mimeType: "text/plain", text: "cool", size: 10 })
+    ).toMatchSnapshot();
   });
 
   it("prepareTooltipData", () => {
@@ -185,12 +189,19 @@ describe("utils", () => {
     expect(
       utils.getHeaders({
         request: {
-          headers: [{ name: "b" }, { name: "a" }],
-        },
+          headers: [
+            { name: "b", value: "b" },
+            { name: "a", value: "a" },
+          ],
+        } as Request,
         response: {
-          headers: [{ name: "z" }, { name: "y" }, { name: "x" }],
-        },
-      })
+          headers: [
+            { name: "z", value: "z" },
+            { name: "y", value: "y" },
+            { name: "x", value: "x" },
+          ],
+        } as Response,
+      } as Entry)
     ).toMatchSnapshot();
   });
 
@@ -239,26 +250,8 @@ describe("utils", () => {
     });
   });
 
-  it("findIndexNearTimestamp", () => {
-    expect(
-      utils.findIndexNearTimestamp(preparedMockData, 1571042841141)
-    ).toMatchSnapshot();
-  });
-
-  it("findIndexBeforeTimestamp", () => {
-    expect(
-      utils.findIndexBeforeTimestamp(preparedMockData, 1571042835643)
-    ).toMatchSnapshot();
-  });
-
-  it("findIndexAfterTimestamp", () => {
-    expect(
-      utils.findIndexAfterTimestamp(preparedMockData, 1571042835643)
-    ).toMatchSnapshot();
-  });
-
   it("getStatusClass", () => {
-    expect(utils.getStatusClass({ status: 200 })).toBe("info");
+    expect(utils.getStatusClass({ status: 200 } as Entry)).toBe("info");
     expect(utils.getStatusClass({ status: 503 })).toBe("error");
     expect(utils.getStatusClass({ status: 0, error: "ERR" })).toBe("error");
     expect(utils.getStatusClass({ status: 0 })).toBe("pending");

@@ -4,9 +4,9 @@ import {
   filterData,
   sortBy,
   prepareViewerData,
-  calculateTimings,
   getSummary,
 } from "./../../utils";
+import { calculateTimings } from "./utils";
 import * as types from "./types";
 import { DEFAULT_STATUS_FILTER, EMPTY_NETWORK_HAR } from "../../constants";
 

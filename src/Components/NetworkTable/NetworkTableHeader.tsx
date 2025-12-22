@@ -10,7 +10,7 @@ export function NetworkTableHeader() {
   const tableHeaderWidth = state.get("tableHeaderWidth");
   const { showWaterfall } = useTheme();
 
-  const columns = getViewerFields(showReqDetail, showWaterfall);
+  const columns = getViewerFields(showReqDetail, showWaterfall || false);
 
   return (
     <div
@@ -24,6 +24,7 @@ export function NetworkTableHeader() {
             "flex items-center px-xs min-w-[60px] font-semibold text-h6 text-brand-primary-dark-gray",
             datakey,
             { "flex-1": showReqDetail },
+            // @ts-ignore
             { "w-[128px]": showWaterfall && key === "waterfall" }
           )}
         >

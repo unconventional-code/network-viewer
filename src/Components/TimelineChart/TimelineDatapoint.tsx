@@ -32,8 +32,8 @@ export function TimelineDatapoint({
     <g>
       {chartAttributes.map((chartProps) => (
         <rect
-          key={chartProps.key}
           {...chartProps}
+          key={chartProps.key}
           height={TIMELINE_DATA_POINT_HEIGHT}
         />
       ))}

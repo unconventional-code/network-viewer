@@ -2,7 +2,7 @@ import { List } from "immutable";
 import { render } from "@testing-library/react";
 import { vi, describe, it, expect } from "vitest";
 
-import { initialState as defaultState } from "./reducer";
+import { initialState as defaultState } from "../reducer";
 import { NetworkProvider } from "./NetworkProvider";
 
 describe("NetworkProvider", () => {
