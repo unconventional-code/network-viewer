@@ -253,9 +253,9 @@ export const prepareViewerData = (entries: Entry[]) => {
   };
 };
 
-export const sortBy = (data, key, isAsc = true) => {
+export const sortBy = (data: any[], key: string, isAsc = true) => {
   const direction = isAsc ? 1 : -1;
-  return data.sort((prev, next) => {
+  return [...data].sort((prev, next) => {
     const entryA = prev[key];
     const entryB = next[key];
 
@@ -416,17 +416,17 @@ export const calcChartAttributes = (
   return chartAttributes;
 };
 
-export const getSummary = (data) =>
+export const getSummary = (data: any[]) =>
   data.reduce(
     (acc, req) => {
-      acc.totalTransferredSize += req.transferredSize;
-      acc.totalUncompressedSize += req.uncompressedSize;
+      acc.totalTransferredSize += req.transferredSize || 0;
+      acc.totalUncompressedSize += req.uncompressedSize || 0;
       return acc;
     },
     {
       totalTransferredSize: 0,
       totalUncompressedSize: 0,
-      totalRequests: data.size,
+      totalRequests: data.length,
     }
   );
 

@@ -4,7 +4,7 @@ import { STATUS_FILTERS } from "../../constants";
 
 export function StatusFilter() {
   const { state, actions } = useNetwork();
-  const filter = state.get("statusFilter");
+  const filter = state.statusFilter;
 
   return (
     <Dropdown

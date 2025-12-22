@@ -17,10 +17,10 @@ export function FilterContainer() {
     <section className="bg-bg-gray-90 flex flex-col">
       <div className="flex w-full border-b border-border-color px-xs-s py-xs-s [&>*:not(:last-child)]:mr-xs-s">
         <StatusFilter />
-        <Search {...state.get("search")} />
+        <Search {...state.search} />
         {showPauseResume && <PauseResumeButton />}
         {showReset && <ResetButton />}
-        {showExportHar && <ExportHarButton rawData={state.get("rawData")} />}
+        {showExportHar && <ExportHarButton rawData={state.rawData} />}
         {showImportHar && <ImportHAR />}
       </div>
 

@@ -14,9 +14,9 @@ import { useResizeObserver } from "../hooks/useResizeObserver";
 export function NetworkTableContainer() {
   const { state } = useNetwork();
   const { showImportHar, showWaterfall } = useTheme();
-  const actualData = state.get("actualData");
-  const error = state.get("error");
-  const showReqDetail = state.get("showReqDetail");
+  const actualData = state.actualData;
+  const error = state.error;
+  const showReqDetail = state.showReqDetail;
 
   const [tableBodyHeight, setTableBodyHeight] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -29,10 +29,13 @@ export function NetworkTableContainer() {
   }, [ref?.current, actualData, elementDims]);
 
   if (error) {
-    return <ErrorMessage {...error} />;
+    if (typeof error === "string") {
+      return <ErrorMessage title={error} />;
+    }
+    return <ErrorMessage title={error.title} description={error.description} />;
   }
 
-  if (!actualData.size && showImportHar) {
+  if (!actualData.length && showImportHar) {
     return (
       <section className="flex flex-col items-center justify-center h-full w-full">
         <ImportHAR showButton={false} />

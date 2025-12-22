@@ -8,7 +8,7 @@ import { Request } from "../Components/ReqDetail/Request";
 
 export function ReqDetailContainer() {
   const { actions, state } = useNetwork();
-  const reqDetail = state.get("reqDetail");
+  const reqDetail = state.reqDetail;
   const handleCloseClick = () => {
     actions.selectRequest(null);
   };

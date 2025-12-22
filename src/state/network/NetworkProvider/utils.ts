@@ -1,7 +1,15 @@
-import { Entry } from "har-format";
+interface EntryWithIndex {
+  startedDateTime: number;
+  index: number;
+}
 
-export const findIndexNearTimestamp = (data: Entry[], exactTimestamp: number) =>
-  data.reduce(
+export const findIndexNearTimestamp = (
+  data: EntryWithIndex[],
+  exactTimestamp: number
+): number | null => {
+  if (data.length === 0) return null;
+
+  return data.reduce(
     (
       { value, index },
       { startedDateTime: currentValue, index: currentIndex }
@@ -16,27 +24,46 @@ export const findIndexNearTimestamp = (data: Entry[], exactTimestamp: number) =>
             index,
           },
     {
-      value: 0,
-      index: 0,
+      value: data[0].startedDateTime,
+      index: data[0].index,
     }
   ).index;
+};
 
 export const findIndexBeforeTimestamp = (
-  data: Entry[],
+  data: EntryWithIndex[],
   exactTimestamp: number
-) => {
-  const resultIndex = data
-    .reverse()
-    .findIndex(({ startedDateTime }) => startedDateTime <= exactTimestamp);
-  return resultIndex < 0 ? 0 : data.size - (resultIndex + 1);
+): number | null => {
+  if (data.length === 0) return null;
+
+  const reversed = [...data].reverse();
+  const resultIndex = reversed.findIndex(
+    ({ startedDateTime }) => startedDateTime <= exactTimestamp
+  );
+  return resultIndex < 0 ? null : data.length - (resultIndex + 1);
 };
 
 export const findIndexAfterTimestamp = (
-  data: Entry[],
+  data: EntryWithIndex[],
   exactTimestamp: number
-) => data.findIndex(({ startedDateTime }) => startedDateTime >= exactTimestamp);
+): number | null => {
+  if (data.length === 0) return null;
 
-export const findRequestIndex = ({ data, timestamp, position }) => {
+  const index = data.findIndex(
+    ({ startedDateTime }) => startedDateTime >= exactTimestamp
+  );
+  return index < 0 ? null : index;
+};
+
+export const findRequestIndex = ({
+  data,
+  timestamp,
+  position,
+}: {
+  data: EntryWithIndex[];
+  timestamp: number;
+  position: "before" | "after" | "near";
+}): number | null => {
   switch (position) {
     case "before":
       return findIndexBeforeTimestamp(data, timestamp);

@@ -11,10 +11,10 @@ import { NetworkTableFooter } from "./../Components/NetworkTable/NetworkTableFoo
 export function MainContainer() {
   const { state } = useNetwork();
   const { showTimeline } = useTheme();
-  const loading = state.get("loading");
-  const showReqDetail = state.get("showReqDetail");
-  const dataSummary = state.get("dataSummary");
-  const actualData = state.get("actualData");
+  const loading = state.loading;
+  const showReqDetail = state.showReqDetail;
+  const dataSummary = state.dataSummary;
+  const actualData = state.actualData;
 
   return (
     <>
@@ -28,7 +28,7 @@ export function MainContainer() {
             <NetworkTableContainer />
             {showReqDetail && <ReqDetailContainer />}
           </section>
-          {actualData.size ? (
+          {actualData.length ? (
             <NetworkTableFooter dataSummary={dataSummary} />
           ) : null}
         </div>

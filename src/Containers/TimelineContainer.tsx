@@ -3,17 +3,17 @@ import { TimelineChart } from "../Components/TimelineChart/TimelineChart";
 
 export function TimelineContainer() {
   const { state } = useNetwork();
-  const data = state.get("data");
-  const actualData = state.get("actualData");
-  const error = state.get("error");
-  const totalNetworkTime = state.get("totalNetworkTime");
-  if (error || !actualData.size) {
+  const data = state.data;
+  const actualData = state.actualData;
+  const error = state.error;
+  const totalNetworkTime = state.totalNetworkTime;
+  if (error || !actualData.length) {
     return null;
   }
   return (
     <section className="w-full border-b border-border-color bg-white-100">
       <TimelineChart
-        chartData={data.toArray()}
+        chartData={data}
         totalNetworkTime={totalNetworkTime || 0}
       />
     </section>

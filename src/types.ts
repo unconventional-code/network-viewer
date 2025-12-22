@@ -85,8 +85,8 @@ export interface NetworkViewerProps {
   data?: HarData | null;
   fetchOptions?: AxiosRequestConfig;
   file?: string | null;
-  onDataError?: ((error: string) => void) | null;
-  onDataLoaded?: ((data: List<any>) => void) | null;
+  onDataError?: ((error: string | { title: string; description: string }) => void) | null;
+  onDataLoaded?: ((data: any[]) => void) | null;
   onPause?: () => void;
   onRequestSelect?: ((request: any) => void) | null;
   onReset?: () => void;

@@ -6,7 +6,7 @@ import { TYPE_FILTERS } from "../../constants";
 
 export function TypeFilter() {
   const { state, actions } = useNetwork();
-  const filter = state.get("typeFilter");
+  const filter = state.typeFilter;
 
   return TYPE_FILTERS.map(({ name, filterBy }) => {
     const selectedFilter = filterBy.value === filter.value;

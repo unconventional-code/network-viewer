@@ -31,7 +31,7 @@ export function NetworkTableRow({
   style = {},
 }: NetworkTableRowProps) {
   const { state } = useNetwork();
-  const showReqDetail = state.get("showReqDetail");
+  const showReqDetail = state.showReqDetail;
   const { showWaterfall } = useTheme();
   const columns = getViewerFields(showReqDetail, showWaterfall || false);
 

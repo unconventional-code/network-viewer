@@ -1,9 +1,17 @@
-import { Map } from "immutable";
-
 import { formatSize, formatTime } from "../../utils";
 
 interface NetworkTableFooterProps {
-  dataSummary: Map<string, any>;
+  dataSummary: {
+    totalRequests: number;
+    totalTransferredSize: number;
+    totalUncompressedSize: number;
+    finishTime: number;
+    timings: {
+      DOMContentLoaded: number;
+      onLoad: number;
+    };
+    finish: number;
+  };
   showAllInfo?: boolean;
 }
 
@@ -15,23 +23,23 @@ export function NetworkTableFooter({
     <div className="flex items-center justify-between px-m py-xs bg-bg-gray-90 border-t border-border-color text-h6 text-brand-primary-gray">
       {showAllInfo ? (
         <>
-          <span>{`${dataSummary.get("totalRequests")} requests`}</span>
+          <span>{`${dataSummary.totalRequests} requests`}</span>
           <span>{`${formatSize(
-            dataSummary.get("totalTransferredSize")
+            dataSummary.totalTransferredSize
           )} transferred`}</span>
           <span>{`${formatSize(
-            dataSummary.get("totalUncompressedSize")
+            dataSummary.totalUncompressedSize
           )} resources`}</span>
-          <span>{`Finished: ${formatTime(dataSummary.get("finish"))}`}</span>
+          <span>{`Finished: ${formatTime(dataSummary.finish)}`}</span>
           <span>{`DOMContentLoaded: ${formatTime(
-            dataSummary.get("timings")?.DOMContentLoaded
+            dataSummary.timings?.DOMContentLoaded
           )}`}</span>
           <span>{`Load: ${formatTime(
-            dataSummary.get("timings")?.onLoad
+            dataSummary.timings?.onLoad
           )}`}</span>
         </>
       ) : (
-        <span>{`${dataSummary.get("totalRequests")} requests`}</span>
+        <span>{`${dataSummary.totalRequests} requests`}</span>
       )}
     </div>
   );

@@ -6,8 +6,8 @@ import { getViewerFields } from "../../utils";
 
 export function NetworkTableHeader() {
   const { state } = useNetwork();
-  const showReqDetail = state.get("showReqDetail");
-  const tableHeaderWidth = state.get("tableHeaderWidth");
+  const showReqDetail = state.showReqDetail;
+  const tableHeaderWidth = state.tableHeaderWidth;
   const { showWaterfall } = useTheme();
 
   const columns = getViewerFields(showReqDetail, showWaterfall || false);

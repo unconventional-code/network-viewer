@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+// @ts-ignore - react-window types issue
 import { FixedSizeList } from "react-window";
 
 import { useNetwork } from "../../state/network/Context";
@@ -10,10 +11,10 @@ import { IconNetworkRequest } from "../../icons/IconNetworkRequest";
 
 /* eslint no-underscore-dangle: 0 */
 
-const virtualizedTableRow = ({ data, index, style }) => {
+const virtualizedTableRow = ({ data, index, style }: any) => {
   const { listData, totalNetworkTime, handleReqSelect, selectedReqIndex } =
     data;
-  const item = listData.get(index);
+  const item = listData[index];
 
   return (
     <NetworkTableRow
@@ -34,18 +35,18 @@ interface NetworkTableBodyProps {
 export function NetworkTableBody({ height }: NetworkTableBodyProps) {
   const { state, actions, callbacks } = useNetwork();
   const { enableAutoScroll, NoDataPlaceholder } = useTheme();
-  const numberOfNewEntries = state.get("numberOfNewEntries");
-  const data = state.get("data");
-  const actualData = state.get("actualData");
-  const totalNetworkTime = state.get("totalNetworkTime");
-  const selectedReqIndex = state.get("selectedReqIndex");
+  const numberOfNewEntries = state.numberOfNewEntries;
+  const data = state.data;
+  const actualData = state.actualData;
+  const totalNetworkTime = state.totalNetworkTime;
+  const selectedReqIndex = state.selectedReqIndex;
 
   const listRef = useRef(null);
   const { elementDims } = useResizeObserver(listRef);
 
   useEffect(() => {
     actions.setTableHeaderWidth(elementDims.width);
-  }, [elementDims]);
+  }, [elementDims, actions]);
 
   useEffect(() => {
     if (enableAutoScroll && listRef?.current) {
@@ -58,26 +59,26 @@ export function NetworkTableBody({ height }: NetworkTableBodyProps) {
         scrollTop = scrollHeight;
       }
     }
-  }, [data, listRef]);
+  }, [data, listRef, numberOfNewEntries]);
 
-  const handleReqSelect = (payload) => {
+  const handleReqSelect = (payload: any) => {
     if (selectedReqIndex === payload.index) {
       return;
     }
 
-    actions.updateScrollToIndex(payload.index);
+    actions.updateScrollToIndex(payload);
     actions.selectRequest(payload);
-    callbacks.onRequestSelect(payload);
+    callbacks.onRequestSelect?.(payload);
   };
 
-  if (actualData.size === 0) {
+  if (actualData.length === 0) {
     return (
       <div
         ref={listRef}
         className="flex flex-col items-center justify-center h-full w-full p-xxl"
       >
         <IconNetworkRequest className="w-16 h-16 fill-brand-primary-gray mb-m" />
-        {NoDataPlaceholder && <NoDataPlaceholder />}
+        {NoDataPlaceholder}
         {!NoDataPlaceholder && (
           <>
             <span className="text-h4 font-semibold text-brand-primary-dark-gray mb-s">
@@ -97,7 +98,7 @@ export function NetworkTableBody({ height }: NetworkTableBodyProps) {
       <FixedSizeList
         className="w-full"
         height={height}
-        itemCount={data.size}
+        itemCount={data.length}
         itemData={{
           listData: data,
           totalNetworkTime,

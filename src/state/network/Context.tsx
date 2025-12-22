@@ -1,41 +1,79 @@
-import React, { useContext, Dispatch } from "react";
-import { Map } from "immutable";
+import React, { useContext } from "react";
+import { PreparedEntry } from "./NetworkProvider/NetworkProvider";
 
-import * as actions from "./actions";
-
-type NetworkState = Map<string, any>;
-type NetworkAction = any;
-type NetworkCallbacks = {
+export interface NetworkCallbacks {
   onPause?: (() => void) | null;
   onResume?: (() => void) | null;
   onReset?: (() => void) | null;
-  onRequestSelect?: ((request: any) => void) | null;
-};
+  onRequestSelect?: ((request: PreparedEntry) => void) | null;
+}
 
-type NetworkContextValue = [
-  NetworkState,
-  Dispatch<NetworkAction>,
-  NetworkCallbacks
-];
+export interface NetworkState {
+  rawData: any;
+  data: PreparedEntry[]; // filtered data (what's shown in table)
+  actualData: PreparedEntry[]; // sorted but unfiltered (all entries)
+  totalNetworkTime: number | null;
+  dataSummary: {
+    totalRequests: number;
+    totalTransferredSize: number;
+    totalUncompressedSize: number;
+    finishTime: number;
+    timings: any;
+    finish: number;
+  };
+  sort: {
+    key: string;
+    isAsc: boolean;
+  };
+  search: {
+    name: string;
+    value: string;
+  };
+  statusFilter: {
+    name: string;
+    value: string | null;
+  };
+  typeFilter: {
+    name: string | null;
+    value: string[] | null;
+  };
+  error: string | { title: string; description: string } | null;
+  loading: boolean;
+  scrollToIndex: number | null;
+  selectedReqIndex: number | null;
+  showReqDetail: boolean;
+  reqDetail: PreparedEntry | null;
+  tableHeaderWidth: string;
+  numberOfNewEntries: number;
+}
 
-const actionsWrapper =
-  (actions = {}) =>
-  (
-    dispatch: Dispatch<NetworkAction>,
-    state: NetworkState
-  ): Record<string, any> =>
-    Object.keys(actions).reduce(
-      (modifiedActions, type) => ({
-        ...modifiedActions,
-        [type]: (
-          actions as Record<
-            string,
-            (dispatch: Dispatch<NetworkAction>, state: NetworkState) => any
-          >
-        )[type](dispatch, state),
-      }),
-      {}
-    );
+export interface NetworkActions {
+  updateData: (harData: any) => void;
+  updateSearch: (search: { name: string; value: string }) => void;
+  updateSort: (sort: { key: string; isAsc: boolean }) => void;
+  updateStatusFilter: (statusFilter: {
+    name: string;
+    value: string | null;
+  }) => void;
+  updateTypeFilter: (typeFilter: {
+    name: string | null;
+    value: string[] | null;
+  }) => void;
+  updateErrorMessage: (
+    error: string | { title: string; description: string } | null
+  ) => void;
+  selectRequest: (payload: PreparedEntry | null) => void;
+  setTableHeaderWidth: (width: number) => void;
+  updateScrollToIndex: (payload: PreparedEntry | null) => void;
+  fetchFile: (file: string, options?: any) => Promise<void>;
+  resetState: () => void;
+}
+
+export interface NetworkContextValue {
+  state: NetworkState;
+  actions: NetworkActions;
+  callbacks: NetworkCallbacks;
+}
 
 export const NetworkContext = React.createContext<
   NetworkContextValue | undefined
@@ -46,26 +84,5 @@ export const useNetwork = () => {
   if (!context) {
     throw new Error("useNetwork must be used within a NetworkProvider");
   }
-  const [state, dispatch, callbacks] = context;
-
-  const wrappedActions = actionsWrapper({
-    fetchFile: actions.fetchFile,
-    updateData: actions.updateData,
-    updateSearch: actions.updateSearch,
-    updateSort: actions.updateSort,
-    updateStatusFilter: actions.updateStatusFilter,
-    updateTypeFilter: actions.updateTypeFilter,
-    updateErrorMessage: actions.updateErrorMessage,
-    selectRequest: actions.selectRequest,
-    setTableHeaderWidth: actions.setTableHeaderWidth,
-    updateScrollToIndex: actions.updateScrollToIndex,
-    resetState: actions.resetState,
-  })(dispatch, state);
-
-  return {
-    state,
-    dispatch,
-    actions: wrappedActions,
-    callbacks,
-  };
+  return context;
 };
