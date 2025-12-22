@@ -1,27 +1,29 @@
-import React from 'react';
-import { Map } from 'immutable';
-import { mount } from 'enzyme';
+import React from "react";
+import { Map } from "immutable";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import NetworkTableFooter from "../../../../src/Components/NetworkTable/NetworkTableFooter";
 
-import NetworkTableFooter from './../../../../src/Components/NetworkTable/NetworkTableFooter';
-
-describe('NetworkTableFooter', () => {
-  it('renders without crashing', () => {
-    const element = mount(
+describe("NetworkTableFooter", () => {
+  it("renders without crashing", () => {
+    const { container } = render(
       <div>
         <NetworkTableFooter
-          dataSummary={new Map({
-            totalRequests: 20,
-            totalTransferredSize: 2034,
-            totalUncompressedSize: 1035,
-            timings: {
-              onLoad: 999,
-              DOMContentLoaded: 2000,
-            },
-          })}
+          dataSummary={
+            new Map({
+              totalRequests: 20,
+              totalTransferredSize: 2034,
+              totalUncompressedSize: 1035,
+              timings: {
+                onLoad: 999,
+                DOMContentLoaded: 2000,
+              },
+            })
+          }
           showAllInfo
         />
-      </div>,
+      </div>
     );
-    expect(element).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

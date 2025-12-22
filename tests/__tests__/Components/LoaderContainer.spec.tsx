@@ -1,20 +1,21 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 
-import LoaderContainer from './../../../src/Components/LoaderContainer';
+import LoaderContainer from "../../../src/Components/LoaderContainer";
 
-describe('LoaderContainer', () => {
+describe("LoaderContainer", () => {
   const props = {
     show: true,
-    text: 'Loader text',
+    text: "Loader text",
   };
 
-  it('renders without crashing', () => {
-    const element = shallow(
+  it("renders without crashing", () => {
+    const { container } = render(
       <LoaderContainer {...props}>
         <p>Loaded</p>
-      </LoaderContainer>,
+      </LoaderContainer>
     );
-    expect(element).toHaveLength(1);
+    expect(container).toBeTruthy();
   });
 });

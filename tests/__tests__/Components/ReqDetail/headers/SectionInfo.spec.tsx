@@ -1,17 +1,18 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 
-import SectionInfo from '../../../../../src/Components/ReqDetail/SectionInfo';
+import SectionInfo from "../../../../../src/Components/ReqDetail/SectionInfo";
 
-describe('SectionInfo', () => {
+describe("SectionInfo", () => {
   const props = {
-    eventKey: 'general',
+    eventKey: "general",
     data: {},
-    component: () => {},
+    component: () => <div>Test</div>,
   };
 
-  it('renders without crashing', () => {
-    const element = shallow(<SectionInfo {...props} />);
-    expect(element).toMatchSnapshot();
+  it("renders without crashing", () => {
+    const { container } = render(<SectionInfo {...props} />);
+    expect(container).toMatchSnapshot();
   });
 });

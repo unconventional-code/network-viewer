@@ -1,21 +1,20 @@
-import React from 'react';
-import { mount } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import NetworkTableRow from "../../../../src/Components/NetworkTable/NetworkTableRow";
+import NetworkProvider from "../../../../src/state/network/NetworkProvider";
 
-import NetworkTableRow from './../../../../src/Components/NetworkTable/NetworkTableRow';
-import NetworkProvider from '../../../../src/state/network/NetworkProvider';
-
-describe('NetworkTableRow', () => {
-  const NOOP = () => {
-  };
+describe("NetworkTableRow", () => {
+  const NOOP = () => {};
 
   const props = {
     entry: {
-      domain: 'developer.mozilla.org',
-      filename: 'slice',
+      domain: "developer.mozilla.org",
+      filename: "slice",
       index: 0,
-      method: 'GET',
+      method: "GET",
       size: 135.04,
-      startedDateTime: '2019-10-14T08:47:11.592Z',
+      startedDateTime: "2019-10-14T08:47:11.592Z",
       status: 200,
       timings: {
         _blocked_queueing: 4.382999992230907,
@@ -28,20 +27,20 @@ describe('NetworkTableRow', () => {
         startTime: 0,
         wait: 26.03899999633059,
       },
-      type: 'html',
-      url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice',
+      type: "html",
+      url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice",
     },
     maxTime: 5000,
     scrollHighlight: false,
     onSelect: NOOP,
   };
 
-  it('renders without crashing', () => {
-    const element = mount(
+  it("renders without crashing", () => {
+    const { container } = render(
       <NetworkProvider>
         <NetworkTableRow {...props} />
-      </NetworkProvider>,
+      </NetworkProvider>
     );
-    expect(element).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

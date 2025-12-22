@@ -1,19 +1,20 @@
-import React from 'react';
-import { mount } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 
-import Headers from './../../../../src/Components/ReqDetail/Headers';
+import Headers from "../../../../src/Components/ReqDetail/Headers";
 
-describe('Headers', () => {
+describe("Headers", () => {
   const props = {
     data: {
-      domain: 'developer.mozilla.org',
-      filename: 'slice',
+      domain: "developer.mozilla.org",
+      filename: "slice",
       index: 0,
-      method: 'GET',
+      method: "GET",
       size: 135.04,
-      startedDateTime: '2019-10-14T08:47:11.592Z',
+      startedDateTime: "2019-10-14T08:47:11.592Z",
       status: 200,
-      serverIPAddress: ':80',
+      serverIPAddress: ":80",
       timings: {
         _blocked_queueing: 4.382999992230907,
         blocked: 5.496999992230907,
@@ -25,11 +26,11 @@ describe('Headers', () => {
         startTime: 0,
         wait: 26.03899999633059,
       },
-      type: 'html',
-      url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice',
+      type: "html",
+      url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice",
       headers: {
-        response: [{ name: 'Connection', value: 'keep-alive' }],
-        request: [{ name: 'Connection', value: 'keep-alive' }],
+        response: [{ name: "Connection", value: "keep-alive" }],
+        request: [{ name: "Connection", value: "keep-alive" }],
         queryString: [],
         postData: {
           text: '{"hello": "foo"}',
@@ -39,10 +40,8 @@ describe('Headers', () => {
     maxTime: 5000,
   };
 
-  it('renders without crashing', () => {
-    const element = mount(
-      <Headers {...props} />,
-    );
-    expect(element).toMatchSnapshot();
+  it("renders without crashing", () => {
+    const { container } = render(<Headers {...props} />);
+    expect(container).toMatchSnapshot();
   });
 });

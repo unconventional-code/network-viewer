@@ -1,14 +1,14 @@
-import React from 'react';
-import { mount } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 
-import TimelineChart from './../../../../src/Components/TimelineChart/TimelineChart';
+import TimelineChart from "../../../../src/Components/TimelineChart/TimelineChart";
 
-describe('TimelineChart', () => {
-  it('renders without crashing', () => {
-    const element = mount(<TimelineChart
-      chartData={[]}
-      totalNetworkTime={17000}
-    />);
-    expect(element).toMatchSnapshot();
+describe("TimelineChart", () => {
+  it("renders without crashing", () => {
+    const { container } = render(
+      <TimelineChart chartData={[]} totalNetworkTime={17000} />
+    );
+    expect(container).toMatchSnapshot();
   });
 });

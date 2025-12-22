@@ -1,9 +1,10 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 
-import RequestPayload from '../../../../../src/Components/ReqDetail/request/RequestPayload';
+import RequestPayload from "../../../../../src/Components/ReqDetail/request/RequestPayload";
 
-describe('RequestPayload', () => {
+describe("RequestPayload", () => {
   const props = {
     data: {
       headers: {
@@ -15,8 +16,8 @@ describe('RequestPayload', () => {
     isPayloadTransformed: true,
   };
 
-  it('renders without crashing', () => {
-    const element = shallow(<RequestPayload {...props} />);
-    expect(element).toMatchSnapshot();
+  it("renders without crashing", () => {
+    const { container } = render(<RequestPayload {...props} />);
+    expect(container).toMatchSnapshot();
   });
 });

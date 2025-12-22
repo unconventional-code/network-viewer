@@ -2,27 +2,25 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
-import FormData from "../../../../../src/Components/ReqDetail/request/FormData";
+import RequestHeaders from "../../../../../src/Components/ReqDetail/headers/RequestHeaders";
 
-describe("FormData", () => {
+describe("RequestHeaders", () => {
   const props = {
     data: {
       headers: {
-        postData: {
-          params: [
-            {
-              name: "foo",
-              value: "bar",
-            },
-          ],
-        },
+        request: [
+          {
+            name: "foo",
+            value: "bar",
+          },
+        ],
       },
     },
     isPayloadTransformed: true,
   };
 
   it("renders without crashing", () => {
-    const { container } = render(<FormData {...props} />);
+    const { container } = render(<RequestHeaders {...props} />);
     expect(container).toMatchSnapshot();
   });
 });

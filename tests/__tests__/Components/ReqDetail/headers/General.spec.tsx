@@ -1,20 +1,21 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 
-import General from '../../../../../src/Components/ReqDetail/headers/General';
+import General from "../../../../../src/Components/ReqDetail/headers/General";
 
-describe('General', () => {
+describe("General", () => {
   const props = {
     data: {},
   };
 
-  it('renders without crashing', () => {
-    const element = shallow(<General {...props} />);
-    expect(element).toMatchSnapshot();
+  it("renders without crashing", () => {
+    const { container } = render(<General {...props} />);
+    expect(container).toMatchSnapshot();
   });
 
-  it('renders intercept error', () => {
-    const element = shallow(<General data={{ error: 'ERR_TIMED_OUT' }} />);
-    expect(element).toMatchSnapshot();
+  it("renders intercept error", () => {
+    const { container } = render(<General data={{ error: "ERR_TIMED_OUT" }} />);
+    expect(container).toMatchSnapshot();
   });
 });

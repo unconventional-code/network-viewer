@@ -1,13 +1,14 @@
-import React from 'react';
-import { mount } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 
-import TimelineChartDatapoint from './../../../../src/Components/TimelineChart/TimelineDatapoint';
+import TimelineDatapoint from "../../../../src/Components/TimelineChart/TimelineDatapoint";
 
-describe('TimelineChartDatapoint', () => {
-  it('renders without crashing', () => {
-    const element = mount(
+describe("TimelineDatapoint", () => {
+  it("renders without crashing", () => {
+    const { container } = render(
       <svg>
-        <TimelineChartDatapoint
+        <TimelineDatapoint
           cx={234}
           index={5}
           maxTime={17000}
@@ -17,8 +18,8 @@ describe('TimelineChartDatapoint', () => {
             },
           }}
         />
-      </svg>,
+      </svg>
     );
-    expect(element).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

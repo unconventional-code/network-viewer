@@ -1,9 +1,12 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 
-import NetworkViewer from './../../src/NetworkViewer';
+import NetworkViewer from "../../src/NetworkViewer";
 
-it('renders without crashing', () => {
-  const element = shallow(<NetworkViewer />);
-  expect(element).toMatchSnapshot();
+describe("NetworkViewer", () => {
+  it("renders without crashing", () => {
+    const { container } = render(<NetworkViewer />);
+    expect(container).toMatchSnapshot();
+  });
 });

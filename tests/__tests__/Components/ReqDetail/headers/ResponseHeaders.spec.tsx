@@ -1,23 +1,26 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 
-import ResponseHeaders from '../../../../../src/Components/ReqDetail/headers/ResponseHeaders';
+import ResponseHeaders from "../../../../../src/Components/ReqDetail/headers/ResponseHeaders";
 
-describe('ResponseHeaders', () => {
+describe("ResponseHeaders", () => {
   const props = {
     data: {
       headers: {
-        response: [{
-          name: 'foo',
-          value: 'bar',
-        }],
+        response: [
+          {
+            name: "foo",
+            value: "bar",
+          },
+        ],
       },
     },
-    isURLEncoded: true,
+    isPayloadTransformed: true,
   };
 
-  it('renders without crashing', () => {
-    const element = shallow(<ResponseHeaders {...props} />);
-    expect(element).toMatchSnapshot();
+  it("renders without crashing", () => {
+    const { container } = render(<ResponseHeaders {...props} />);
+    expect(container).toMatchSnapshot();
   });
 });
