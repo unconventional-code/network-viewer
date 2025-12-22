@@ -3,17 +3,13 @@
   "homepage": ".",
   "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "start": "SKIP_PREFLIGHT_CHECK=true node ../node_modules/react-scripts/bin/react-scripts.js start",
-    "build": "SKIP_PREFLIGHT_CHECK=true node ../node_modules/react-scripts/bin/react-scripts.js build"
-  },
+  "scripts": {},
   "dependencies": {
     "classnames": "file:../node_modules/classnames",
     "network-viewer": "file:..",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "qs": "file:../node_modules/qs",
-    "react-scripts": "file:../node_modules/react-scripts"
+    "qs": "file:../node_modules/qs"
   },
   "browserslist": [
     ">0.2%",
