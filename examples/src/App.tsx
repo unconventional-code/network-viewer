@@ -4,7 +4,7 @@ import { NetworkViewer } from "../../src";
 import { Footer } from "./Components/Footer";
 import { parseQueryString } from "./utils";
 
-const App = () => {
+export function App() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [fileOptions, setFileOptions] = useState(null);
 
@@ -37,4 +37,4 @@ const App = () => {
       )}
     </section>
   );
-};
+}
