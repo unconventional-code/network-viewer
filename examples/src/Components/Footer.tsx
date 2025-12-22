@@ -1,14 +1,10 @@
-import React from 'react';
-
-import Styles from './Footer.module.scss';
+import React from "react";
 
 const Footer = () => (
-  <footer className={Styles.footer}>
-    <span>
-      For more information please check
-    </span>
+  <footer className="p-4 bg-gray-100 border-t border-gray-300 text-center">
+    <span>For more information please check</span>
     <a
-      className={Styles.link}
+      className="ml-2 text-blue-600 hover:underline"
       href="//github.com/saucelabs/network-viewer"
       rel="noopener noreferrer"
       target="_blank"

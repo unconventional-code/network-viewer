@@ -3,42 +3,13 @@
   "version": "2.4.5",
   "main": "./lib/index.js",
   "scripts": {
-    "start": "concurrently -n 'library,example' -c 'bgBlue.bold,bgGreen.bold' 'npm run watch:lib' 'npm run watch:examples'",
-    "test:lint": "eslint ./src/**/*.{ts,tsx}",
+    "dev": "vite",
     "test:unit": "vitest",
-    "test": "run-s test:*",
-    "lint:fix": "npm run test:lint --quiet --fix",
-    "build:lib": "rollup --config ./config/rollup/lib.js",
-    "build:es6": "rollup --config ./config/rollup/es6.js",
-    "build:umd": "rollup --config ./config/rollup/umd.js",
-    "build:examples": "cd examples && npm run build",
-    "build:package:ci": "run-s build:lib build:es6 build:umd",
-    "build": "run-s build:*",
-    "watch:lib": "rollup --config ./config/rollup/lib.js -w",
-    "watch:examples": "cd examples && npm run start",
-    "deploy": "gh-pages -d examples/build",
-    "publish-demo": "npm run build:examples && npm run deploy",
-    "release": "release-it --github.release",
-    "release:ci": "npm run release -- --ci --npm.skipChecks --no-git.requireCleanWorkingDir",
-    "release:patch": "npm run release -- patch",
-    "release:minor": "npm run release -- minor",
-    "release:major": "npm run release -- major",
-    "clean": "rm -rf .cache .tmp lib build"
+    "lint:check:eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix:eslint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint:check:prettier": "prettier --check ./**/*.{ts,js,tsx,jsx,graphql,yaml,yml} --no-error-on-unmatched-pattern",
+    "lint:check:tsc": "tsc --noEmit"
   },
-  "author": "The Sauce Labs Insights Team <insights@saucelabs.com>",
-  "contributors": [
-    "Farhan Chauhan <farhan687@gmail.com>"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/saucelabs/network-viewer/issues"
-  },
-  "homepage": "https://github.com/saucelabs/network-viewer#readme",
-  "files": [
-    "es6/",
-    "lib/",
-    "umd/"
-  ],
   "dependencies": {
     "@react-aria/overlays": "3.31.0",
     "@react-aria/tooltip": "^3.9.0",
@@ -55,18 +26,7 @@
     "react-window": "^2.2.3",
     "recharts": ">=3.6.0"
   },
-  "peerDependencies": {
-    "react": "^16.13.1"
-  },
   "devDependencies": {
-    "@babel/core": "^7.28.5",
-    "@babel/preset-env": "^7.28.5",
-    "@babel/preset-react": "^7.28.5",
-    "@rollup/plugin-babel": "^6.1.0",
-    "@rollup/plugin-commonjs": "^29.0.0",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^16.0.3",
-    "@rollup/plugin-replace": "^6.0.3",
     "@svgr/rollup": "^8.1.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
@@ -84,21 +44,16 @@
     "concurrently": "^9.2.1",
     "cssnano": "^7.1.2",
     "deepmerge": "^4.3.1",
-    "gh-pages": "^6.3.0",
     "immutable": "5.1.4",
     "jsdom": "^27.3.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.5.6",
     "react-dom": "^19.2.3",
     "recharts": "3.6.0",
-    "release-it": "^19.1.0",
-    "rollup": "^4.54.0",
-    "rollup-plugin-filesize": "^10.0.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-smart-asset": "^2.1.2",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
+    "vite": "^7.3.0",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.0.16"
   }
 }

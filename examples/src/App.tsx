@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
-import classNames from 'classnames/bind';
-import { NetworkViewer } from 'network-viewer';
+import React, { useState } from "react";
+import { NetworkViewer } from "../../src";
 
-import Styles from './App.module.scss';
-import Footer from './Components/Footer';
-import { parseQueryString } from './utils';
-
-const contextClassNames = classNames.bind(Styles);
+import Footer from "./Components/Footer";
+import { parseQueryString } from "./utils";
 
 const App = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [fileOptions, setFileOptions] = useState(null);
-  const networkContainerClassName = contextClassNames('network-container', {
-    'network-container-data-loaded': isDataLoaded,
-  });
 
   // read file queryString and load HAR file
   useState(() => {
@@ -24,8 +17,13 @@ const App = () => {
   }, []);
 
   return (
-    <section className={Styles['app-container']}>
-      <div className={networkContainerClassName}>
+    <section className="flex flex-col h-full">
+      <div
+        className={`
+          flex-1
+          ${isDataLoaded ? "h-full" : ""}
+        `}
+      >
         <NetworkViewer
           onDataLoaded={() => setIsDataLoaded(true)}
           onReset={() => setIsDataLoaded(false)}
@@ -33,7 +31,7 @@ const App = () => {
         />
       </div>
       {!isDataLoaded && (
-        <div className={Styles['app-info']}>
+        <div className="w-full">
           <Footer />
         </div>
       )}
