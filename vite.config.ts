@@ -1,13 +1,14 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
-import dts from 'vite-plugin-dts';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { resolve } from "path";
+import dts from "vite-plugin-dts";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://vitejs.dev/config/
 // https://github.com/aws-amplify/amplify-js/issues/9639
 export default defineConfig({
-  plugins: [react(), dts({ include: ['src'] })],
-  ...(process.env.NODE_ENV === 'development'
+  plugins: [react(), tailwindcss(), dts({ include: ["src"] })],
+  ...(process.env.NODE_ENV === "development"
     ? {
         define: {
           global: {},
@@ -19,9 +20,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      ...(process.env.NODE_ENV !== 'development'
+      ...(process.env.NODE_ENV !== "development"
         ? {
-            './runtimeConfig': './runtimeConfig.browser', //fix production build
+            "./runtimeConfig": "./runtimeConfig.browser", //fix production build
           }
         : {}),
     },
@@ -29,35 +30,35 @@ export default defineConfig({
   build: {
     outDir: `./dist`,
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      formats: ['es'],
-      fileName: 'index',
+      entry: resolve(__dirname, "src/index.ts"),
+      formats: ["es"],
+      fileName: "index",
     },
     rollupOptions: {
       external: [
-        'react',
-        'react-dom',
-        '@emotion/react',
-        '@emotion/styled',
-        '@mui/material',
-        '@mui/icons-material',
-        '@mui/x-data-grid-premium',
-        '@mui/x-data-grid',
-        '@mui/x-date-pickers',
-        '@mui/x-date-pickers-pro',
+        "react",
+        "react-dom",
+        "@emotion/react",
+        "@emotion/styled",
+        "@mui/material",
+        "@mui/icons-material",
+        "@mui/x-data-grid-premium",
+        "@mui/x-data-grid",
+        "@mui/x-date-pickers",
+        "@mui/x-date-pickers-pro",
       ],
       output: {
         globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          '@emotion/react': '@emotion/react',
-          '@emotion/styled': '@emotion/styled',
-          '@mui/material': '@mui/material',
-          '@mui/icons-material': '@mui/icons-material',
-          '@mui/x-data-grid-premium': '@mui/x-data-grid-premium',
-          '@mui/x-data-grid': '@mui/x-data-grid',
-          '@mui/x-date-pickers': '@mui/x-date-pickers',
-          '@mui/x-date-pickers-pro': '@mui/x-date-pickers-pro',
+          react: "React",
+          "react-dom": "ReactDOM",
+          "@emotion/react": "@emotion/react",
+          "@emotion/styled": "@emotion/styled",
+          "@mui/material": "@mui/material",
+          "@mui/icons-material": "@mui/icons-material",
+          "@mui/x-data-grid-premium": "@mui/x-data-grid-premium",
+          "@mui/x-data-grid": "@mui/x-data-grid",
+          "@mui/x-date-pickers": "@mui/x-date-pickers",
+          "@mui/x-date-pickers-pro": "@mui/x-date-pickers-pro",
         },
       },
     },
