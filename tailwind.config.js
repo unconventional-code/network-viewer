@@ -27,6 +27,13 @@ module.exports = {
         'time-wait': '#7ca0bf',
         'time-receive': '#65b955',
         'time-queueing': '#ccc',
+        'white-0': '#000',
+        'white-100': '#fff',
+        'white-33': '#555',
+        'white-39': '#646464',
+        'white-50': '#808080',
+        'white-80': '#ccc',
+        'white-90': '#e6e6e6',
       },
       fontSize: {
         'base': '14px',

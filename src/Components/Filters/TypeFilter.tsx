@@ -1,16 +1,13 @@
-import React from 'react';
-import classNames from 'classnames/bind';
+import React from "react";
+import classNames from "classnames";
 
-import { useNetwork } from '../../state/network/Context';
-import Button from '../Common/Button';
-import { TYPE_FILTERS } from '../../constants';
-import Styles from '../../Containers/FilterContainer.styles.scss';
+import { useNetwork } from "../../state/network/Context";
+import Button from "../Common/Button";
+import { TYPE_FILTERS } from "../../constants";
 
-const context = classNames.bind(Styles);
-
-const TypeFilter = () => {
+const TypeFilter: React.FC = () => {
   const { state, actions } = useNetwork();
-  const filter = state.get('typeFilter');
+  const filter = state.get("typeFilter");
 
   return TYPE_FILTERS.map(({ name, filterBy }) => {
     const selectedFilter = filterBy.value === filter.value;
@@ -18,7 +15,9 @@ const TypeFilter = () => {
     return (
       <Button
         key={name}
-        className={context({ active: selectedFilter })}
+        className={classNames({
+          "text-white-100 bg-brand-blue": selectedFilter,
+        })}
         onClick={() => actions.updateTypeFilter(filterBy)}
         variant="text"
       >

@@ -1,23 +1,22 @@
-import React from 'react';
+import React from "react";
 
-import { useNetwork } from './../state/network/Context';
-import Styles from './TimelineContainer.styles.scss';
-import TimelineChart from './../Components/TimelineChart/TimelineChart';
+import { useNetwork } from "../state/network/Context";
+import TimelineChart from "../Components/TimelineChart/TimelineChart";
 
-const TimelineContainer = () => {
+const TimelineContainer: React.FC = () => {
   const { state } = useNetwork();
-  const data = state.get('data');
-  const actualData = state.get('actualData');
-  const error = state.get('error');
-  const totalNetworkTime = state.get('totalNetworkTime');
+  const data = state.get("data");
+  const actualData = state.get("actualData");
+  const error = state.get("error");
+  const totalNetworkTime = state.get("totalNetworkTime");
   if (error || !actualData.size) {
     return null;
   }
   return (
-    <section className={Styles['timeline-container']}>
+    <section className="w-full border-b border-border-color bg-white-100">
       <TimelineChart
         chartData={data.toArray()}
-        totalNetworkTime={totalNetworkTime}
+        totalNetworkTime={totalNetworkTime || 0}
       />
     </section>
   );

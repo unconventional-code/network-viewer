@@ -1,32 +1,30 @@
-import React from 'react';
+import React from "react";
 
-import Button from '../Common/Button';
-import IconReset from '../../icons/IconReset';
-import Styles from './IconButton.styles.scss';
-import { useNetwork } from '../../state/network/Context';
-import Tooltip from '../Common/Tooltip/Tooltip';
-import { useTheme } from '../../state/theme/Context';
+import Button from "../Common/Button";
+import IconReset from "../../icons/IconReset";
+import { useNetwork } from "../../state/network/Context";
+import Tooltip from "../Common/Tooltip/Tooltip";
+import { useTheme } from "../../state/theme/Context";
 
-const ResetButton = () => {
+const ResetButton: React.FC = () => {
   const { actions, callbacks } = useNetwork();
   const { showImportHar } = useTheme();
 
   const handleReset = () => {
     actions.resetState();
-    callbacks.onReset();
+    if (callbacks.onReset) {
+      callbacks.onReset();
+    }
 
     if (showImportHar) {
-      window.history.pushState({}, document.title, '/');
+      window.history.pushState({}, document.title, "/");
     }
   };
 
   return (
     <Tooltip title="Reset">
-      <Button
-        className={Styles['icon-button']}
-        onClick={handleReset}
-      >
-        <IconReset className={Styles['action-icon']} />
+      <Button className="p-0 w-8 h-8 min-w-8 h-[26px]" onClick={handleReset}>
+        <IconReset className="w-4 h-4 fill-brand-primary-dark-gray" />
       </Button>
     </Tooltip>
   );

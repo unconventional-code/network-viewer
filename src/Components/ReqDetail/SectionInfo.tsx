@@ -1,25 +1,38 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, ReactNode } from "react";
 
-import SectionTitle from './SectionTitle';
+import SectionTitle from "./SectionTitle";
 
-const SectionInfo = ({
+interface SectionInfoProps {
+  component: (props: {
+    data: any;
+    isPayloadTransformed: boolean;
+    onChangeEncode: () => void;
+  }) => ReactNode;
+  data?: any | null;
+  eventKey: string;
+  isEncodeEnabled?: boolean;
+  isParseEnabled?: boolean;
+  isVisible?: boolean;
+}
+
+const SectionInfo: React.FC<SectionInfoProps> = ({
   eventKey,
-  data,
+  data = null,
   component,
-  isEncodeEnabled,
-  isParseEnabled,
-  isVisible,
+  isEncodeEnabled = false,
+  isParseEnabled = false,
+  isVisible = false,
 }) => {
   const [isOpen, setIsOpen] = useState(isVisible);
   const [isPayloadTransformed, updateTransform] = useState(true);
 
   const handlePayloadTransform = () => updateTransform(!isPayloadTransformed);
-  const ChildComponent = () => component({
-    data,
-    isPayloadTransformed,
-    onChangeEncode: handlePayloadTransform,
-  });
+  const ChildComponent = () =>
+    component({
+      data,
+      isPayloadTransformed,
+      onChangeEncode: handlePayloadTransform,
+    });
 
   return (
     <>
@@ -35,22 +48,6 @@ const SectionInfo = ({
       {isOpen && <ChildComponent />}
     </>
   );
-};
-
-SectionInfo.propTypes = {
-  component: PropTypes.func.isRequired,
-  data: PropTypes.object,
-  eventKey: PropTypes.string.isRequired,
-  isEncodeEnabled: PropTypes.bool,
-  isParseEnabled: PropTypes.bool,
-  isVisible: PropTypes.bool,
-};
-
-SectionInfo.defaultProps = {
-  data: null,
-  isEncodeEnabled: false,
-  isParseEnabled: false,
-  isVisible: false,
 };
 
 export default SectionInfo;

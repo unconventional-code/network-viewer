@@ -1,14 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
 
-import Styles from './ReqDetail.styles.scss';
-import CopyAllButton from './CopyAllButton';
+import CopyAllButton from "./CopyAllButton";
 
-const NoResponseText = () => (
-  <h4 className={Styles['no-payload']}>This request has no response data available.</h4>
+const NoResponseText: React.FC = () => (
+  <h4 className="flex items-center justify-center text-h4 w-full text-brand-primary-dark-gray">
+    This request has no response data available.
+  </h4>
 );
 
-const Response = ({ data }) => {
+interface ResponseProps {
+  data?: any | null;
+}
+
+const Response: React.FC<ResponseProps> = ({ data = null }) => {
   const content = data && data.body ? data.body : null;
 
   if (!content) {
@@ -16,25 +20,17 @@ const Response = ({ data }) => {
   }
 
   return (
-    <div className={Styles['section-detail']}>
-      <div className={Styles['payload-content']}>
-        <div className={Styles['copy-button']}>
+    <div className="px-xs-s py-s w-full">
+      <div className="text-small w-full flex flex-col">
+        <div className="flex justify-end w-full -mt-xs-s bg-white-100 sticky top-0">
           <CopyAllButton text={content} />
         </div>
-        <span className={Styles['payload-body']}>
+        <span className="font-mono whitespace-pre-wrap break-all">
           {content}
         </span>
       </div>
     </div>
   );
-};
-
-Response.propTypes = {
-  data: PropTypes.object,
-};
-
-Response.defaultProps = {
-  data: null,
 };
 
 export default Response;

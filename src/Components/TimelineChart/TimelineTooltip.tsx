@@ -1,32 +1,28 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
 
-import Styles from './TimelineTooltip.styles.scss';
-import { formatTime } from '../../utils';
+import { formatTime } from "../../utils";
 
-const TimelineTooltip = ({ payload }) => {
+interface TimelineTooltipProps {
+  payload?: Array<{
+    payload: { filename: string; timings: { startTime: number } };
+  }> | null;
+}
+
+const TimelineTooltip: React.FC<TimelineTooltipProps> = ({
+  payload = null,
+}) => {
   if (!payload || !payload.length) {
     return null;
   }
 
   return (
-    <div className={Styles.tooltip}>
-      <div className={Styles.content}>
-        {payload[0].payload.filename}
-      </div>
+    <div className="bg-white-39 text-white-100 text-small px-xs-s py-xs rounded-base">
+      <div className="font-semibold mb-xs">{payload[0].payload.filename}</div>
       <div>
         {`Started at: ${formatTime(payload[0].payload.timings.startTime)}`}
       </div>
     </div>
   );
-};
-
-TimelineTooltip.propTypes = {
-  payload: PropTypes.array,
-};
-
-TimelineTooltip.defaultProps = {
-  payload: null,
 };
 
 export default TimelineTooltip;

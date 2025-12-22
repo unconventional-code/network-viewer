@@ -1,81 +1,76 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames/bind';
+import React, { CSSProperties } from "react";
+import classNames from "classnames";
 
-import { ROW_ID_PREFIX } from './../../constants';
-import Styles from './NetworkTable.styles.scss';
-import TimeChart from './TimeChart';
-import NetworkCellValue from './NetworkCellValue';
-import { getStatusClass, getViewerFields } from '../../utils';
-import { useTheme } from '../../state/theme/Context';
-import { useNetwork } from '../../state/network/Context';
+import { ROW_ID_PREFIX } from "../../constants";
+import TimeChart from "./TimeChart";
+import NetworkCellValue from "./NetworkCellValue";
+import { getStatusClass, getViewerFields } from "../../utils";
+import { useTheme } from "../../state/theme/Context";
+import { useNetwork } from "../../state/network/Context";
 
-const context = classNames.bind(Styles);
+interface NetworkTableRowProps {
+  entry: any;
+  maxTime: number;
+  onSelect: (entry: any) => void;
+  scrollHighlight: boolean;
+  style?: CSSProperties;
+}
 
-const NetworkTableRow = ({
+const NetworkTableRow: React.FC<NetworkTableRowProps> = ({
   entry,
   maxTime,
   onSelect,
   scrollHighlight,
-  style,
+  style = {},
 }) => {
   const { state } = useNetwork();
-  const showReqDetail = state.get('showReqDetail');
+  const showReqDetail = state.get("showReqDetail");
   const { showWaterfall } = useTheme();
   const columns = getViewerFields(showReqDetail, showWaterfall);
 
-  const rowProps = {
-    className: context(
-      'network-table-row',
-      getStatusClass(entry),
-      { highlight: scrollHighlight },
-    ),
-    id: ROW_ID_PREFIX + entry.index,
-    onClick: () => onSelect(entry),
-  };
+  const statusClass = getStatusClass(entry);
+  const rowClassName = classNames(
+    "flex items-center h-6 border-b border-border-color cursor-pointer hover:bg-bg-gray-90",
+    {
+      "bg-bg-blue-50": scrollHighlight,
+      "text-brand-danger": statusClass === "error",
+      "text-brand-primary-gray": statusClass === "info",
+      "text-brand-warning": statusClass === "pending",
+    }
+  );
 
   return (
     <div style={{ ...style }}>
-      <div {...rowProps}>
+      <div
+        className={rowClassName}
+        id={ROW_ID_PREFIX + entry.index}
+        onClick={() => onSelect(entry)}
+      >
         {Object.entries(columns).map(([datakey, { key, unit }]) => (
           <div
             key={key}
-            className={context(
-              'table-column', datakey,
-              { 'limited-cols': showReqDetail },
-              { 'show-waterfall': showWaterfall },
+            className={classNames(
+              "flex items-center px-xs min-w-[60px]",
+              datakey,
+              { "flex-1": showReqDetail },
+              { "w-[128px]": showWaterfall && key === "waterfall" }
             )}
           >
-            {(key === 'waterfall' && entry.time ? (
-              <TimeChart
-                maxTime={maxTime}
-                timings={entry.timings}
-              />
+            {key === "waterfall" && entry.time ? (
+              <TimeChart maxTime={maxTime} timings={entry.timings} />
             ) : (
               <NetworkCellValue
                 datakey={key}
-                onClick={rowProps.onClick}
+                onClick={() => onSelect(entry)}
                 payload={entry}
                 unit={unit}
               />
-            ))}
+            )}
           </div>
         ))}
       </div>
     </div>
   );
-};
-
-NetworkTableRow.propTypes = {
-  entry: PropTypes.object.isRequired,
-  maxTime: PropTypes.number.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  scrollHighlight: PropTypes.bool.isRequired,
-  style: PropTypes.object,
-};
-
-NetworkTableRow.defaultProps = {
-  style: {},
 };
 
 export default NetworkTableRow;

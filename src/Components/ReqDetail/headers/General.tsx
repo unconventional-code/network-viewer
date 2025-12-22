@@ -1,33 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
 
-import Styles from '../ReqDetail.styles.scss';
-import { GENERAL_HEADERS } from '../../../constants';
+import { GENERAL_HEADERS } from "../../../constants";
 
-const General = ({ data }) => (
-  <div className={Styles['section-detail']}>
+interface GeneralProps {
+  data?: any | null;
+}
+
+const General: React.FC<GeneralProps> = ({ data = null }) => (
+  <div className="px-xs-s py-s w-full">
     {Object.entries(GENERAL_HEADERS).map(([dataKey, { key, name }]) => (
-      <div
-        key={dataKey}
-        className={Styles['info-row']}
-      >
-        <span className={Styles['info-caption']}>
-          {`${name}:`}
-        </span>
-        <span className={Styles['info-value']}>
-          {key === 'status' && data.error ? data.error : data[key]}
+      <div key={dataKey} className="m-0 text-small pb-xs last:pb-0">
+        <span className="font-bold pr-xs-s">{`${name}:`}</span>
+        <span className="break-all">
+          {key === "status" && data?.error ? data.error : data?.[key]}
         </span>
       </div>
     ))}
   </div>
 );
-
-General.propTypes = {
-  data: PropTypes.object,
-};
-
-General.defaultProps = {
-  data: null,
-};
 
 export default General;

@@ -1,33 +1,29 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
 
-import Styles from '../ReqDetail.styles.scss';
+interface FormDataProps {
+  data?: any | null;
+  isPayloadTransformed: boolean;
+}
 
-const FormData = ({ data, isPayloadTransformed }) => (
-  <div className={Styles['section-detail']}>
-    {data.headers.postData.params.map(({ name, value }, index) => (
-      <div
-        key={`${name}-${index}`}
-        className={Styles['info-row']}
-      >
-        <span className={Styles['info-caption']}>
-          {`${name}:`}
-        </span>
-        <span className={Styles['info-value']}>
-          {isPayloadTransformed ? decodeURIComponent(value) : value}
-        </span>
-      </div>
-    ))}
+const FormData: React.FC<FormDataProps> = ({
+  data = null,
+  isPayloadTransformed,
+}) => (
+  <div className="px-xs-s py-s w-full">
+    {data?.headers?.postData?.params?.map(
+      ({ name, value }: { name: string; value: string }, index: number) => (
+        <div
+          key={`${name}-${index}`}
+          className="m-0 text-small pb-xs last:pb-0"
+        >
+          <span className="font-bold pr-xs-s">{`${name}:`}</span>
+          <span className="break-all">
+            {isPayloadTransformed ? decodeURIComponent(value) : value}
+          </span>
+        </div>
+      )
+    )}
   </div>
 );
-
-FormData.propTypes = {
-  data: PropTypes.object,
-  isPayloadTransformed: PropTypes.bool.isRequired,
-};
-
-FormData.defaultProps = {
-  data: null,
-};
 
 export default FormData;

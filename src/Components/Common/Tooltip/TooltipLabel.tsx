@@ -1,49 +1,41 @@
-import React, { forwardRef } from 'react';
-import { useTooltip } from '@react-aria/tooltip';
-import { mergeProps } from '@react-aria/utils';
-import classnames from 'classnames';
-import PropTypes from 'prop-types';
+import React, { forwardRef, ReactNode } from "react";
+import { useTooltip } from "@react-aria/tooltip";
+import { mergeProps } from "@react-aria/utils";
+import classnames from "classnames";
 
-import Styles from './Tooltip.styles.scss';
+interface TooltipLabelProps {
+  state: any;
+  className?: string;
+  children: ReactNode;
+  isOpen?: boolean;
+  [key: string]: any;
+}
 
-const TooltipLabel = forwardRef(({
-  state,
-  className,
-  children,
-  isOpen,
-  ...props
-}, ref) => {
-  const { tooltipProps } = useTooltip(props, state);
-  return (
-    <div
-      ref={ref}
-      className={classnames(
-        Styles['tooltip-label'],
-        { [Styles['tooltip-visible']]: isOpen },
-      )}
-      {...mergeProps(props, tooltipProps)}
-    >
-      <span className={classnames(
-        className,
-        Styles['tooltip-label-box'],
-      )}
+const TooltipLabel = forwardRef<HTMLDivElement, TooltipLabelProps>(
+  ({ state, className = "", children, isOpen = false, ...props }, ref) => {
+    const { tooltipProps } = useTooltip(props, state);
+    return (
+      <div
+        ref={ref}
+        className={classnames("absolute z-50 pointer-events-none", {
+          "opacity-100 visible": isOpen,
+          "opacity-0 invisible": !isOpen,
+        })}
+        {...mergeProps(props, tooltipProps)}
       >
-        {children}
-      </span>
-    </div>
-  );
-});
+        <span
+          className={classnames(
+            "inline-block px-s py-xs bg-white-39 text-white-100 text-h6 rounded-base shadow-lg max-w-xs",
+            className
+          )}
+        >
+          {children}
+        </span>
+      </div>
+    );
+  }
+);
 
-TooltipLabel.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  isOpen: PropTypes.bool,
-  state: PropTypes.object.isRequired,
-};
-
-TooltipLabel.defaultProps = {
-  className: '',
-  isOpen: false,
-};
+TooltipLabel.displayName = "TooltipLabel";
 
 export default TooltipLabel;

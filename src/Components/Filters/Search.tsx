@@ -1,16 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ChangeEventHandler } from "react";
 
-import Styles from './Search.styles.scss';
-import { useNetwork } from '../../state/network/Context';
+import { useNetwork } from "../../state/network/Context";
 
-const Search = ({
-  name,
-  value,
-}) => {
+interface SearchProps {
+  name: string;
+  value?: string;
+}
+
+const Search: React.FC<SearchProps> = ({ name, value = "" }) => {
   const { actions } = useNetwork();
 
-  const handleInputChange = ({ target }) => {
+  const handleInputChange: ChangeEventHandler<HTMLInputElement> = ({
+    target,
+  }) => {
     actions.updateSearch({
       name,
       value: target.value,
@@ -19,7 +21,7 @@ const Search = ({
 
   return (
     <input
-      className={Styles['search-input']}
+      className="w-full px-s py-xs border border-border-color rounded-base text-h5 text-brand-primary-dark-gray outline-none focus:border-brand-blue"
       name="search"
       onChange={handleInputChange}
       placeholder="Search by URL"
@@ -27,15 +29,6 @@ const Search = ({
       value={value}
     />
   );
-};
-
-Search.propTypes = {
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string,
-};
-
-Search.defaultProps = {
-  value: '',
 };
 
 export default Search;

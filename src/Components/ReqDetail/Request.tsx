@@ -1,22 +1,30 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
 
-import QueryString from './request/QueryString';
-import FormData from './request/FormData';
-import SectionInfo from './SectionInfo';
-import Styles from './ReqDetail.styles.scss';
-import RequestPayload from './request/RequestPayload';
+import QueryString from "./request/QueryString";
+import FormData from "./request/FormData";
+import SectionInfo from "./SectionInfo";
+import RequestPayload from "./request/RequestPayload";
 
-const Request = ({ data }) => {
-  if (!data.headers.postData?.text &&
-    !data.headers.postData?.params &&
-    !data.headers.queryString?.length
+interface RequestProps {
+  data?: any | null;
+}
+
+const Request: React.FC<RequestProps> = ({ data = null }) => {
+  if (
+    !data ||
+    (!data.headers.postData?.text &&
+      !data.headers.postData?.params &&
+      !data.headers.queryString?.length)
   ) {
-    return (<h4 className={Styles['no-payload']}>This request has no request data available.</h4>);
+    return (
+      <h4 className="flex items-center justify-center text-h4 w-full text-brand-primary-dark-gray">
+        This request has no request data available.
+      </h4>
+    );
   }
 
-  return (!data ? null : (
-    <section className={Styles['section-container']}>
+  return (
+    <section className="w-full">
       {data.headers.postData && data.headers.postData.text && (
         <SectionInfo
           component={RequestPayload}
@@ -43,15 +51,7 @@ const Request = ({ data }) => {
         />
       )}
     </section>
-  ));
-};
-
-Request.propTypes = {
-  data: PropTypes.object,
-};
-
-Request.defaultProps = {
-  data: null,
+  );
 };
 
 export default Request;

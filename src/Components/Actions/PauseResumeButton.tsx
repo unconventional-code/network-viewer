@@ -1,35 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import Button from '../Common/Button';
-import Styles from './IconButton.styles.scss';
-import IconPause from '../../icons/IconPause';
-import { useNetwork } from '../../state/network/Context';
-import IconResume from '../../icons/IconResume';
-import Tooltip from '../Common/Tooltip/Tooltip';
+import Button from "../Common/Button";
+import IconPause from "../../icons/IconPause";
+import { useNetwork } from "../../state/network/Context";
+import IconResume from "../../icons/IconResume";
+import Tooltip from "../Common/Tooltip/Tooltip";
 
-const PauseResumeButton = () => {
+const PauseResumeButton: React.FC = () => {
   const { callbacks } = useNetwork();
   const [isPaused, setIsPaused] = useState(false);
 
   const pause = () => {
     setIsPaused(true);
-    callbacks.onPause();
+    if (callbacks.onPause) {
+      callbacks.onPause();
+    }
   };
 
   const resume = () => {
     setIsPaused(false);
-    callbacks.onResume();
+    if (callbacks.onResume) {
+      callbacks.onResume();
+    }
   };
 
   return (
-    <Tooltip title={isPaused ? 'Resume' : 'Pause'}>
+    <Tooltip title={isPaused ? "Resume" : "Pause"}>
       <Button
-        className={Styles['icon-button']}
+        className="p-0 w-8 h-8 min-w-8 h-[26px]"
         onClick={isPaused ? resume : pause}
       >
-        {isPaused ?
-          <IconResume className={Styles['action-icon']} /> :
-          <IconPause className={Styles['action-icon']} />}
+        {isPaused ? (
+          <IconResume className="w-4 h-4 fill-brand-primary-dark-gray" />
+        ) : (
+          <IconPause className="w-4 h-4 fill-brand-primary-dark-gray" />
+        )}
       </Button>
     </Tooltip>
   );

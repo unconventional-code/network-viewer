@@ -1,32 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
 
-import Styles from '../ReqDetail.styles.scss';
+interface ResponseHeadersProps {
+  data?: any | null;
+}
 
-const ResponseHeaders = ({ data }) => (
-  <div className={Styles['section-detail']}>
-    {data.headers.response.map(({ name, value }, index) => (
-      <div
-        key={`${name}-${index}`}
-        className={Styles['info-row']}
-      >
-        <span className={Styles['info-caption']}>
-          {`${name}:`}
-        </span>
-        <span className={Styles['info-value']}>
-          {value}
-        </span>
-      </div>
-    ))}
+const ResponseHeaders: React.FC<ResponseHeadersProps> = ({ data = null }) => (
+  <div className="px-xs-s py-s w-full">
+    {data?.headers?.response?.map(
+      ({ name, value }: { name: string; value: string }, index: number) => (
+        <div
+          key={`${name}-${index}`}
+          className="m-0 text-small pb-xs last:pb-0"
+        >
+          <span className="font-bold pr-xs-s">{`${name}:`}</span>
+          <span className="break-all">{value}</span>
+        </div>
+      )
+    )}
   </div>
 );
-
-ResponseHeaders.propTypes = {
-  data: PropTypes.object,
-};
-
-ResponseHeaders.defaultProps = {
-  data: null,
-};
 
 export default ResponseHeaders;

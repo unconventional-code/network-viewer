@@ -1,18 +1,21 @@
-import { OverlayContainer } from '@react-aria/overlays';
-import React, { useState } from 'react';
-import { Transition } from 'react-transition-group';
-import PropTypes from 'prop-types';
+import { OverlayContainer } from "@react-aria/overlays";
+import React, { useState, ReactNode } from "react";
+import { Transition } from "react-transition-group";
 
-const OPEN_STATES = {
+const OPEN_STATES: Record<string, boolean> = {
   entering: false,
   entered: true,
 };
 
-const TooltipTransition = (props) => {
-  const {
-    children,
-    isOpen,
-  } = props;
+interface TooltipTransitionProps {
+  children: ReactNode;
+  isOpen: boolean;
+}
+
+const TooltipTransition: React.FC<TooltipTransitionProps> = ({
+  children,
+  isOpen,
+}) => {
   const [exited, setExited] = useState(!isOpen);
 
   const handleEntered = () => setExited(false);
@@ -36,20 +39,16 @@ const TooltipTransition = (props) => {
         exit: 350,
       }}
     >
-      {(state) => React.Children.map(children, (child) => (
-        <OverlayContainer>
-          {React.isValidElement(child) && (
-            React.cloneElement(child, { isOpen: !!OPEN_STATES[state] })
-          )}
-        </OverlayContainer>
-      ))}
+      {(state) =>
+        React.Children.map(children, (child) => (
+          <OverlayContainer>
+            {React.isValidElement(child) &&
+              React.cloneElement(child, { isOpen: !!OPEN_STATES[state] })}
+          </OverlayContainer>
+        ))
+      }
     </Transition>
   );
-};
-
-TooltipTransition.propTypes = {
-  children: PropTypes.node.isRequired,
-  isOpen: PropTypes.bool.isRequired,
 };
 
 export default TooltipTransition;

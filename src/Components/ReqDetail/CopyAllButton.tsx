@@ -1,17 +1,20 @@
-import React, { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useRef, useState, ReactNode } from "react";
 
-import Button from '../Common/Button';
-import Styles from './CopyAllButton.styles.scss';
-import IconCopy from '../../icons/IconCopy';
-import IconCheckMark from '../../icons/IconCheckMark';
+import Button from "../Common/Button";
+import IconCopy from "../../icons/IconCopy";
+import IconCheckMark from "../../icons/IconCheckMark";
 
-const CopyAllButton = ({ text }) => {
+interface CopyAllButtonProps {
+  text?: string | ReactNode;
+}
+
+const CopyAllButton: React.FC<CopyAllButtonProps> = ({ text = "" }) => {
   const [isCopied, setIsCopied] = useState(false);
-  const timeoutRef = useRef(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const copy = () => {
-    navigator.clipboard.writeText(text);
+    const textToCopy = typeof text === "string" ? text : String(text);
+    navigator.clipboard.writeText(textToCopy);
     setIsCopied(true);
 
     if (timeoutRef.current) {
@@ -24,25 +27,15 @@ const CopyAllButton = ({ text }) => {
   };
 
   return (
-    <Button
-      className={Styles['copy-button']}
-      onClick={copy}
-      variant="text"
-    >
-      {isCopied ?
-        <IconCheckMark className={Styles['copy-icon']} /> :
-        <IconCopy className={Styles['copy-icon']} />}
-      <span className={Styles['copy-text']}>{isCopied ? 'Copied!' : 'Copy All'}</span>
+    <Button className="gap-xs" onClick={copy} variant="text">
+      {isCopied ? (
+        <IconCheckMark className="w-4 h-4 fill-brand-primary-dark-gray" />
+      ) : (
+        <IconCopy className="w-4 h-4 fill-brand-primary-dark-gray" />
+      )}
+      <span className="text-h5">{isCopied ? "Copied!" : "Copy All"}</span>
     </Button>
   );
-};
-
-CopyAllButton.propTypes = {
-  text: PropTypes.any,
-};
-
-CopyAllButton.defaultProps = {
-  text: '',
 };
 
 export default CopyAllButton;

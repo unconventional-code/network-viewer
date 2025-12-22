@@ -1,21 +1,26 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo } from "react";
 
-import { calcChartAttributes } from './../../utils';
-import { TIME_CHART_DEFAULT_PROPS, TIME_CHART_SVG_PROPS } from './../../constants';
-import TimeChartTooltip from './TimeChartTooltip';
-import Tooltip from '../Common/Tooltip/Tooltip';
-import Styles from './TimeChart.styles.scss';
+import { calcChartAttributes } from "../../utils";
+import {
+  TIME_CHART_DEFAULT_PROPS,
+  TIME_CHART_SVG_PROPS,
+} from "../../constants";
+import TimeChartTooltip from "./TimeChartTooltip";
+import Tooltip from "../Common/Tooltip/Tooltip";
 
-const TimeChart = ({
-  timings,
-  maxTime,
-}) => {
-  const chartAttributes = useMemo(() => calcChartAttributes(timings, maxTime), [timings, maxTime]);
+interface TimeChartProps {
+  maxTime: number;
+  timings: Record<string, number>;
+}
+
+const TimeChart: React.FC<TimeChartProps> = ({ timings, maxTime }) => {
+  const chartAttributes = useMemo(
+    () => calcChartAttributes(timings, maxTime),
+    [timings, maxTime]
+  );
 
   return (
     <Tooltip
-      className={Styles['time-chart-tooltip']}
       delay={300}
       placement="left"
       title={<TimeChartTooltip data={timings} />}
@@ -33,11 +38,6 @@ const TimeChart = ({
       </svg>
     </Tooltip>
   );
-};
-
-TimeChart.propTypes = {
-  maxTime: PropTypes.number.isRequired,
-  timings: PropTypes.object.isRequired,
 };
 
 export default TimeChart;

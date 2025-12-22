@@ -1,37 +1,32 @@
-import React from 'react';
+import React from "react";
 
-import Search from './../Components/Filters/Search';
-import Styles from './FilterContainer.styles.scss';
-import ResetButton from '../Components/Actions/ResetButton';
-import StatusFilter from '../Components/Filters/StatusFilter';
-import ExportHarButton from '../Components/Actions/ExportHarButton';
-import PauseResumeButton from '../Components/Actions/PauseResumeButton';
-import TypeFilter from '../Components/Filters/TypeFilter';
-import ImportHAR from '../Components/Import/ImportHAR';
-import { useTheme } from '../state/theme/Context';
-import { useNetwork } from '../state/network/Context';
+import Search from "../Components/Filters/Search";
+import ResetButton from "../Components/Actions/ResetButton";
+import StatusFilter from "../Components/Filters/StatusFilter";
+import ExportHarButton from "../Components/Actions/ExportHarButton";
+import PauseResumeButton from "../Components/Actions/PauseResumeButton";
+import TypeFilter from "../Components/Filters/TypeFilter";
+import ImportHAR from "../Components/Import/ImportHAR";
+import { useTheme } from "../state/theme/Context";
+import { useNetwork } from "../state/network/Context";
 
-const FilterContainer = () => {
+const FilterContainer: React.FC = () => {
   const { state } = useNetwork();
-  const {
-    showExportHar,
-    showImportHar,
-    showReset,
-    showPauseResume,
-  } = useTheme();
+  const { showExportHar, showImportHar, showReset, showPauseResume } =
+    useTheme();
 
   return (
-    <section className={Styles['filters-container']}>
-      <div className={Styles['filter-row']}>
+    <section className="bg-bg-gray-90 flex flex-col">
+      <div className="flex w-full border-b border-border-color px-xs-s py-xs-s [&>*:not(:last-child)]:mr-xs-s">
         <StatusFilter />
-        <Search {...state.get('search')} />
+        <Search {...state.get("search")} />
         {showPauseResume && <PauseResumeButton />}
         {showReset && <ResetButton />}
-        {showExportHar && <ExportHarButton rawData={state.get('rawData')} />}
+        {showExportHar && <ExportHarButton rawData={state.get("rawData")} />}
         {showImportHar && <ImportHAR />}
       </div>
 
-      <div className={Styles['type-filter-row']}>
+      <div className="flex w-full border-b border-border-color px-xs-s py-xs-s overflow-x-auto [&>*:not(:last-child)]:mr-xs">
         <TypeFilter />
       </div>
     </section>

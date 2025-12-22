@@ -1,41 +1,43 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useDropzone } from 'react-dropzone';
+import React from "react";
+import { useDropzone } from "react-dropzone";
 
-import { useNetwork } from './../../state/network/Context';
-import Styles from './ImportHAR.styles.scss';
-import ImportHarButton from '../Actions/ImportHarButton';
+import { useNetwork } from "../../state/network/Context";
+import ImportHarButton from "../Actions/ImportHarButton";
 
 const DROP_FILE_CONFIG = {
-  accept: '.har',
+  accept: { "application/json": [".har"] },
   multiple: false,
 };
 
-const ImportHar = ({ showButton }) => {
+interface ImportHARProps {
+  showButton?: boolean;
+}
+
+const ImportHAR: React.FC<ImportHARProps> = ({ showButton = true }) => {
   const { actions } = useNetwork();
   const { updateErrorMessage } = actions;
 
-  const prepareData = (newNetworkData) => actions.updateData(newNetworkData);
+  const prepareData = (newNetworkData: any) =>
+    actions.updateData(newNetworkData);
 
-  const onDrop = (files) => {
+  const onDrop = (files: File[]) => {
     const reader = new FileReader();
-    reader.onabort = () => updateErrorMessage({ title: 'file reading was aborted' });
-    reader.onerror = () => updateErrorMessage({ title: 'file reading has failed' });
+    reader.onabort = () =>
+      updateErrorMessage({ title: "file reading was aborted" });
+    reader.onerror = () =>
+      updateErrorMessage({ title: "file reading has failed" });
     reader.onload = () => {
       try {
-        const data = JSON.parse(reader.result);
+        const data = JSON.parse(reader.result as string);
         prepareData(data);
       } catch (error) {
-        updateErrorMessage({ title: 'Error while parsing HAR file' });
+        updateErrorMessage({ title: "Error while parsing HAR file" });
       }
     };
     reader.readAsText(files[0]);
   };
 
-  const {
-    getRootProps,
-    getInputProps,
-  } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     ...DROP_FILE_CONFIG,
     onDrop,
   });
@@ -43,22 +45,15 @@ const ImportHar = ({ showButton }) => {
   return (
     <div {...getRootProps()}>
       <input {...getInputProps()} />
-      {showButton ? <ImportHarButton /> : (
-        <p className={Styles['drag-drop']}>
-          Drag and drop HAR file here, or click to select
-          file
+      {showButton ? (
+        <ImportHarButton />
+      ) : (
+        <p className="text-base text-brand-primary-gray cursor-pointer hover:text-brand-blue">
+          Drag and drop HAR file here, or click to select file
         </p>
       )}
     </div>
   );
 };
 
-ImportHar.propTypes = {
-  showButton: PropTypes.bool,
-};
-
-ImportHar.defaultProps = {
-  showButton: true,
-};
-
-export default ImportHar;
+export default ImportHAR;

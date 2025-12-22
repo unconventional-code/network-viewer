@@ -1,36 +1,34 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo } from "react";
 
-import Styles from '../ReqDetail.styles.scss';
-import { parseRequestPayload } from '../../../utils';
-import CopyAllButton from '../CopyAllButton';
+import { parseRequestPayload } from "../../../utils";
+import CopyAllButton from "../CopyAllButton";
 
-const RequestPayload = ({ data, isPayloadTransformed }) => {
-  const payloadData = data.headers.postData.text;
-  const parsedData = useMemo(() => parseRequestPayload(payloadData), [payloadData]);
+interface RequestPayloadProps {
+  data?: any | null;
+  isPayloadTransformed: boolean;
+}
+
+const RequestPayload: React.FC<RequestPayloadProps> = ({
+  data = null,
+  isPayloadTransformed,
+}) => {
+  const payloadData = data?.headers?.postData?.text;
+  const parsedData = useMemo(
+    () => parseRequestPayload(payloadData),
+    [payloadData]
+  );
   const payload = isPayloadTransformed ? parsedData : payloadData;
 
   return (
-    <div className={Styles['section-detail']}>
-      <div className={Styles['payload-content']}>
-        <div className={Styles['copy-button']}>
+    <div className="px-xs-s py-s w-full">
+      <div className="text-small w-full flex flex-col">
+        <div className="flex justify-end w-full -mt-xs-s bg-white-100 sticky top-0">
           <CopyAllButton text={payload} />
         </div>
-        <div className={Styles['payload-body']}>
-          {payload}
-        </div>
+        <div className="font-mono whitespace-pre-wrap break-all">{payload}</div>
       </div>
     </div>
   );
-};
-
-RequestPayload.propTypes = {
-  data: PropTypes.object,
-  isPayloadTransformed: PropTypes.bool.isRequired,
-};
-
-RequestPayload.defaultProps = {
-  data: null,
 };
 
 export default RequestPayload;

@@ -1,28 +1,18 @@
-import React, { useEffect, useRef } from 'react';
-import { FixedSizeList } from 'react-window';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef } from "react";
+import { FixedSizeList } from "react-window";
 
-import { useNetwork } from '../../state/network/Context';
-import NetworkTableRow from './NetworkTableRow';
-import { TABLE_ENTRY_HEIGHT } from '../../constants';
-import { useResizeObserver } from '../../hooks/useResizeObserver';
-import Styles from './NetworkTable.styles.scss';
-import { useTheme } from '../../state/theme/Context';
-import IconNetworkRequest from '../../icons/IconNetworkRequest';
+import { useNetwork } from "../../state/network/Context";
+import NetworkTableRow from "./NetworkTableRow";
+import { TABLE_ENTRY_HEIGHT } from "../../constants";
+import { useResizeObserver } from "../../hooks/useResizeObserver";
+import { useTheme } from "../../state/theme/Context";
+import IconNetworkRequest from "../../icons/IconNetworkRequest";
 
 /* eslint no-underscore-dangle: 0 */
 
-const virtualizedTableRow = ({
-  data,
-  index,
-  style,
-}) => {
-  const {
-    listData,
-    totalNetworkTime,
-    handleReqSelect,
-    selectedReqIndex,
-  } = data;
+const virtualizedTableRow = ({ data, index, style }) => {
+  const { listData, totalNetworkTime, handleReqSelect, selectedReqIndex } =
+    data;
   const item = listData.get(index);
 
   return (
@@ -37,18 +27,18 @@ const virtualizedTableRow = ({
   );
 };
 
-const NetworkTableBody = ({ height }) => {
-  const {
-    state,
-    actions,
-    callbacks,
-  } = useNetwork();
+interface NetworkTableBodyProps {
+  height: number;
+}
+
+const NetworkTableBody: React.FC<NetworkTableBodyProps> = ({ height }) => {
+  const { state, actions, callbacks } = useNetwork();
   const { enableAutoScroll, NoDataPlaceholder } = useTheme();
-  const numberOfNewEntries = state.get('numberOfNewEntries');
-  const data = state.get('data');
-  const actualData = state.get('actualData');
-  const totalNetworkTime = state.get('totalNetworkTime');
-  const selectedReqIndex = state.get('selectedReqIndex');
+  const numberOfNewEntries = state.get("numberOfNewEntries");
+  const data = state.get("data");
+  const actualData = state.get("actualData");
+  const totalNetworkTime = state.get("totalNetworkTime");
+  const selectedReqIndex = state.get("selectedReqIndex");
 
   const listRef = useRef(null);
   const { elementDims } = useResizeObserver(listRef);
@@ -61,8 +51,9 @@ const NetworkTableBody = ({ height }) => {
     if (enableAutoScroll && listRef?.current) {
       const { offsetHeight, scrollHeight } = listRef.current;
       let { scrollTop } = listRef.current;
-      const needToScroll = scrollTop + offsetHeight +
-        (numberOfNewEntries * TABLE_ENTRY_HEIGHT) >= scrollHeight;
+      const needToScroll =
+        scrollTop + offsetHeight + numberOfNewEntries * TABLE_ENTRY_HEIGHT >=
+        scrollHeight;
       if (needToScroll) {
         scrollTop = scrollHeight;
       }
@@ -83,14 +74,18 @@ const NetworkTableBody = ({ height }) => {
     return (
       <div
         ref={listRef}
-        className={Styles['no-data']}
+        className="flex flex-col items-center justify-center h-full w-full p-xxl"
       >
-        <IconNetworkRequest className={Styles['network-icon']} />
+        <IconNetworkRequest className="w-16 h-16 fill-brand-primary-gray mb-m" />
         {NoDataPlaceholder && <NoDataPlaceholder />}
         {!NoDataPlaceholder && (
           <>
-            <span className={Styles.header}>Recording network activity</span>
-            <span className={Styles.subtext}>Perform a request to see the network activity</span>
+            <span className="text-h4 font-semibold text-brand-primary-dark-gray mb-s">
+              Recording network activity
+            </span>
+            <span className="text-base text-brand-primary-gray">
+              Perform a request to see the network activity
+            </span>
           </>
         )}
       </div>
@@ -100,7 +95,7 @@ const NetworkTableBody = ({ height }) => {
   return (
     <>
       <FixedSizeList
-        className={Styles['network-table-body']}
+        className="w-full"
         height={height}
         itemCount={data.size}
         itemData={{
@@ -116,10 +111,6 @@ const NetworkTableBody = ({ height }) => {
       </FixedSizeList>
     </>
   );
-};
-
-NetworkTableBody.propTypes = {
-  height: PropTypes.number.isRequired,
 };
 
 export default NetworkTableBody;

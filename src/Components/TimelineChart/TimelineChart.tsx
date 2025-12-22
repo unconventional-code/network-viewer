@@ -1,21 +1,29 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import React from "react";
+import {
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 
-import Styles from './TimelineChart.styles.scss';
-import TimelineDatapoint from './TimelineDatapoint';
-import { formatTime } from '../../utils';
-import TimelineTooltip from './TimelineTooltip';
+import TimelineDatapoint from "./TimelineDatapoint";
+import { formatTime } from "../../utils";
+import TimelineTooltip from "./TimelineTooltip";
 
-const TimelineChart = ({ chartData, totalNetworkTime }) => (
-  <div className={Styles['chart-container']}>
-    <ResponsiveContainer
-      height={100}
-      width="100%"
-    >
-      <ScatterChart
-        className={Styles['scatter-chart']}
-      >
+interface TimelineChartProps {
+  chartData: any[];
+  totalNetworkTime: number;
+}
+
+const TimelineChart: React.FC<TimelineChartProps> = ({
+  chartData,
+  totalNetworkTime,
+}) => (
+  <div className="w-full h-[100px] p-m">
+    <ResponsiveContainer height={100} width="100%">
+      <ScatterChart>
         <XAxis
           axisLine={false}
           dataKey="timings.startTime"
@@ -27,29 +35,15 @@ const TimelineChart = ({ chartData, totalNetworkTime }) => (
           tickLine={false}
           type="number"
         />
-        <YAxis
-          dataKey="index"
-          domain={['min', 'max']}
-          hide
-          reversed
-        />
+        <YAxis dataKey="index" domain={["min", "max"]} hide reversed />
         <Tooltip content={<TimelineTooltip />} />
         <Scatter
           data={chartData}
-          shape={(
-            <TimelineDatapoint
-              maxTime={totalNetworkTime}
-            />
-          )}
+          shape={<TimelineDatapoint maxTime={totalNetworkTime} />}
         />
       </ScatterChart>
     </ResponsiveContainer>
   </div>
 );
-
-TimelineChart.propTypes = {
-  chartData: PropTypes.array.isRequired,
-  totalNetworkTime: PropTypes.number.isRequired,
-};
 
 export default TimelineChart;

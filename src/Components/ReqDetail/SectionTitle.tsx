@@ -1,38 +1,51 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
 
-import { SECTION_TITLES, PAYLOAD_CAPTIONS } from '../../constants';
-import Styles from './ReqDetail.styles.scss';
-import IconCaretDown from '../../icons/IconCaretDown';
-import IconCaretRight from '../../icons/IconCaretRight';
+import { SECTION_TITLES, PAYLOAD_CAPTIONS } from "../../constants";
+import IconCaretDown from "../../icons/IconCaretDown";
+import IconCaretRight from "../../icons/IconCaretRight";
 
-const SectionTitle = ({
+interface SectionTitleProps {
+  eventKey: string;
+  isEncodeEnabled?: boolean;
+  isOpen?: boolean;
+  isParseEnabled?: boolean;
+  isPayloadTransformed?: boolean;
+  onClick: (key: string) => void;
+  onPayloadTransform: () => void;
+}
+
+const SectionTitle: React.FC<SectionTitleProps> = ({
   onClick,
   eventKey,
-  isEncodeEnabled,
-  isOpen,
+  isEncodeEnabled = false,
+  isOpen = false,
   onPayloadTransform,
-  isPayloadTransformed,
-  isParseEnabled,
+  isPayloadTransformed = true,
+  isParseEnabled = false,
 }) => {
-  const payloadStatus = PAYLOAD_CAPTIONS[isParseEnabled ? 'parse' : 'encode'][isPayloadTransformed];
+  const payloadStatus =
+    PAYLOAD_CAPTIONS[isParseEnabled ? "parse" : "encode"][
+      String(isPayloadTransformed)
+    ];
 
   return (
-    <div className={Styles['section-title-row']}>
+    <div className="flex items-center justify-between py-xs border-b border-border-color">
       <span
-        className={Styles['section-title']}
+        className="flex items-center gap-xs text-h5 font-medium text-brand-primary-dark-gray cursor-pointer hover:text-brand-blue"
         onClick={() => onClick(SECTION_TITLES[eventKey].key)}
         role="button"
         tabIndex={0}
       >
-        {isOpen ?
-          <IconCaretDown className={Styles['caret-icon']} /> :
-          <IconCaretRight className={Styles['caret-icon']} />}
+        {isOpen ? (
+          <IconCaretDown className="w-3 h-3 fill-brand-primary-dark-gray" />
+        ) : (
+          <IconCaretRight className="w-3 h-3 fill-brand-primary-dark-gray" />
+        )}
         {SECTION_TITLES[eventKey].name}
       </span>
       {(isEncodeEnabled || isParseEnabled) && (
         <span
-          className={Styles['encode-url']}
+          className="text-h6 text-brand-primary-gray cursor-pointer hover:text-brand-blue"
           onClick={onPayloadTransform}
           role="button"
           tabIndex={0}
@@ -42,23 +55,6 @@ const SectionTitle = ({
       )}
     </div>
   );
-};
-
-SectionTitle.propTypes = {
-  eventKey: PropTypes.string.isRequired,
-  isEncodeEnabled: PropTypes.bool,
-  isOpen: PropTypes.bool,
-  isParseEnabled: PropTypes.bool,
-  isPayloadTransformed: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
-  onPayloadTransform: PropTypes.func.isRequired,
-};
-
-SectionTitle.defaultProps = {
-  isEncodeEnabled: false,
-  isOpen: false,
-  isParseEnabled: false,
-  isPayloadTransformed: true,
 };
 
 export default SectionTitle;

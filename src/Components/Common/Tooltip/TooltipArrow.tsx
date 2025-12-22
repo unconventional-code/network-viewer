@@ -1,35 +1,32 @@
-import React from 'react';
-import classnames from 'classnames';
-import PropTypes from 'prop-types';
+import React from "react";
+import classnames from "classnames";
 
-import Styles from './Tooltip.styles.scss';
+type PlacementAxis = "top" | "bottom" | "left" | "right" | "center";
 
-const getArrowPosition = (placement) => classnames('tooltip-arrow-position', {
-  [Styles['tooltip-arrow-position-right']]: placement === 'left',
-  [Styles['tooltip-arrow-position-left']]: placement === 'right',
-  [Styles['tooltip-arrow-position-bottom']]: placement === 'top',
-  [Styles['tooltip-arrow-position-top']]: placement === 'bottom',
-});
+interface TooltipArrowProps {
+  placementAxis?: PlacementAxis;
+  [key: string]: any;
+}
 
-const TooltipArrow = ({
-  placementAxis,
+const getArrowPosition = (placement: PlacementAxis) =>
+  classnames({
+    "right-0": placement === "left",
+    "left-0": placement === "right",
+    "bottom-0": placement === "top",
+    "top-0": placement === "bottom",
+  });
+
+const TooltipArrow: React.FC<TooltipArrowProps> = ({
+  placementAxis = "bottom",
   ...props
 }) => (
   <div
     className={classnames(
-      Styles['tooltip-arrow'],
-      getArrowPosition(placementAxis),
+      "absolute w-2 h-2 bg-white-39 transform rotate-45",
+      getArrowPosition(placementAxis)
     )}
     {...props}
   />
 );
-
-TooltipArrow.propTypes = {
-  placementAxis: PropTypes.oneOf(['top', 'bottom', 'left', 'right', 'center']),
-};
-
-TooltipArrow.defaultProps = {
-  placementAxis: 'bottom',
-};
 
 export default TooltipArrow;

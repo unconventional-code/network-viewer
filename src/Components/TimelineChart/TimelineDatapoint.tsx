@@ -1,17 +1,32 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo } from "react";
 
-import { calcChartAttributes } from './../../utils';
-import { TIMELINE_DATA_POINT_HEIGHT } from '../../constants';
+import { calcChartAttributes } from "../../utils";
+import { TIMELINE_DATA_POINT_HEIGHT } from "../../constants";
 
-const TimelineDatapoint = ({ payload, maxTime, cx, cy, index }) => {
-  const { timings } = payload;
-  const chartAttributes = useMemo(
-    () => calcChartAttributes(timings, maxTime, cx, index, cy), [timings, maxTime],
-  );
+interface TimelineDatapointProps {
+  payload?: any | null;
+  maxTime: number;
+  cx?: number;
+  cy?: number | null;
+  index?: number;
+}
+
+const TimelineDatapoint: React.FC<TimelineDatapointProps> = ({
+  payload = null,
+  maxTime,
+  cx = 0,
+  cy = null,
+  index = 0,
+}) => {
   if (!payload) {
     return null;
   }
+
+  const { timings } = payload;
+  const chartAttributes = useMemo(
+    () => calcChartAttributes(timings, maxTime, cx, index, cy),
+    [timings, maxTime, cx, index, cy]
+  );
 
   return (
     <g>
@@ -24,21 +39,6 @@ const TimelineDatapoint = ({ payload, maxTime, cx, cy, index }) => {
       ))}
     </g>
   );
-};
-
-TimelineDatapoint.propTypes = {
-  cx: PropTypes.number,
-  cy: PropTypes.number,
-  index: PropTypes.number,
-  maxTime: PropTypes.number.isRequired,
-  payload: PropTypes.object,
-};
-
-TimelineDatapoint.defaultProps = {
-  cx: 0,
-  cy: 0,
-  index: 0,
-  payload: null,
 };
 
 export default TimelineDatapoint;

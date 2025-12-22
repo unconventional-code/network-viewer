@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { stringify } from 'qs';
+import React, { useState, ChangeEventHandler } from "react";
+import { stringify } from "qs";
 
-import Styles from './URLInput.styles.scss';
-import Button from './../../../src/Components/Common/Button';
-import CORSCheckbox from './CORSCheckbox';
+import Button from "../../../src/Components/Common/Button";
+import CORSCheckbox from "./CORSCheckbox";
 
-const URLInput = () => {
-  const [url, setURL] = useState('');
+const URLInput: React.FC = () => {
+  const [url, setURL] = useState("");
   const [isCORSEnabled, setCORS] = useState(false);
-  const handleInputChange = ({ target }) => {
+  const handleInputChange: ChangeEventHandler<HTMLInputElement> = ({
+    target,
+  }) => {
     setURL(target.value);
   };
 
@@ -22,23 +23,17 @@ const URLInput = () => {
   };
 
   return (
-    <div className={Styles['url-input-container']}>
-      <CORSCheckbox
-        isEnabled={isCORSEnabled}
-        onChange={setCORS}
-      />
+    <div className="flex items-center gap-s w-full max-w-2xl">
+      <CORSCheckbox isEnabled={isCORSEnabled} onChange={setCORS} />
       <input
-        className={Styles.input}
+        className="flex-1 px-s py-xs border border-border-color rounded-base text-h5 text-brand-primary-dark-gray outline-none focus:border-brand-blue"
         name="har-url"
         onChange={handleInputChange}
         placeholder="HAR file URL"
         type="text"
         value={url}
       />
-      <Button
-        className={Styles['postpend-button']}
-        onClick={handleSubmit}
-      >
+      <Button className="ml-s" onClick={handleSubmit}>
         GO
       </Button>
     </div>
