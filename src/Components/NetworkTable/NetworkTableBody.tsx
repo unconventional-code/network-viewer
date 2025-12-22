@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback, useMemo } from "react";
 import { List, ListImperativeAPI } from "react-window";
 
 import { useNetwork } from "../../state/network/Context";
@@ -25,45 +25,99 @@ export function NetworkTableBody({ height }: NetworkTableBodyProps) {
 
   const listRef = useRef<ListImperativeAPI>(null);
   const elementRef = useRef<HTMLDivElement | null>(null);
+  const setTableHeaderWidthRef = useRef(actions.setTableHeaderWidth);
 
-  // Update elementRef when listRef's element changes
+  // Keep ref in sync with latest action
   useEffect(() => {
-    if (listRef.current) {
+    setTableHeaderWidthRef.current = actions.setTableHeaderWidth;
+  }, [actions.setTableHeaderWidth]);
+
+  // Update elementRef when listRef's element changes - use a ref callback pattern
+  useEffect(() => {
+    if (
+      listRef.current?.element &&
+      listRef.current.element !== elementRef.current
+    ) {
       elementRef.current = listRef.current.element;
     }
-  }, [listRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { elementDims } = useResizeObserver(elementRef);
 
   useEffect(() => {
-    actions.setTableHeaderWidth(elementDims.width);
-  }, [elementDims, actions]);
+    if (elementDims.width > 0) {
+      setTableHeaderWidthRef.current(elementDims.width);
+    }
+  }, [elementDims.width]);
 
   useEffect(() => {
-    if (enableAutoScroll && listRef?.current) {
+    if (enableAutoScroll && listRef?.current?.element) {
       const element = listRef.current.element;
-      if (element) {
-        const { offsetHeight, scrollHeight } = element;
-        let { scrollTop } = element;
-        const needToScroll =
-          scrollTop + offsetHeight + numberOfNewEntries * TABLE_ENTRY_HEIGHT >=
-          scrollHeight;
-        if (needToScroll) {
-          element.scrollTop = scrollHeight;
-        }
+      const { offsetHeight, scrollHeight } = element;
+      let { scrollTop } = element;
+      const needToScroll =
+        scrollTop + offsetHeight + numberOfNewEntries * TABLE_ENTRY_HEIGHT >=
+        scrollHeight;
+      if (needToScroll) {
+        element.scrollTop = scrollHeight;
       }
     }
-  }, [data, listRef, numberOfNewEntries, enableAutoScroll]);
+  }, [data.length, numberOfNewEntries, enableAutoScroll]);
 
-  const handleReqSelect = (payload: any) => {
-    if (selectedReqIndex === payload.index) {
-      return;
+  const handleReqSelect = useCallback(
+    (payload: any) => {
+      if (selectedReqIndex === payload.index) {
+        return;
+      }
+
+      actions.updateScrollToIndex(payload);
+      actions.selectRequest(payload);
+      callbacks.onRequestSelect?.(payload);
+    },
+    [selectedReqIndex, actions, callbacks]
+  );
+
+  const rowComponent = useCallback((props: any) => {
+    const {
+      index,
+      style,
+      ariaAttributes,
+      data: rowData,
+      totalNetworkTime: rowTotalNetworkTime,
+      selectedReqIndex: rowSelectedReqIndex,
+      handleReqSelect: rowHandleReqSelect,
+    } = props;
+    const item = rowData[index];
+    if (!item) {
+      // Return a placeholder div if item is missing
+      return (
+        <div style={style} {...ariaAttributes}>
+          {/* Empty row */}
+        </div>
+      );
     }
+    return (
+      <NetworkTableRow
+        key={index}
+        entry={item as any}
+        maxTime={rowTotalNetworkTime ?? 0}
+        onSelect={rowHandleReqSelect}
+        scrollHighlight={rowSelectedReqIndex === item.index}
+        style={style}
+      />
+    );
+  }, []);
 
-    actions.updateScrollToIndex(payload);
-    actions.selectRequest(payload);
-    callbacks.onRequestSelect?.(payload);
-  };
+  const rowProps = useMemo(
+    () => ({
+      data,
+      totalNetworkTime: totalNetworkTime ?? 0,
+      selectedReqIndex,
+      handleReqSelect,
+    }),
+    [data, totalNetworkTime, selectedReqIndex, handleReqSelect]
+  );
 
   if (actualData.length === 0) {
     return (
@@ -89,51 +143,17 @@ export function NetworkTableBody({ height }: NetworkTableBodyProps) {
     );
   }
 
-  const rowComponent = ({
-    index,
-    style,
-    ariaAttributes,
-  }: {
-    index: number;
-    style: React.CSSProperties;
-    ariaAttributes: {
-      "aria-posinset": number;
-      "aria-setsize": number;
-      role: "listitem";
-    };
-  }) => {
-    const item = data[index];
-    if (!item) {
-      // Return a placeholder div if item is missing
-      return (
-        <div style={style} {...ariaAttributes}>
-          {/* Empty row */}
-        </div>
-      );
-    }
-    return (
-      <NetworkTableRow
-        key={index}
-        entry={item as any}
-        maxTime={totalNetworkTime ?? 0}
-        onSelect={handleReqSelect}
-        scrollHighlight={selectedReqIndex === item.index}
-        style={style}
-      />
-    );
-  };
-
   return (
     <>
       <List
         id="network-table-body"
         data-testid="network-table-body"
-        className="w-full"
+        className="w-full h-full"
         style={{ height }}
         rowCount={data.length}
         rowHeight={TABLE_ENTRY_HEIGHT}
         rowComponent={rowComponent}
-        rowProps={{}}
+        rowProps={rowProps}
         listRef={listRef}
         onResize={() => {
           // Update elementRef when List resizes

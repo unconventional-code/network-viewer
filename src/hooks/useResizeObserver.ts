@@ -22,27 +22,27 @@ export function useResizeObserver(
 
   useEffect(() => {
     const ref = elementRef?.current;
+    if (!ref) return;
+
     const onResize = debounce(() => {
-      if (ref) {
+      const currentRef = elementRef?.current;
+      if (currentRef) {
         setElementDims({
-          width: ref.clientWidth,
-          height: ref.clientHeight,
+          width: currentRef.clientWidth,
+          height: currentRef.clientHeight,
         });
       }
     }, 50);
 
     const resizeObserver = new ResizeObserver(() => onResize());
 
-    if (ref) {
-      resizeObserver.observe(ref);
-    }
+    resizeObserver.observe(ref);
 
     return () => {
-      if (ref) {
-        resizeObserver.unobserve(ref);
-      }
+      resizeObserver.unobserve(ref);
     };
-  }, [elementRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { elementDims };
 }
