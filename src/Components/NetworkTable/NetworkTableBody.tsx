@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, CSSProperties } from "react";
 import { List, ListImperativeAPI } from "react-window";
 
 import { useNetwork } from "../../state/network/Context";
@@ -7,6 +7,7 @@ import { TABLE_ENTRY_HEIGHT } from "../../constants";
 import { useResizeObserver } from "../../hooks/useResizeObserver";
 import { useTheme } from "../../state/theme/Context";
 import { IconNetworkRequest } from "../../icons/IconNetworkRequest";
+import { PreparedEntry } from "../../state/network/NetworkProvider/types";
 
 /* eslint no-underscore-dangle: 0 */
 
@@ -84,36 +85,29 @@ export function NetworkTableBody({ height }: NetworkTableBodyProps) {
     [selectedReqIndex, actions, callbacks]
   );
 
-  const rowComponent = useCallback((props: any) => {
-    const {
-      index,
-      style,
-      ariaAttributes,
-      data: rowData,
-      totalNetworkTime: rowTotalNetworkTime,
-      selectedReqIndex: rowSelectedReqIndex,
-      handleReqSelect: rowHandleReqSelect,
-    } = props;
-    const item = rowData[index];
-    if (!item) {
-      // Return a placeholder div if item is missing
+  const rowComponent = useCallback(
+    (props: {
+      index: number;
+      style: CSSProperties;
+      ariaAttributes: React.AriaAttributes;
+      data: PreparedEntry[];
+    }) => {
+      const { index, style, ariaAttributes, data } = props;
+
       return (
-        <div style={style} {...ariaAttributes}>
-          {/* Empty row */}
-        </div>
+        <NetworkTableRow
+          key={index}
+          preparedEntry={data[index]}
+          maxTime={totalNetworkTime ?? 0}
+          onSelect={handleReqSelect}
+          scrollHighlight={selectedReqIndex === index}
+          style={style}
+          {...ariaAttributes}
+        />
       );
-    }
-    return (
-      <NetworkTableRow
-        key={index}
-        entry={item as any}
-        maxTime={rowTotalNetworkTime ?? 0}
-        onSelect={rowHandleReqSelect}
-        scrollHighlight={rowSelectedReqIndex === item.index}
-        style={style}
-      />
-    );
-  }, []);
+    },
+    [totalNetworkTime, handleReqSelect, selectedReqIndex]
+  );
 
   if (actualData.length === 0) {
     return (
@@ -153,9 +147,6 @@ export function NetworkTableBody({ height }: NetworkTableBodyProps) {
       rowComponent={rowComponent}
       rowProps={{
         data,
-        totalNetworkTime: totalNetworkTime ?? 0,
-        selectedReqIndex,
-        handleReqSelect,
       }}
       listRef={listRef}
       onResize={() => {

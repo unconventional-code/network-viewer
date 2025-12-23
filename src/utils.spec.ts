@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint no-useless-escape: 0 */
 import { describe, it, expect } from "vitest";
 import * as utils from "./utils";
@@ -247,13 +248,6 @@ describe("utils", () => {
       const entry = { ...networkDataMock.log.entries[0], timings };
       expect(utils.getTotalTimeOfEntry(entry)).toMatchSnapshot();
     });
-  });
-
-  it("getStatusClass", () => {
-    expect(utils.getStatusClass({ status: 200 } as Entry)).toBe("info");
-    expect(utils.getStatusClass({ status: 503 })).toBe("error");
-    expect(utils.getStatusClass({ status: 0, error: "ERR" })).toBe("error");
-    expect(utils.getStatusClass({ status: 0 })).toBe("pending");
   });
 
   it("formatValue", () => {

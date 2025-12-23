@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { PreparedEntry } from "./NetworkProvider/NetworkProvider";
+import { PreparedEntry } from "./NetworkProvider/types";
 import {
   PaginationState,
   PaginationCallbacks,
@@ -18,14 +18,6 @@ export interface NetworkState {
   data: PreparedEntry[]; // filtered data (what's shown in table)
   actualData: PreparedEntry[]; // sorted but unfiltered (all entries)
   totalNetworkTime: number | null;
-  dataSummary: {
-    totalRequests: number;
-    totalTransferredSize: number;
-    totalUncompressedSize: number;
-    finishTime: number;
-    timings: any;
-    finish: number;
-  };
   sort: {
     key: string;
     isAsc: boolean;

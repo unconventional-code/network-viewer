@@ -10,9 +10,10 @@ import {
 import { TimelineDatapoint } from "./TimelineDatapoint";
 import { formatTime } from "../../utils";
 import { TimelineTooltip } from "./TimelineTooltip";
+import { PreparedEntry } from "../../state/network/NetworkProvider/types";
 
 interface TimelineChartProps {
-  chartData: any[];
+  chartData: PreparedEntry[];
   totalNetworkTime: number;
 }
 

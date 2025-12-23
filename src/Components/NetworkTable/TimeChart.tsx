@@ -1,30 +1,40 @@
 import { useMemo } from "react";
 
-import { calcChartAttributes } from "../../utils";
 import {
   TIME_CHART_DEFAULT_PROPS,
   TIME_CHART_SVG_PROPS,
 } from "../../constants";
 import { TimeChartTooltip } from "./TimeChartTooltip/TimeChartTooltip";
 import { Tooltip } from "../Common/Tooltip/Tooltip";
-import { Timings } from "har-format";
+import { calcChartAttributes } from "../../utils";
+import { PreparedEntry } from "../../state/network/NetworkProvider/types";
 
 interface TimeChartProps {
   maxTime: number;
-  timings: Timings;
+  preparedEntry: PreparedEntry; // Timings may have startTime if from prepared entry
+  firstEntryTime?: number | string; // Optional first entry time for relative timing
 }
 
-export function TimeChart({ timings, maxTime }: TimeChartProps) {
+export function TimeChart({
+  maxTime,
+  preparedEntry,
+  firstEntryTime,
+}: TimeChartProps) {
   const chartAttributes = useMemo(
-    () => calcChartAttributes(timings, maxTime, 0, 0, 0),
-    [timings, maxTime]
+    () => calcChartAttributes(preparedEntry, maxTime, 0, 0, 0, firstEntryTime),
+    [preparedEntry, maxTime, firstEntryTime]
   );
 
   return (
     <Tooltip
       delay={300}
       placement="left"
-      title={<TimeChartTooltip timings={timings} />}
+      title={
+        <TimeChartTooltip
+          preparedEntry={preparedEntry}
+          firstEntryTime={firstEntryTime}
+        />
+      }
     >
       <svg {...TIME_CHART_SVG_PROPS}>
         <g>

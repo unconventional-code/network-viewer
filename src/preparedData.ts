@@ -1,5 +1,5 @@
 import networkDataMock from "./network.json";
-import { prepareViewerData } from "./utils";
+import { prepareViewerData } from "./state/network/NetworkProvider/utils";
 import { Entry } from "har-format";
 
 export const preparedMockData = prepareViewerData(

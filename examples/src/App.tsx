@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NetworkViewer } from "../../src";
 
 import { Footer } from "./Components/Footer";
@@ -6,13 +6,23 @@ import { parseQueryString } from "./utils";
 
 export function App() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
-  const [fileOptions, setFileOptions] = useState(null);
+  const [fileOptions, setFileOptions] = useState<{
+    file: string;
+    fetchOptions: { withCredentials: boolean };
+  } | null>(null);
 
   // read file queryString and load HAR file
-  useState(() => {
+  useEffect(() => {
     const parsedData = parseQueryString();
-    if (parsedData) {
-      setFileOptions(parsedData);
+    if (
+      parsedData &&
+      "file" in parsedData &&
+      typeof parsedData.file === "string"
+    ) {
+      setFileOptions({
+        file: parsedData.file,
+        fetchOptions: { withCredentials: false },
+      });
     }
   }, []);
 
@@ -27,6 +37,13 @@ export function App() {
         <NetworkViewer
           options={{
             enableAutoScroll: true,
+            showTimeline: true,
+            showWaterfall: true,
+            showExportHar: true,
+            showImportHar: true,
+            showPauseResume: true,
+            showPagination: true,
+            showReset: true,
           }}
           onDataLoaded={() => setIsDataLoaded(true)}
           onReset={() => setIsDataLoaded(false)}

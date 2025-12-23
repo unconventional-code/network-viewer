@@ -1,16 +1,16 @@
-import { CSSProperties } from "react";
+import { CSSProperties, useMemo } from "react";
 import classNames from "classnames";
 
 import { ROW_ID_PREFIX } from "../../constants";
 import { TimeChart } from "./TimeChart";
 import { NetworkCellValue } from "./NetworkCellValue";
-import { getStatusClass, getViewerFields } from "../../utils";
+import { getViewerFields } from "../../utils";
 import { useTheme } from "../../state/theme/Context";
 import { useNetwork } from "../../state/network/Context";
-import { Entry } from "har-format";
+import { PreparedEntry } from "../../state/network/NetworkProvider/types";
 
 interface NetworkTableRowProps {
-  entry: Entry;
+  preparedEntry: PreparedEntry;
   maxTime: number;
   onSelect: (entry: any) => void;
   scrollHighlight: boolean;
@@ -18,18 +18,33 @@ interface NetworkTableRowProps {
 }
 
 export function NetworkTableRow({
-  entry,
+  preparedEntry,
   maxTime,
   onSelect,
   scrollHighlight,
   style = {},
+  ...ariaAttributes
 }: NetworkTableRowProps) {
   const { state } = useNetwork();
   const showReqDetail = state.showReqDetail;
   const { showWaterfall } = useTheme();
   const columns = getViewerFields(showReqDetail, showWaterfall || false);
 
-  const statusClass = getStatusClass(entry);
+  // Handle Entry format
+  const statusClass = useMemo(() => {
+    const response = preparedEntry.response;
+    const status = response?.status ?? 0;
+    const error = response?._error ?? null;
+
+    if (status === 0 && !error) {
+      return "pending";
+    }
+    if (status >= 400 || error) {
+      return "error";
+    }
+    return "info";
+  }, [preparedEntry]);
+
   const rowClassName = classNames(
     "flex items-center h-6 border-b border-border-color cursor-pointer hover:bg-bg-gray-90",
     {
@@ -40,16 +55,24 @@ export function NetworkTableRow({
     }
   );
 
-  console.log(columns);
+  if (!preparedEntry) {
+    // Return a placeholder div if item is missing
+    return (
+      <div style={style} {...ariaAttributes}>
+        {/* Empty row */}
+      </div>
+    );
+  }
 
   return (
     <div style={{ ...style }}>
       <div
         className={rowClassName}
-        id={ROW_ID_PREFIX + entry._index}
-        data-testid={`network-table-row-${entry._index}`}
-        data-entry-index={entry._index}
-        onClick={() => onSelect(entry)}
+        id={ROW_ID_PREFIX + (preparedEntry._index ?? preparedEntry.index ?? 0)}
+        data-testid={`network-table-row-${
+          preparedEntry._index ?? preparedEntry.index ?? 0
+        }`}
+        onClick={() => onSelect(preparedEntry)}
       >
         {Object.entries(columns).map(([datakey, { key }]) => {
           // Mirror header width logic
@@ -87,14 +110,20 @@ export function NetworkTableRow({
                 }
               )}
             >
-              {key === ("waterfall" as any) && entry.time ? (
-                <TimeChart maxTime={maxTime} timings={entry.timings} />
+              {key === ("waterfall" as any) &&
+              (preparedEntry.time || preparedEntry.time) ? (
+                <TimeChart
+                  maxTime={maxTime}
+                  preparedEntry={preparedEntry}
+                  firstEntryTime={
+                    state.rawData?.log?.entries?.[0]?.startedDateTime
+                  }
+                />
               ) : (
                 <NetworkCellValue
                   datakey={key}
-                  onClick={() => onSelect(entry)}
-                  payload={entry}
-                  unit={null}
+                  onClick={() => onSelect(preparedEntry)}
+                  preparedEntry={preparedEntry}
                 />
               )}
             </div>

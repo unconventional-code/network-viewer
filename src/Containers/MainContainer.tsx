@@ -13,7 +13,6 @@ export function MainContainer() {
   const { showTimeline } = useTheme();
   const loading = state.loading;
   const showReqDetail = state.showReqDetail;
-  const dataSummary = state.dataSummary;
   const actualData = state.actualData;
 
   return (
@@ -36,9 +35,7 @@ export function MainContainer() {
             <NetworkTableContainer />
             {showReqDetail && <ReqDetailContainer />}
           </section>
-          {actualData.length ? (
-            <NetworkTableFooter dataSummary={dataSummary} />
-          ) : null}
+          {actualData.length ? <NetworkTableFooter /> : null}
         </div>
       </LoaderContainer>
     </>

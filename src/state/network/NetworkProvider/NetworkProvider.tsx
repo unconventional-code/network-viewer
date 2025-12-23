@@ -10,13 +10,8 @@ import {
 import { AxiosRequestConfig } from "axios";
 import axios from "axios";
 
-import {
-  filterData,
-  sortBy,
-  prepareViewerData,
-  getSummary,
-} from "../../../utils";
-import { calculateTimings } from "../utils";
+import { sortBy } from "../../../utils";
+import { prepareViewerData } from "./utils";
 import { NetworkContext } from "../Context";
 import { findRequestIndex } from "./utils";
 import {
@@ -28,44 +23,19 @@ import {
   FilteringMode,
   PartialEntry,
 } from "../../../types";
-import { DEFAULT_STATUS_FILTER, EMPTY_NETWORK_HAR } from "../../../constants";
+import {
+  DEFAULT_STATUS_FILTER,
+  EMPTY_NETWORK_HAR,
+  FILTER_OPTION,
+} from "../../../constants";
 import { Har, Entry } from "har-format";
-
-// Prepared entry type (from prepareViewerData)
-export interface PreparedEntry {
-  index: number;
-  status: number;
-  method: string;
-  size: string;
-  startedDateTime: number;
-  type: string;
-  timings: Record<string, number>;
-  body: string;
-  time: number;
-  serverIPAddress: string;
-  headers: any;
-  transferredSize: number;
-  uncompressedSize: number;
-  error?: string;
-  domain: string;
-  filename: string;
-  url: string;
-  [key: string]: any;
-}
+import { PreparedEntry } from "./types";
 
 interface NetworkState {
   rawData: Har;
   data: PreparedEntry[]; // filtered data (what's shown in table)
   actualData: PreparedEntry[]; // sorted but unfiltered (all entries)
   totalNetworkTime: number | null;
-  dataSummary: {
-    totalRequests: number;
-    totalTransferredSize: number;
-    totalUncompressedSize: number;
-    finishTime: number;
-    timings: any;
-    finish: number;
-  };
   sort: {
     key: string;
     isAsc: boolean;
@@ -91,6 +61,78 @@ interface NetworkState {
   tableHeaderWidth: string;
   numberOfNewEntries: number;
 }
+
+/**
+ * ⚠️ WORKS ON PREPARED ENTRIES - Requires prepareViewerData to run first
+ * Helper for filterData - checks if entry matches filter criteria
+ */
+const applyFilter = (
+  filterOption: keyof typeof FILTER_OPTION,
+  filter: { value: string },
+  entry: PreparedEntry
+) => {
+  switch (filterOption) {
+    case FILTER_OPTION.STATUS:
+      return entry.status && entry.status.toString().startsWith(filter.value);
+    case FILTER_OPTION.TYPE:
+      return entry.type && filter.value.includes(entry.type);
+    case FILTER_OPTION.URL:
+      return entry.url && entry.url.includes(filter.value);
+    case FILTER_OPTION.BODY:
+      return entry.body && entry.body.includes(filter.value);
+    default:
+      return true;
+  }
+};
+
+/**
+ * ⚠️ WORKS ON PREPARED ENTRIES - Requires prepareViewerData to run first
+ * Filters prepared entries based on search, status, and type filters
+ */
+const filterData = ({
+  data,
+  search,
+  statusFilter,
+  typeFilter,
+}: {
+  data: PreparedEntry[];
+  search?: { name: string; value: string };
+  statusFilter?: { name: string; value: string | null };
+  typeFilter?: { name: string | null; value: string[] | null };
+}) => {
+  const trimmedSearch = search?.value && search?.value.trim();
+
+  if (!trimmedSearch && !statusFilter?.value && !typeFilter?.value) {
+    return data;
+  }
+
+  const filters = [
+    {
+      option: FILTER_OPTION.STATUS,
+      filter: statusFilter,
+    },
+    {
+      option: FILTER_OPTION.TYPE,
+      filter: typeFilter,
+    },
+    {
+      option: search?.name,
+      filter: { value: trimmedSearch },
+    },
+  ];
+
+  return data.filter((entry) =>
+    filters.every(
+      ({ option, filter }) =>
+        !filter?.value ||
+        applyFilter(
+          option as keyof typeof FILTER_OPTION,
+          filter as { value: string },
+          entry
+        )
+    )
+  );
+};
 
 export interface NetworkProviderRef {
   appendEntries: (entries: Entry[] | PartialEntry[]) => void;
@@ -131,14 +173,6 @@ const initialState: NetworkState = {
   data: [],
   actualData: [],
   totalNetworkTime: null,
-  dataSummary: {
-    totalRequests: 0,
-    totalTransferredSize: 0,
-    totalUncompressedSize: 0,
-    finishTime: 0,
-    timings: {},
-    finish: 0,
-  },
   sort: {
     key: "startedDateTime",
     isAsc: true,
@@ -199,14 +233,9 @@ export const NetworkProvider = forwardRef<
     // Update data - processes HAR entries and applies filters
     const updateData = useCallback(
       (harData: Har, skipClientFiltering = false) => {
-        const {
-          data: preparedData,
-          totalNetworkTime,
-          totalRequests,
-          totalTransferredSize,
-          totalUncompressedSize,
-          finishTime,
-        } = prepareViewerData(harData.log.entries as any);
+        const { data: preparedData, totalNetworkTime } = prepareViewerData(
+          harData.log.entries
+        );
 
         const sortedData = sortBy(
           preparedData,
@@ -236,14 +265,6 @@ export const NetworkProvider = forwardRef<
           actualData: sortedData,
           numberOfNewEntries,
           totalNetworkTime,
-          dataSummary: {
-            totalRequests,
-            totalTransferredSize,
-            totalUncompressedSize,
-            finishTime,
-            timings: calculateTimings(harData.log.pages as any),
-            finish: finishTime,
-          },
         }));
       },
       [
@@ -276,17 +297,10 @@ export const NetworkProvider = forwardRef<
             typeFilter: prev.typeFilter,
             search,
           });
-          const summary = getSummary(filteredData);
           return {
             ...prev,
             search,
             data: filteredData,
-            dataSummary: {
-              ...prev.dataSummary,
-              totalRequests: summary.totalRequests,
-              totalTransferredSize: summary.totalTransferredSize,
-              totalUncompressedSize: summary.totalUncompressedSize,
-            },
           };
         });
 
@@ -328,17 +342,10 @@ export const NetworkProvider = forwardRef<
             typeFilter: prev.typeFilter,
             search: prev.search,
           });
-          const summary = getSummary(filteredData);
           return {
             ...prev,
             statusFilter,
             data: filteredData,
-            dataSummary: {
-              ...prev.dataSummary,
-              totalRequests: summary.totalRequests,
-              totalTransferredSize: summary.totalTransferredSize,
-              totalUncompressedSize: summary.totalUncompressedSize,
-            },
           };
         });
         // Notify parent of filter change for server-side filtering
@@ -379,17 +386,10 @@ export const NetworkProvider = forwardRef<
             typeFilter,
             search: prev.search,
           });
-          const summary = getSummary(filteredData);
           return {
             ...prev,
             typeFilter,
             data: filteredData,
-            dataSummary: {
-              ...prev.dataSummary,
-              totalRequests: summary.totalRequests,
-              totalTransferredSize: summary.totalTransferredSize,
-              totalUncompressedSize: summary.totalUncompressedSize,
-            },
           };
         });
         // Notify parent of filter change for server-side filtering

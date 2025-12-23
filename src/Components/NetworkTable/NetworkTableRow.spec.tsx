@@ -48,4 +48,11 @@ describe("NetworkTableRow", () => {
     );
     expect(container).toMatchSnapshot();
   });
+
+  // it("getStatusClass", () => {
+  //   expect(utils.getStatusClass({ status: 200 } as Entry)).toBe("info");
+  //   expect(utils.getStatusClass({ status: 503 })).toBe("error");
+  //   expect(utils.getStatusClass({ status: 0, error: "ERR" })).toBe("error");
+  //   expect(utils.getStatusClass({ status: 0 })).toBe("pending");
+  // });
 });

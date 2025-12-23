@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import classNames from "classnames";
 
 import { TIMINGS } from "../../../constants";
-import { prepareTooltipData } from "../../../utils";
-import { Timings } from "har-format";
+import { parseTime } from "../../../utils";
+import { PreparedEntry } from "../../../state/network/NetworkProvider/types";
 
 const DETAIL = [
   {
@@ -21,13 +21,73 @@ const DETAIL = [
 ] as const;
 
 interface TimeChartTooltipProps {
-  timings: Timings;
+  preparedEntry: PreparedEntry; // Optional raw entry for computing startTime
+  firstEntryTime?: number | string; // Optional first entry time for relative timing
 }
 
-export function TimeChartTooltip({ timings }: TimeChartTooltipProps) {
+// Component-specific utility: prepares tooltip data from raw timings
+// Computed on-the-fly when tooltip is shown
+export const prepareTooltipData = (
+  preparedEntry: PreparedEntry,
+  firstEntryTime?: number | string
+): Record<string, string> | null => {
+  if (!preparedEntry.timings) return null;
+
+  // Calculate startTime if we have entry and firstEntryTime
+  let startTime = preparedEntry.timings.startTime;
+  if (startTime === undefined && preparedEntry && firstEntryTime) {
+    startTime =
+      new Date(preparedEntry.startedDateTime).getTime() -
+      new Date(firstEntryTime).getTime();
+  } else if (startTime === undefined) {
+    startTime = 0;
+  }
+
+  // Calculate total time excluding special fields
+  const calcTotalTime = (data: PreparedEntry["timings"]) =>
+    Object.keys(data)
+      .filter(
+        (key) => !["_blocked_queueing", "_queued", "startTime"].includes(key)
+      )
+      .reduce((acc, key) => {
+        const value = data[key as keyof PreparedEntry["timings"]];
+        return acc + (typeof value === "number" && value > 0 ? value : 0);
+      }, 0);
+
+  const queuedAt: string = String(parseTime(startTime));
+  const blockedOrQueued =
+    preparedEntry.timings._blocked_queueing ??
+    preparedEntry.timings._queued ??
+    0;
+  const startedAt: string = String(parseTime(startTime + blockedOrQueued));
+  const totalTime: string = String(
+    parseTime(calcTotalTime(preparedEntry.timings))
+  );
+
+  const result: Record<string, string> = {
+    queuedAt,
+    startedAt,
+    totalTime,
+  };
+
+  // Add all timing fields
+  Object.keys(preparedEntry.timings).forEach((key) => {
+    const value = preparedEntry.timings[key as keyof PreparedEntry["timings"]];
+    if (typeof value === "number" && value > 0) {
+      result[key] = String(parseTime(value));
+    }
+  });
+
+  return result;
+};
+
+export function TimeChartTooltip({
+  preparedEntry,
+  firstEntryTime,
+}: TimeChartTooltipProps) {
   const tooltipData = useMemo(
-    () => (!timings ? null : prepareTooltipData(timings)),
-    [timings]
+    () => prepareTooltipData(preparedEntry, firstEntryTime),
+    [preparedEntry, firstEntryTime]
   );
 
   if (!tooltipData) {
@@ -86,7 +146,7 @@ export function TimeChartTooltip({ timings }: TimeChartTooltipProps) {
                 <tr key={key} className="odd:bg-white-100">
                   <td
                     className={classNames(
-                      "p-0 border-0 bg-transparent font-normal text-left font-bold px-m relative",
+                      "p-0 border-0 bg-transparent font-normal text-left px-m relative",
                       getTimingColor(key)
                     )}
                   >

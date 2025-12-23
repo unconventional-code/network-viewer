@@ -2,9 +2,10 @@ import { useMemo } from "react";
 
 import { calcChartAttributes } from "../../utils";
 import { TIMELINE_DATA_POINT_HEIGHT } from "../../constants";
+import { PreparedEntry } from "../../state/network/NetworkProvider/types";
 
 interface TimelineDatapointProps {
-  payload?: any | null;
+  preparedEntry?: PreparedEntry | null;
   maxTime: number;
   cx?: number;
   cy?: number | null;
@@ -12,20 +13,19 @@ interface TimelineDatapointProps {
 }
 
 export function TimelineDatapoint({
-  payload = null,
+  preparedEntry = null,
   maxTime,
   cx = 0,
   cy = null,
   index = 0,
 }: TimelineDatapointProps) {
-  if (!payload) {
+  if (!preparedEntry) {
     return null;
   }
 
-  const { timings } = payload;
   const chartAttributes = useMemo(
-    () => calcChartAttributes(timings, maxTime, cx, index, cy),
-    [timings, maxTime, cx, index, cy]
+    () => calcChartAttributes(preparedEntry, maxTime, cx, index, cy),
+    [preparedEntry, maxTime, cx, index, cy]
   );
 
   return (

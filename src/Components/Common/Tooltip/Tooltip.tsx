@@ -153,7 +153,7 @@ export function Tooltip({
         childProps.onBlur(e);
       }
     },
-  } as any);
+  });
 
   return (
     <>

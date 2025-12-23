@@ -1,20 +1,27 @@
-import { Entry, Header, Timings } from "har-format";
+import { Content, Entry, Header, Response, Timings } from "har-format";
 import {
-  FILTER_OPTION,
   TIMELINE_DATA_POINT_HEIGHT,
   TIMINGS,
   VIEWER_FIELD_FILE,
   VIEWER_FIELDS,
   VIEWER_FIELDS_HIDE_WATERFALL,
 } from "./constants";
+import { PreparedEntry } from "./state/network/NetworkProvider/types";
 
 /* eslint no-underscore-dangle: 0 */
+
+/**
+ * Pure utility functions - can be used anywhere
+ */
 
 export const roundOff = (value: number, decimal = 1) => {
   const base = 10 ** decimal;
   return Math.round(value * base) / base;
 };
 
+/**
+ * Pure formatting utility - works on raw numbers
+ */
 export const formatSize = (bytes: number) => {
   if (bytes < 1024) {
     return `${roundOff(bytes)} B`;
@@ -25,6 +32,9 @@ export const formatSize = (bytes: number) => {
   return `${roundOff(bytes / 1024 ** 2)} MB`;
 };
 
+/**
+ * Pure formatting utility - works on raw numbers
+ */
 export const formatTime = (time: number) => {
   if (time < 1000) {
     return `${Math.round(time)}ms`;
@@ -35,6 +45,10 @@ export const formatTime = (time: number) => {
   return `${(Math.ceil(time / 60000) * 100) / 100}m`;
 };
 
+/**
+ * Works on raw URL string - can be called on-demand
+ * Used by components for on-the-fly computation
+ */
 export const getUrlInfo = (url: string) => {
   // If there's an invalid URL (resource identifier, etc.) the constructor would throw an exception.
   // Return a 'placeholder' object with default values in the event the passed value cannot be
@@ -61,12 +75,16 @@ export const getUrlInfo = (url: string) => {
   }
 };
 
+/**
+ * Works on raw Entry.response - can be called on-demand
+ * Used by components for on-the-fly computation
+ */
 export const parseSize = ({
   bodySize,
   _transferSize,
   headers,
   content,
-}: Entry["response"]) => {
+}: Response) => {
   if (content && content.size) {
     return formatSize(content.size);
   }
@@ -80,28 +98,40 @@ export const parseSize = ({
     ["content-length", "Content-Length"].includes(name)
   );
   if (!contentInfo) {
-    return 0;
+    return formatSize(0);
   }
 
   return formatSize(Number(contentInfo.value));
 };
 
-export const getContentType = (entry: Entry) => {
+/**
+ * Works on raw Entry - can be called on-demand
+ * Used by components for on-the-fly computation
+ */
+export const getContentType = (entry: Entry | PreparedEntry) => {
   if (entry._resourceType) {
     return entry._resourceType.toLowerCase();
   }
 
-  const { headers } = entry.response;
-  const contentInfo = headers.find(({ name }) =>
-    ["content-type", "Content-Type"].includes(name)
-  );
-  if (!contentInfo) {
-    return "";
+  if ("response" in entry && entry.response) {
+    const headers: Header[] = entry.response.headers;
+    const contentInfo = headers.find(({ name }) =>
+      ["content-type", "Content-Type"].includes(name)
+    );
+    if (!contentInfo) {
+      return "";
+    }
+    const type = contentInfo.value.split(";")[0].split("/");
+    return type.length > 1 ? type[1] : type[0];
   }
-  const type = contentInfo.value.split(";")[0].split("/");
-  return type.length > 1 ? type[1] : type[0];
+  return "text/plain";
 };
 
+/**
+ * Works on raw Entry - transforms timings for prepared data
+ * NOTE: This is used in prepareViewerData for upfront calculation
+ * Consider moving to component if timings are only needed for display
+ */
 export const getTimings = (
   { startedDateTime, timings }: Entry,
   firstEntryTime: number | string
@@ -111,23 +141,31 @@ export const getTimings = (
     new Date(startedDateTime).getTime() - new Date(firstEntryTime).getTime(),
 });
 
-export const getContent = ({
-  mimeType,
-  text,
-}: Entry["response"]["content"]) => {
+/**
+ * Works on raw Entry.response.content - can be called on-demand
+ * Used by components for on-the-fly computation
+ */
+export const getContent = ({ mimeType, text }: Content) => {
   if (mimeType === "application/json") {
-    let parsedJson;
+    let parsedJson: string | null = null;
     try {
       parsedJson = JSON.stringify(JSON.parse(text || ""), null, 2);
     } catch (err) {
-      parsedJson = text;
+      parsedJson = text || null;
     }
     return parsedJson;
   }
 
-  return text;
+  if (text) {
+    return text;
+  }
+  return null;
 };
 
+/**
+ * Works on raw Entry.response - can be called on-demand
+ * Used by components for on-the-fly computation
+ */
 export const getEntryTransferredSize = ({ response }: Entry) => {
   const { bodySize, _transferSize } = response;
   if (_transferSize && _transferSize > -1) {
@@ -140,6 +178,10 @@ export const getEntryTransferredSize = ({ response }: Entry) => {
   return -1;
 };
 
+/**
+ * Works on raw Entry.response - can be called on-demand
+ * Used by components for on-the-fly computation
+ */
 export const getEntryUncompressedSize = ({ response }: Entry) => {
   const {
     bodySize,
@@ -158,7 +200,11 @@ export const getEntryUncompressedSize = ({ response }: Entry) => {
   return -1;
 };
 
-export const calculateFinishTime = (data: Entry[]) => {
+/**
+ * Works on raw Entry[] - can be called on-demand
+ * Used for summary calculations (e.g., in NetworkTableFooter)
+ */
+export const calculateFinishTime = (data: PreparedEntry[]) => {
   const finishTimes = data.map(({ timings }) =>
     Object.values(timings).reduce(
       (acc, durationInMS) => acc + (durationInMS > -1 ? durationInMS : 0),
@@ -168,6 +214,9 @@ export const calculateFinishTime = (data: Entry[]) => {
   return Math.max(...finishTimes);
 };
 
+/**
+ * Pure utility function for sorting headers
+ */
 export const sortHeaders = (current: Header, next: Header) => {
   if (current.name < next.name) {
     return -1;
@@ -175,6 +224,10 @@ export const sortHeaders = (current: Header, next: Header) => {
   return current.name > next.name ? 1 : 0;
 };
 
+/**
+ * Works on raw Entry - can be called on-demand
+ * Used by components for on-the-fly computation
+ */
 export const getHeaders = (entry: Entry) => {
   const requestHeaders = [...entry.request.headers];
   const responseHeaders = [...entry.response.headers];
@@ -186,6 +239,10 @@ export const getHeaders = (entry: Entry) => {
   };
 };
 
+/**
+ * Works on raw Entry - can be called on-demand
+ * Used for summary calculations
+ */
 export const getTotalTimeOfEntry = ({
   startedDateTime,
   time,
@@ -195,64 +252,17 @@ export const getTotalTimeOfEntry = ({
   time +
   (timings?._blocked_queueing || timings?._queued || 0);
 
+/**
+ * Works on raw Entry.response - can be called on-demand
+ * Used by components for on-the-fly computation
+ */
 export const getInterceptError = ({ response }: Entry) =>
   response && response._error ? response._error : null;
 
-export const prepareViewerData = (entries: Entry[]) => {
-  if (!entries.length) {
-    return {
-      totalNetworkTime: 0,
-      data: [],
-      totalRequests: 0,
-      totalTransferredSize: 0,
-      totalUncompressedSize: 0,
-      finishTime: 0,
-    };
-  }
-
-  const firstEntryTime = entries[0].startedDateTime;
-  let endTime = getTotalTimeOfEntry(entries[entries.length - 1]);
-  let totalTransferredSize = 0;
-  let totalUncompressedSize = 0;
-  const data = entries
-    .filter((entry) => entry.response && getUrlInfo(entry.request.url).domain)
-    .map((entry, index) => {
-      totalTransferredSize += getEntryTransferredSize(entry);
-      totalUncompressedSize += getEntryUncompressedSize(entry);
-      const lastTimeOfEntry = getTotalTimeOfEntry(entry);
-      endTime = endTime < lastTimeOfEntry ? lastTimeOfEntry : endTime;
-      return {
-        index,
-        status: entry.response.status,
-        method: entry.request.method,
-        size: parseSize(entry.response),
-        startedDateTime: new Date(entry.startedDateTime).getTime(),
-        type: getContentType(entry),
-        timings: getTimings(entry, firstEntryTime),
-        body: getContent(entry.response.content),
-        time: entry.time,
-        serverIPAddress: entry.serverIPAddress || ":80",
-        headers: getHeaders(entry),
-        transferredSize: getEntryTransferredSize(entry),
-        uncompressedSize: getEntryUncompressedSize(entry),
-        error: getInterceptError(entry),
-        ...getUrlInfo(entry.request.url),
-      };
-    });
-
-  const totalRequests = data.length;
-  const totalNetworkTime = endTime - new Date(firstEntryTime).getTime();
-  const finishTime = calculateFinishTime(data);
-  return {
-    totalNetworkTime,
-    data,
-    totalRequests,
-    totalTransferredSize,
-    totalUncompressedSize,
-    finishTime,
-  };
-};
-
+/**
+ * ⚠️ WORKS ON PREPARED ENTRIES - Requires prepareViewerData to run first
+ * Sorts prepared entries for table display
+ */
 export const sortBy = (data: any[], key: string, isAsc = true) => {
   const direction = isAsc ? 1 : -1;
   return [...data].sort((prev, next) => {
@@ -265,60 +275,10 @@ export const sortBy = (data: any[], key: string, isAsc = true) => {
   });
 };
 
-const applyFilter = (
-  filterOption: keyof typeof FILTER_OPTION,
-  filter: { value: string },
-  entry: Entry
-) => {
-  switch (filterOption) {
-    case FILTER_OPTION.STATUS:
-      return entry.status && entry.status.toString().startsWith(filter.value);
-    case FILTER_OPTION.TYPE:
-      return entry.type && filter.value.includes(entry.type);
-    case FILTER_OPTION.URL:
-      return entry.url && entry.url.includes(filter.value);
-    case FILTER_OPTION.BODY:
-      return entry.body && entry.body.includes(filter.value);
-    default:
-      return true;
-  }
-};
-
-export const filterData = ({
-  data,
-  search = {},
-  statusFilter = {},
-  typeFilter = {},
-}) => {
-  const trimmedSearch = search.value && search.value.trim();
-
-  if (!trimmedSearch && !statusFilter.value && !typeFilter.value) {
-    return data;
-  }
-
-  const filters = [
-    {
-      option: FILTER_OPTION.STATUS,
-      filter: statusFilter,
-    },
-    {
-      option: FILTER_OPTION.TYPE,
-      filter: typeFilter,
-    },
-    {
-      option: search.name,
-      filter: { value: trimmedSearch },
-    },
-  ];
-
-  return data.filter((entry) =>
-    filters.every(
-      ({ option, filter }) =>
-        !filter.value || applyFilter(option, filter, entry)
-    )
-  );
-};
-
+/**
+ * Pure formatting utility - works on raw numbers
+ * Used by components for on-the-fly formatting
+ */
 export const parseTime = (time: number) => {
   if (!time) {
     return time;
@@ -331,65 +291,41 @@ export const parseTime = (time: number) => {
   return `${time.toFixed(2)} ms`;
 };
 
-export const calcTotalTime = (data) =>
-  Object.keys(data)
-    .filter(
-      (key) => !["_blocked_queueing", "_queued", "startTime"].includes(key)
-    )
-    .reduce((acc, key) => acc + data[key], 0);
-
-export const prepareTooltipData = (timings: Timings) => ({
-  queuedAt: parseTime(timings.startTime),
-  startedAt: parseTime(
-    timings.startTime + (timings._blocked_queueing || timings._queued || 0)
-  ),
-  totalTime: parseTime(calcTotalTime(timings)),
-  ...Object.keys(timings).reduce((acc, key) => {
-    acc[key] = parseTime(timings[key]);
-    return acc;
-  }, {}),
-});
-
-export const getStatusClass = ({ status, error }: Entry) => {
-  if (status === 0 && !error) {
-    return "pending";
-  }
-  if (status >= 400 || error) {
-    return "error";
-  }
-  return "info";
-};
-
-export const formatValue = (
-  key: string,
-  value: number,
-  unit: string | null,
-  entry: Record<string, any> = {}
+/**
+ * Pure utility function - returns field configuration based on view mode
+ */
+export const getViewerFields = (
+  showReqDetail: boolean,
+  showWaterfall: boolean
 ) => {
-  switch (key) {
-    case "time":
-      if (entry.status === 0) {
-        return "Pending";
-      }
-      return value === 0 && !entry.error ? "-" : parseTime(value);
-    case "status":
-      if (entry.error) {
-        return "(failed)";
-      }
-      return value === 0 ? "Pending" : value;
-    default:
-      return !unit ? value : `${value} ${unit}`;
+  if (showReqDetail) {
+    return VIEWER_FIELD_FILE;
   }
+
+  return showWaterfall ? VIEWER_FIELDS : VIEWER_FIELDS_HIDE_WATERFALL;
 };
 
+// Component-specific utility: calculates chart attributes from raw timings
+// Computed on-the-fly when chart is rendered
 export const calcChartAttributes = (
-  data: any,
+  preparedEntry: PreparedEntry,
   maxTime: number,
-  cx: number,
+  _cx: number,
   index: number,
-  cy: number | null = null
+  cy: number | null = null,
+  firstEntryTime?: number | string
 ) => {
-  const startTimePercent = (data.startTime / maxTime) * 100;
+  // Calculate startTime if we have entry and firstEntryTime
+  let startTime = preparedEntry.timings.startTime;
+  if (startTime === undefined && preparedEntry && firstEntryTime) {
+    startTime =
+      new Date(preparedEntry.startedDateTime).getTime() -
+      new Date(firstEntryTime).getTime();
+  } else if (startTime === undefined) {
+    startTime = 0;
+  }
+
+  const startTimePercent = (startTime / maxTime) * 100;
   let previousX = 0;
   let previousWidth = 0;
   const chartAttributes: {
@@ -400,13 +336,15 @@ export const calcChartAttributes = (
     key: string;
   }[] = [];
 
-  Object.keys(TIMINGS).forEach((key) => {
+  (Object.keys(TIMINGS) as Array<keyof typeof TIMINGS>).forEach((key) => {
     const timingInfo = TIMINGS[key];
     const dataKey = Array.isArray(timingInfo.dataKey)
-      ? timingInfo.dataKey.find((dKey) => data[dKey])
+      ? timingInfo.dataKey.find(
+          (dKey) => preparedEntry.timings[dKey as keyof Timings]
+        )
       : timingInfo.dataKey;
-    const value = data[dataKey];
-    if (value <= 0) {
+    const value = preparedEntry.timings[dataKey as keyof Timings] as number;
+    if (!value || value <= 0) {
       return;
     }
 
@@ -423,39 +361,4 @@ export const calcChartAttributes = (
   });
 
   return chartAttributes;
-};
-
-export const getSummary = (data: any[]) =>
-  data.reduce(
-    (acc, req) => {
-      acc.totalTransferredSize += req.transferredSize || 0;
-      acc.totalUncompressedSize += req.uncompressedSize || 0;
-      return acc;
-    },
-    {
-      totalTransferredSize: 0,
-      totalUncompressedSize: 0,
-      totalRequests: data.length,
-    }
-  );
-
-export const parseRequestPayload = (text: string) => {
-  let parsedJson;
-  try {
-    parsedJson = JSON.stringify(JSON.parse(text), null, 2);
-  } catch (err) {
-    parsedJson = text;
-  }
-  return parsedJson;
-};
-
-export const getViewerFields = (
-  showReqDetail: boolean,
-  showWaterfall: boolean
-) => {
-  if (showReqDetail) {
-    return VIEWER_FIELD_FILE;
-  }
-
-  return showWaterfall ? VIEWER_FIELDS : VIEWER_FIELDS_HIDE_WATERFALL;
 };

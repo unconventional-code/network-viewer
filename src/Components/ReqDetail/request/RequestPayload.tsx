@@ -1,12 +1,23 @@
 import { useMemo } from "react";
 
-import { parseRequestPayload } from "../../../utils";
 import { CopyAllButton } from "../CopyAllButton";
 
 interface RequestPayloadProps {
   data?: any | null;
   isPayloadTransformed: boolean;
 }
+
+// Component-specific utility: parses request payload JSON
+const parseRequestPayload = (text: string) => {
+  if (!text) return text;
+  let parsedJson;
+  try {
+    parsedJson = JSON.stringify(JSON.parse(text), null, 2);
+  } catch (err) {
+    parsedJson = text;
+  }
+  return parsedJson;
+};
 
 export function RequestPayload({
   data = null,
