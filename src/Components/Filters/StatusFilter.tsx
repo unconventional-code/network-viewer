@@ -11,7 +11,12 @@ export function StatusFilter() {
       id="status-filter"
       data-testid="status-filter"
       items={STATUS_FILTERS}
-      onChange={actions.updateStatusFilter}
+      onChange={(item) =>
+        actions.updateStatusFilter({
+          name: item.name,
+          value: item.value as string | null,
+        })
+      }
       selected={filter}
     />
   );

@@ -11,7 +11,21 @@ describe("SectionInfo", () => {
   };
 
   it("renders without crashing", () => {
-    const { container } = render(<SectionInfo {...props} />);
+    const { container } = render(
+      <SectionInfo
+        eventKey={
+          props.eventKey as
+            | "general"
+            | "requestHeaders"
+            | "responseHeaders"
+            | "requestPayload"
+            | "queryString"
+            | "formData"
+        }
+        data={props.data}
+        component={props.component}
+      />
+    );
     expect(container).toMatchSnapshot();
   });
 });

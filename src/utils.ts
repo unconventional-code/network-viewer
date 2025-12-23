@@ -1,4 +1,4 @@
-import { Entry, Header } from "har-format";
+import { Entry, Header, Timings } from "har-format";
 import {
   FILTER_OPTION,
   TIMELINE_DATA_POINT_HEIGHT,
@@ -104,7 +104,7 @@ export const getContentType = (entry: Entry) => {
 
 export const getTimings = (
   { startedDateTime, timings }: Entry,
-  firstEntryTime: number
+  firstEntryTime: number | string
 ) => ({
   ...timings,
   startTime:
@@ -195,7 +195,7 @@ export const getTotalTimeOfEntry = ({
   time +
   (timings?._blocked_queueing || timings?._queued || 0);
 
-export const getInterceptError = ({ response }) =>
+export const getInterceptError = ({ response }: Entry) =>
   response && response._error ? response._error : null;
 
 export const prepareViewerData = (entries: Entry[]) => {
@@ -265,7 +265,11 @@ export const sortBy = (data: any[], key: string, isAsc = true) => {
   });
 };
 
-const applyFilter = (filterOption, filter, entry) => {
+const applyFilter = (
+  filterOption: keyof typeof FILTER_OPTION,
+  filter: { value: string },
+  entry: Entry
+) => {
   switch (filterOption) {
     case FILTER_OPTION.STATUS:
       return entry.status && entry.status.toString().startsWith(filter.value);
@@ -334,14 +338,14 @@ export const calcTotalTime = (data) =>
     )
     .reduce((acc, key) => acc + data[key], 0);
 
-export const prepareTooltipData = (data) => ({
-  queuedAt: parseTime(data.startTime),
+export const prepareTooltipData = (timings: Timings) => ({
+  queuedAt: parseTime(timings.startTime),
   startedAt: parseTime(
-    data.startTime + (data._blocked_queueing || data._queued || 0)
+    timings.startTime + (timings._blocked_queueing || timings._queued || 0)
   ),
-  totalTime: parseTime(calcTotalTime(data)),
-  ...Object.keys(data).reduce((acc, key) => {
-    acc[key] = parseTime(data[key]);
+  totalTime: parseTime(calcTotalTime(timings)),
+  ...Object.keys(timings).reduce((acc, key) => {
+    acc[key] = parseTime(timings[key]);
     return acc;
   }, {}),
 });
@@ -356,7 +360,12 @@ export const getStatusClass = ({ status, error }: Entry) => {
   return "info";
 };
 
-export const formatValue = (key, value, unit, entry = {}) => {
+export const formatValue = (
+  key: string,
+  value: number,
+  unit: string | null,
+  entry: Record<string, any> = {}
+) => {
   switch (key) {
     case "time":
       if (entry.status === 0) {
@@ -406,7 +415,7 @@ export const calcChartAttributes = (
 
     chartAttributes.push({
       width: `${previousWidth}%`,
-      y: index ? (index % 10) * (TIMELINE_DATA_POINT_HEIGHT + 1) + 40 : cy,
+      y: index ? (index % 10) * (TIMELINE_DATA_POINT_HEIGHT + 1) + 40 : cy || 0,
       x: `${previousX}%`,
       fill: timingInfo.fill,
       key,

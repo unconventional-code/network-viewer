@@ -7,15 +7,16 @@ import {
 } from "../../constants";
 import { TimeChartTooltip } from "./TimeChartTooltip/TimeChartTooltip";
 import { Tooltip } from "../Common/Tooltip/Tooltip";
+import { Timings } from "har-format";
 
 interface TimeChartProps {
   maxTime: number;
-  timings: Record<string, number>;
+  timings: Timings;
 }
 
 export function TimeChart({ timings, maxTime }: TimeChartProps) {
   const chartAttributes = useMemo(
-    () => calcChartAttributes(timings, maxTime),
+    () => calcChartAttributes(timings, maxTime, 0, 0, 0),
     [timings, maxTime]
   );
 
@@ -23,7 +24,7 @@ export function TimeChart({ timings, maxTime }: TimeChartProps) {
     <Tooltip
       delay={300}
       placement="left"
-      title={<TimeChartTooltip data={timings} />}
+      title={<TimeChartTooltip timings={timings} />}
     >
       <svg {...TIME_CHART_SVG_PROPS}>
         <g>

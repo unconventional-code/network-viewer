@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { NetworkTableRow } from "./NetworkTableRow";
 import { NetworkProvider } from "../../state/network/NetworkProvider/NetworkProvider";
+import { Entry } from "har-format";
 
 describe("NetworkTableRow", () => {
   const NOOP = () => {};
@@ -37,7 +38,12 @@ describe("NetworkTableRow", () => {
   it("renders without crashing", () => {
     const { container } = render(
       <NetworkProvider>
-        <NetworkTableRow {...props} />
+        <NetworkTableRow
+          entry={props.entry as unknown as Entry}
+          maxTime={props.maxTime}
+          scrollHighlight={props.scrollHighlight}
+          onSelect={props.onSelect}
+        />
       </NetworkProvider>
     );
     expect(container).toMatchSnapshot();

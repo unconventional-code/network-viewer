@@ -32,7 +32,7 @@ export function NetworkTableHeader() {
           widthClass = showReqDetail ? "w-full" : "w-[25%]";
         }
         // Waterfall column: 10%
-        if (key === "waterfall" && showWaterfall) {
+        if (key === ("waterfall" as any) && showWaterfall) {
           widthClass = "w-[10%]";
         }
         // If showReqDetail, stretch all except file
@@ -40,7 +40,8 @@ export function NetworkTableHeader() {
           widthClass = "w-[12%] flex-1";
         }
         // Remove right padding on last col
-        let isLast = Object.keys(columns).at(-1) === datakey;
+        let isLast =
+          Object.keys(columns)[Object.keys(columns).length - 1] === datakey;
         let prClass = isLast ? "" : "pr-xs-s";
         return (
           <div
@@ -54,7 +55,7 @@ export function NetworkTableHeader() {
               prClass,
               {
                 "limited-cols": showReqDetail && datakey === "file",
-                "show-waterfall": key === "waterfall" && showWaterfall,
+                "show-waterfall": key === ("waterfall" as any) && showWaterfall,
               }
             )}
           >

@@ -40,6 +40,8 @@ export function NetworkTableRow({
     }
   );
 
+  console.log(columns);
+
   return (
     <div style={{ ...style }}>
       <div
@@ -49,55 +51,55 @@ export function NetworkTableRow({
         data-entry-index={entry._index}
         onClick={() => onSelect(entry)}
       >
-        {Object.entries(columns).map(
-          ([datakey, { key, unit }], colIdx, arr) => {
-            // Mirror header width logic
-            let colClasses =
-              "flex items-center font-semibold text-h6 text-brand-primary-dark-gray min-w-[60px] pr-xs-s";
-            let widthClass = "w-[12%]";
-            if (datakey === "domain") widthClass = "w-[15%]";
-            if (datakey === "file") {
-              widthClass = showReqDetail ? "w-full" : "w-[25%]";
-            }
-            if (key === "waterfall" && showWaterfall) {
-              widthClass = "w-[10%]";
-            }
-            if (showReqDetail && datakey !== "file") {
-              widthClass = "w-[12%] flex-1";
-            }
-            // Remove right padding on last col
-            let isLast = Object.keys(columns).at(-1) === datakey;
-            let prClass = isLast ? "" : "pr-xs-s";
-            return (
-              <div
-                key={key}
-                className={classNames(
-                  "table-column",
-                  "flex items-center px-xs min-w-[60px] font-semibold text-h6 text-brand-primary-dark-gray",
-                  colClasses,
-                  widthClass,
-                  datakey,
-                  prClass,
-                  {
-                    "limited-cols": showReqDetail && datakey === "file",
-                    "show-waterfall": key === "waterfall" && showWaterfall,
-                  }
-                )}
-              >
-                {key === "waterfall" && entry.time ? (
-                  <TimeChart maxTime={maxTime} timings={entry.timings as any} />
-                ) : (
-                  <NetworkCellValue
-                    datakey={key}
-                    onClick={() => onSelect(entry)}
-                    payload={entry}
-                    unit={unit}
-                  />
-                )}
-              </div>
-            );
+        {Object.entries(columns).map(([datakey, { key }]) => {
+          // Mirror header width logic
+          let colClasses =
+            "flex items-center font-semibold text-h6 text-brand-primary-dark-gray min-w-[60px] pr-xs-s";
+          let widthClass = "w-[12%]";
+          if (datakey === "domain") widthClass = "w-[15%]";
+          if (datakey === "file") {
+            widthClass = showReqDetail ? "w-full" : "w-[25%]";
           }
-        )}
+          if (key === ("waterfall" as any) && showWaterfall) {
+            widthClass = "w-[10%]";
+          }
+          if (showReqDetail && datakey !== "file") {
+            widthClass = "w-[12%] flex-1";
+          }
+          // Remove right padding on last col
+          let isLast =
+            Object.keys(columns)[Object.keys(columns).length - 1] === datakey;
+          let prClass = isLast ? "" : "pr-xs-s";
+          return (
+            <div
+              key={key}
+              className={classNames(
+                "table-column",
+                "flex items-center px-xs min-w-[60px] font-semibold text-h6 text-brand-primary-dark-gray",
+                colClasses,
+                widthClass,
+                datakey,
+                prClass,
+                {
+                  "limited-cols": showReqDetail && datakey === "file",
+                  "show-waterfall":
+                    key === ("waterfall" as any) && showWaterfall,
+                }
+              )}
+            >
+              {key === ("waterfall" as any) && entry.time ? (
+                <TimeChart maxTime={maxTime} timings={entry.timings} />
+              ) : (
+                <NetworkCellValue
+                  datakey={key}
+                  onClick={() => onSelect(entry)}
+                  payload={entry}
+                  unit={null}
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

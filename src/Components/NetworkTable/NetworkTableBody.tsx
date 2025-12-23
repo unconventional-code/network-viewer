@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useMemo } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { List, ListImperativeAPI } from "react-window";
 
 import { useNetwork } from "../../state/network/Context";

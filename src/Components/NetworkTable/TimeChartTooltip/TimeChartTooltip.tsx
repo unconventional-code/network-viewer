@@ -3,6 +3,7 @@ import classNames from "classnames";
 
 import { TIMINGS } from "../../../constants";
 import { prepareTooltipData } from "../../../utils";
+import { Timings } from "har-format";
 
 const DETAIL = [
   {
@@ -20,13 +21,13 @@ const DETAIL = [
 ] as const;
 
 interface TimeChartTooltipProps {
-  data: Record<string, number>;
+  timings: Timings;
 }
 
-export function TimeChartTooltip({ data }: TimeChartTooltipProps) {
+export function TimeChartTooltip({ timings }: TimeChartTooltipProps) {
   const tooltipData = useMemo(
-    () => (!data ? null : prepareTooltipData(data)),
-    [data]
+    () => (!timings ? null : prepareTooltipData(timings)),
+    [timings]
   );
 
   if (!tooltipData) {
@@ -101,10 +102,13 @@ export function TimeChartTooltip({ data }: TimeChartTooltipProps) {
                     {Array.isArray(TIMINGS[key].dataKey)
                       ? tooltipData[
                           TIMINGS[key].dataKey.find(
-                            (dataKey) => tooltipData[dataKey]
-                          )
+                            (dataKey) =>
+                              tooltipData[dataKey as keyof typeof tooltipData]
+                          ) as keyof typeof tooltipData
                         ]
-                      : tooltipData[TIMINGS[key].dataKey]}
+                      : tooltipData[
+                          TIMINGS[key].dataKey as keyof typeof tooltipData
+                        ]}
                   </td>
                 </tr>
               ))}

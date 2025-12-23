@@ -15,6 +15,8 @@ describe("NetworkTableFooter", () => {
               onLoad: 999,
               DOMContentLoaded: 2000,
             },
+            finishTime: 1000,
+            finish: 1000,
           }}
           showAllInfo
         />

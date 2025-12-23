@@ -22,15 +22,21 @@ export function ImportHAR({ showButton = true }: ImportHARProps) {
   const onDrop = (files: File[]) => {
     const reader = new FileReader();
     reader.onabort = () =>
-      updateErrorMessage({ title: "file reading was aborted" });
+      updateErrorMessage({
+        title: "file reading was aborted",
+        description: "",
+      });
     reader.onerror = () =>
-      updateErrorMessage({ title: "file reading has failed" });
+      updateErrorMessage({ title: "file reading has failed", description: "" });
     reader.onload = () => {
       try {
         const data = JSON.parse(reader.result as string);
         prepareData(data);
       } catch (error) {
-        updateErrorMessage({ title: "Error while parsing HAR file" });
+        updateErrorMessage({
+          title: "Error while parsing HAR file",
+          description: "",
+        });
       }
     };
     reader.readAsText(files[0]);
